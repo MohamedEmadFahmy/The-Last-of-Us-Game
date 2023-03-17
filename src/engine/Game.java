@@ -4,7 +4,7 @@ import model.characters.Hero;
 import model.characters.Zombie;
 import model.world.Cell;
 
-import java.io.FileNotFoundException;
+// import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 

@@ -28,8 +28,9 @@ public class CSVReader {
             else  {
                 availableHeroes.add(new Explorer(current[0],Integer.parseInt(current[2]), Integer.parseInt(current[4]),Integer.parseInt(current[3])));
             }
-
         }
+        sc.close();
+        file.close();
         //Class to put CSV reading method to make code look easier to read
     }
 }
