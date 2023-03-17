@@ -22,7 +22,7 @@ public class Game {
     }
     public static void main(String[] args)  {
         try {
-            loadHeros("src\\model\\characters\\Heros.csv");
+            loadHeros("src\\Heros.csv");
         }
         catch(IOException e) {
             System.out.println("Error while parsing file.");
