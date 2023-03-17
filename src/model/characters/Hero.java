@@ -45,4 +45,7 @@ public class Hero extends Character {
     public ArrayList<Supply> getSupplyInventory() {
         return supplyInventory;
     }
+    public String toString() {
+        return this.getName();
+    }
 }

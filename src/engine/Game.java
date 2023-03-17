@@ -16,8 +16,16 @@ public class Game {
     public static ArrayList<Zombie> zombies;
     public static Cell[][] map;
 
-    public static void loadHeros(String filePath) throws FileNotFoundException {
-        loadHeroesHelper(availableHeros,filePath);
+    public static void loadHeros(String filePath) throws IOException {
+            availableHeros = new ArrayList<Hero>();
+            loadHeroesHelper(availableHeros, filePath);
     }
-
+    public static void main(String[] args)  {
+        try {
+            loadHeros("C:\\Users\\reeka\\Desktop\\Heros.csv");
+        }
+        catch(IOException e) {
+            System.out.println("Error while parsing file.");
+        }
+    }
 }
