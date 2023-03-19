@@ -5,7 +5,6 @@ public class MovementException extends GameActionException{
         super();
     }
     public MovementException(String s) {
-        super();
-        System.out.println("Custom Message");
+        super(s);
     }
 }

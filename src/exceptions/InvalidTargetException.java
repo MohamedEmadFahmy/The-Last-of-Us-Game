@@ -5,7 +5,6 @@ public class InvalidTargetException extends GameActionException {
         super();
     }
     public InvalidTargetException(String s) {
-        super();
-        System.out.println("Custom Message");
+        super(s);
     }
 }

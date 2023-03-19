@@ -5,7 +5,6 @@ public class GameActionException extends Exception{
         super();
     }
     public GameActionException(String s) {
-        super();
-        System.out.println("Custom Message");
+        super(s);
     }
 }

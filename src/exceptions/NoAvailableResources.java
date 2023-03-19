@@ -5,7 +5,6 @@ public class NoAvailableResources extends GameActionException{
         super();
     }
     public NoAvailableResources(String s) {
-        super();
-        System.out.println("Custom Message");
+        super(s);
     }
 }

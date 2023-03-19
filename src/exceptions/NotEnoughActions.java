@@ -5,7 +5,6 @@ public class NotEnoughActions extends GameActionException{
         super();
     }
     public NotEnoughActions(String s) {
-        super();
-        System.out.println("Custom Message");
+        super(s);
     }
 }
