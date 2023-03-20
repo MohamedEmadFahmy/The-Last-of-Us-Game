@@ -12,7 +12,7 @@ import static engine.CSVReader.loadHeroesHelper;
 
 public class Game {
     public static ArrayList<Hero> availableHeroes;
-    public static ArrayList<Hero> heros;
+    public static ArrayList<Hero> heroes;
     public static ArrayList<Zombie> zombies;
     public static Cell[][] map;
 

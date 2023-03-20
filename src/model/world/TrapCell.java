@@ -5,4 +5,7 @@ public class TrapCell extends Cell{
     public int getTrapDamage() {
         return trapDamage;
     }
+    public TrapCell(int trapDamage) {
+
+    }
 }

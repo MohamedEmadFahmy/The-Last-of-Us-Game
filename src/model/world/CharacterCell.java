@@ -10,14 +10,12 @@ public class CharacterCell extends Cell{
         isSafe = x;
     }
     public Character getCharacter() {
-        return character;
+        return this.character;
     }
     public void setCharacter(Character x) {
         this.character = x;
     }
-    public CharacterCell(Character character, boolean safe) {
+    public CharacterCell(Character character) {
         this.character = character;
-        this.isSafe = safe;
-
     }
 }
