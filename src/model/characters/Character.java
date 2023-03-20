@@ -47,5 +47,7 @@ public abstract class Character {
     public void setTarget(Character x) {
         this.target = x;
     }
-
+    public static void main(String[] args) {
+        // Character c = new Character();
+    }
 }
