@@ -16,9 +16,11 @@ public abstract class Character {
         this.attackDmg = attackDmg;
         this.currentHp = maxHp;
     }
-    public Character() {
 
-    }
+    // public Character() {
+
+    // }
+
     public String getName() {
         return this.name;
     }
@@ -26,28 +28,39 @@ public abstract class Character {
     public Point getLocation() {
         return location;
     }
+
     public void setLocation(Point x) {
         this.location = x;
     }
+
     public int getMaxHp() {
         return this.maxHp;
     }
+
     public int getCurrentHp() {
         return this.currentHp;
     }
+
     public void setCurrentHp(int x) {
-        this.currentHp = x;
+        if (x <= maxHp) {
+            this.currentHp = x;
+        }
     }
+
     public int getAttackDmg() {
         return this.attackDmg;
     }
-    public Character getTarget(){
+
+    public Character getTarget() {
         return this.target;
     }
+
     public void setTarget(Character x) {
         this.target = x;
     }
+
     public static void main(String[] args) {
-        // Character c = new Character();
+        // Character c = new Character("Emad", 30, 10);
+
     }
 }

@@ -6,13 +6,16 @@ public abstract class Cell {
     public boolean isVisible() {
         return isVisible;
     }
+
     public void setVisible(boolean x) {
         this.isVisible = x;
     }
+
     public Cell() {
 
     }
-    // public Cell(boolean isVisible) {
-    //     this.isVisible = isVisible;
+
+    // public Cell(boolean isVisible) { feeh ala2
+    // this.isVisible = isVisible;
     // }
 }
