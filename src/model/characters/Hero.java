@@ -5,7 +5,7 @@ import model.collectibles.Vaccine;
 
 import java.util.ArrayList;
 
-public abstract class Hero extends Character {
+public class Hero extends Character {
     private int actionsAvailable;
     private int maxActions;
     private boolean specialAction;
@@ -16,6 +16,9 @@ public abstract class Hero extends Character {
         super(name,maxHp,attackDmg);
         this.maxActions = maxActions;
         actionsAvailable = maxActions;
+        this.supplyInventory = new ArrayList<Supply>();
+        this.vaccineInventory = new ArrayList<Vaccine>();
+
     }
     public Hero() {
 
@@ -51,6 +54,10 @@ public abstract class Hero extends Character {
         return this.getName();
     }
     public static void main(String[] args) {
-        // Hero h = new Hero();
+//        Hero h = new Hero();
+//        h.vaccineInventory = new ArrayList<Vaccine>();
+//        h.vaccineInventory.add(new Vaccine());
+//        h.vaccineInventory.add(new Vaccine());
+
     }
 }
