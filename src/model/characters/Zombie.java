@@ -13,5 +13,4 @@ public class Zombie extends Character {
         System.out.println(first.getName());
         System.out.println(second.getName());
         System.out.println(ZOMBIES_COUNT);
-    }
 }
