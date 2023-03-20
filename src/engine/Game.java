@@ -11,18 +11,18 @@ import java.util.ArrayList;
 import static engine.CSVReader.loadHeroesHelper;
 
 public class Game {
-    public static ArrayList<Hero> availableHeros;
-    public static ArrayList<Hero> heros;
+    public static ArrayList<Hero> availableHeroes;
+    public static ArrayList<Hero> heroes;
     public static ArrayList<Zombie> zombies;
     public static Cell[][] map;
 
-    public static void loadHeros(String filePath) throws IOException {
-            availableHeros = new ArrayList<Hero>();
-            loadHeroesHelper(availableHeros, filePath);
+    public static void loadHeroes(String filePath) throws IOException {
+            availableHeroes = new ArrayList<Hero>();
+            loadHeroesHelper(availableHeroes, filePath);
     }
     public static void main(String[] args)  {
         try {
-            loadHeros("src\\CSV files\\Heros.csv");
+            loadHeroes("src\\CSV files\\Heros.csv");
         }
         catch(IOException e) {
             System.out.println("Error while parsing file.");
