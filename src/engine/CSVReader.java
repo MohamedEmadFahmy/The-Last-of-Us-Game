@@ -20,15 +20,15 @@ public class CSVReader {
             int maxHp = Integer.parseInt(content[2]);
             int maxActions = Integer.parseInt(content[3]);
             int attackDmg = Integer.parseInt(content[4]);
-            Hero hero;
-            switch (content[1]) {
-                case "FIGH":
+            Hero hero = null;
+            switch (content[1].toLowerCase()) {
+                case "figh":
                     hero = new Fighter(name, maxHp, attackDmg, maxActions);
                     break;
-                case "EXP":
+                case "exp":
                     hero = new Explorer(name, maxHp, attackDmg, maxActions);
                     break;
-                default:
+                case "med":
                     hero = new Medic(name, maxHp, attackDmg, maxActions);
             }
             availableHeroes.add(hero);
