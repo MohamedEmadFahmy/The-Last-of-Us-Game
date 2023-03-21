@@ -8,7 +8,7 @@ import model.world.Cell;
 // import java.io.IOException;
 import java.util.ArrayList;
 
-import static engine.CSVReader.loadHeroesHelper;
+import static engine.CSVReader.loadHeroesCSV;
 
 public class Game {
     public static ArrayList<Hero> availableHeroes;
@@ -18,7 +18,7 @@ public class Game {
 
     public static void loadHeroes(String filePath) throws Exception {
         availableHeroes = new ArrayList<Hero>();
-        loadHeroesHelper(availableHeroes, filePath);
+        loadHeroesCSV(availableHeroes, filePath);
     }
 
     public static void main(String[] args) {

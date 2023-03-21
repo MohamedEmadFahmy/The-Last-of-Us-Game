@@ -7,33 +7,33 @@ import model.characters.Medic;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class CSVReader {
-    public static void loadHeroesHelper(ArrayList<Hero> availableHeroes, String FilePath) throws Exception {
-        Scanner file = new Scanner(new File(FilePath));
-        Scanner sc = new Scanner("");
-        String[] current = new String[5];
-        while (file.hasNext()) {
-            String s = file.nextLine();
-            sc = new Scanner(s);
-            sc.useDelimiter(",");
-            for (int i = 0; sc.hasNext(); i++) {
-                current[i] = sc.next();
+    public static void loadHeroesCSV(ArrayList<Hero> availableHeroes, String FilePath) throws Exception {
+        FileReader file = new FileReader(new File(FilePath));
+        BufferedReader reader = new BufferedReader(file);
+        String line = reader.readLine();
+
+        while (line != null) {
+            String[] content = line.split(",");
+            String name = (String) content[0];
+            int maxHp = Integer.parseInt(content[2]);
+            int maxActions = Integer.parseInt(content[3]);
+            int attackDmg = Integer.parseInt(content[4]);
+            Hero hero;
+            switch (content[1]) {
+                case "FIGH":
+                    hero = new Fighter(name, maxHp, attackDmg, maxActions);
+                    break;
+                case "EXP":
+                    hero = new Explorer(name, maxHp, attackDmg, maxActions);
+                    break;
+                default:
+                    hero = new Medic(name, maxHp, attackDmg, maxActions);
             }
-            if (current[1].equalsIgnoreCase("Figh")) {
-                availableHeroes.add(new Fighter(current[0], Integer.parseInt(current[2]), Integer.parseInt(current[4]),
-                        Integer.parseInt(current[3])));
-            } else if (current[1].equalsIgnoreCase("Med")) {
-                availableHeroes.add(new Medic(current[0], Integer.parseInt(current[2]), Integer.parseInt(current[4]),
-                        Integer.parseInt(current[3])));
-            } else {
-                availableHeroes.add(new Explorer(current[0], Integer.parseInt(current[2]), Integer.parseInt(current[4]),
-                        Integer.parseInt(current[3])));
-            }
+            availableHeroes.add(hero);
+            line = reader.readLine();
         }
-        sc.close();
-        file.close();
-        // Class to put CSV reading method to make code look easier to read
+        reader.close();
     }
 }
