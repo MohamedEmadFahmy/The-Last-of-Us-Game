@@ -5,7 +5,7 @@ import model.characters.Zombie;
 import model.world.Cell;
 
 // import java.io.FileNotFoundException;
-import java.io.IOException;
+// import java.io.IOException;
 import java.util.ArrayList;
 
 import static engine.CSVReader.loadHeroesHelper;
@@ -16,15 +16,15 @@ public class Game {
     public static ArrayList<Zombie> zombies;
     public static Cell[][] map;
 
-    public static void loadHeroes(String filePath) throws IOException {
-            availableHeroes = new ArrayList<Hero>();
-            loadHeroesHelper(availableHeroes, filePath);
+    public static void loadHeroes(String filePath) throws Exception {
+        availableHeroes = new ArrayList<Hero>();
+        loadHeroesHelper(availableHeroes, filePath);
     }
-    public static void main(String[] args)  {
+
+    public static void main(String[] args) {
         try {
             loadHeroes("src\\CSV files\\Heros.csv");
-        }
-        catch(IOException e) {
+        } catch (Exception e) {
             System.out.println("Error while parsing file.");
         }
     }
