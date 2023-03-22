@@ -11,13 +11,12 @@ import java.util.ArrayList;
 import static engine.CSVReader.loadHeroesCSV;
 
 public class Game {
-    public static ArrayList<Hero> availableHeroes;
-    public static ArrayList<Hero> heroes;
-    public static ArrayList<Zombie> zombies;
-    public static Cell[][] map;
+    public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
+    public static ArrayList<Hero> heroes = new ArrayList<Hero>();
+    public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+    public static Cell[][] map = new Cell[15][15];
 
     public static void loadHeroes(String filePath) throws Exception {
-        availableHeroes = new ArrayList<Hero>();
         loadHeroesCSV(availableHeroes, filePath);
     }
 

@@ -1,6 +1,7 @@
 package model.world;
 
 import model.characters.Character;
+import model.characters.*;
 
 public class CharacterCell extends Cell {
 
@@ -23,6 +24,10 @@ public class CharacterCell extends Cell {
         this.character = x;
     }
 
+    // public CharacterCell(Character character) { // feeh 7ewar
+    // // super();
+    // this.character = character;
+    // }
     public CharacterCell(Character character) { // feeh 7ewar
         // super();
         this.character = character;
