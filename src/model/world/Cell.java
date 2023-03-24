@@ -15,7 +15,7 @@ public abstract class Cell {
 
     }
 
-    // public Cell(boolean isVisible) { // feeh ala2
-    // this.isVisible = isVisible;
-    // }
+    public Cell(boolean isVisible) { // feeh ala2
+        this.isVisible = isVisible;
+    }
 }
