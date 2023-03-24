@@ -64,11 +64,11 @@ public abstract class Character {
         this.target = x;
     }
 
-    public static void main(String[] args) {
-        // Character c = new Character("Emad", 30, 10);
-        // System.out.println(c.location);
-        // c.setLocation(new Point(3, 3));
-        // System.out.println(c.location);
+    // public static void main(String[] args) {
+    // // Character c = new Character("Emad", 30, 10);
+    // // System.out.println(c.location);
+    // // c.setLocation(new Point(3, 3));
+    // // System.out.println(c.location);
 
-    }
+    // }
 }

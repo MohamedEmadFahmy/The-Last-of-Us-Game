@@ -20,11 +20,11 @@ public class Game {
         loadHeroesCSV(availableHeroes, filePath);
     }
 
-    public static void main(String[] args) {
-        try {
-            loadHeroes("src\\CSV files\\Heros.csv");
-        } catch (Exception e) {
-            System.out.println("Error while parsing file.");
-        }
-    }
+    // public static void main(String[] args) {
+    // try {
+    // loadHeroes("src\\CSV files\\Heros.csv");
+    // } catch (Exception e) {
+    // System.out.println("Error while parsing file.");
+    // }
+    // }
 }

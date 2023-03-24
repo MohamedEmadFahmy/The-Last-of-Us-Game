@@ -1,7 +1,7 @@
 package model.world;
 
+// import model.characters.*;
 import model.characters.Character;
-import model.characters.*;
 
 public class CharacterCell extends Cell {
 
@@ -35,13 +35,13 @@ public class CharacterCell extends Cell {
         this.isSafe = isSafe;
     }
 
-    public static void main(String[] args) {
-        CharacterCell c = new CharacterCell(null, true);
-        CharacterCell d = new CharacterCell(null);
-        d.setVisible(true);
-        // c.isVisible;
-        System.out.println(c.isVisible());
-        System.out.println(d.isVisible());
-        System.out.println(c instanceof Cell);
-    }
+    // public static void main(String[] args) {
+    // CharacterCell c = new CharacterCell(null, true);
+    // CharacterCell d = new CharacterCell(null);
+    // d.setVisible(true);
+    // // c.isVisible;
+    // System.out.println(c.isVisible());
+    // System.out.println(d.isVisible());
+    // System.out.println(c instanceof Cell);
+    // }
 }
