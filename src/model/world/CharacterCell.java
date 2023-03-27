@@ -1,6 +1,5 @@
 package model.world;
 
-// import model.characters.*;
 import model.characters.Character;
 
 public class CharacterCell extends Cell {
@@ -24,24 +23,13 @@ public class CharacterCell extends Cell {
         this.character = x;
     }
 
-    public CharacterCell(Character character) { // feeh 7ewar
-        // super();
+    public CharacterCell(Character character) {
         this.character = character;
     }
 
-    public CharacterCell(Character character, boolean isSafe) { // feeh 7ewar
-        // super();
+    public CharacterCell(Character character, boolean isSafe) {
         this.character = character;
         this.isSafe = isSafe;
     }
 
-    // public static void main(String[] args) {
-    // CharacterCell c = new CharacterCell(null, true);
-    // CharacterCell d = new CharacterCell(null);
-    // d.setVisible(true);
-    // // c.isVisible;
-    // System.out.println(c.isVisible());
-    // System.out.println(d.isVisible());
-    // System.out.println(c instanceof Cell);
-    // }
 }
