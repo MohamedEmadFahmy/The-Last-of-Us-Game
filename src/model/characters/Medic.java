@@ -5,6 +5,4 @@ public class Medic extends Hero {
         super(Name, maxHp, attackDmg, maxActions);
     }
 
-    public static void main(String[] args) {
-    }
 }

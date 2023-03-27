@@ -18,22 +18,15 @@ public abstract class Hero extends Character {
         this.actionsAvailable = maxActions;
         this.supplyInventory = new ArrayList<Supply>();
         this.vaccineInventory = new ArrayList<Vaccine>();
+        this.specialAction = false;
     }
-
-    // public Hero() {
-
-    // }
 
     public int getActionsAvailable() {
         return actionsAvailable;
     }
 
     public void setActionsAvailable(int x) {
-        if (x <= 0) {
-            actionsAvailable = 0;
-        } else {
-            actionsAvailable = x;
-        }
+        this.actionsAvailable = x;
     }
 
     public int getMaxActions() {
@@ -56,15 +49,4 @@ public abstract class Hero extends Character {
         return supplyInventory;
     }
 
-    // public String toString() {
-    // return this.getName();
-    // }
-
-    // public static void main(String[] args) {
-    // // Hero h = new Hero();
-    // // h.vaccineInventory = new ArrayList<Vaccine>();
-    // // h.vaccineInventory.add(new Vaccine());
-    // // h.vaccineInventory.add(new Vaccine());
-
-    // }
 }

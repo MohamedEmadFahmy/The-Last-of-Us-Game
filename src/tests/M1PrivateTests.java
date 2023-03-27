@@ -493,7 +493,8 @@ public class M1PrivateTests {
 				"The method \"" + methodName + "\" in class "
 						+ createdObject.getClass().getSimpleName()
 						+ " should set the correct value of variable \"" + name
-						+ "\".", expectedValue, f.get(createdObject));
+						+ "\".",
+				expectedValue, f.get(createdObject));
 
 	}
 
@@ -529,7 +530,8 @@ public class M1PrivateTests {
 				"The method \"" + methodName + "\" in class "
 						+ createdObject.getClass().getSimpleName()
 						+ " should set the correct value of variable \"" + name
-						+ "\".", valueIn, f.get(createdObject));
+						+ "\".",
+				valueIn, f.get(createdObject));
 	}
 
 	private void testClassIsAbstract(Class aClass) {
@@ -561,11 +563,13 @@ public class M1PrivateTests {
 			assertFalse(
 					"Missing constructor with " + msg + " parameter"
 							+ (inputs.length > 1 ? "s" : "") + " in "
-							+ aClass.getSimpleName() + " class.", thrown);
+							+ aClass.getSimpleName() + " class.",
+					thrown);
 		} else
 			assertFalse(
 					"Missing constructor with zero parameters in "
-							+ aClass.getSimpleName() + " class.", thrown);
+							+ aClass.getSimpleName() + " class.",
+					thrown);
 	}
 
 	private void testConstructorInitialization(Object createdObject,
@@ -616,7 +620,8 @@ public class M1PrivateTests {
 	private void testClassIsSubclass(Class subClass, Class superClass) {
 		assertEquals(
 				subClass.getSimpleName() + " class should be a subclass from "
-						+ superClass.getSimpleName() + ".", superClass,
+						+ superClass.getSimpleName() + ".",
+				superClass,
 				subClass.getSuperclass());
 	}
 
@@ -645,7 +650,8 @@ public class M1PrivateTests {
 			assertTrue(
 					"The instance variable \"" + varName
 							+ "\" should be declared in class "
-							+ aClass.getSimpleName() + ".", false);
+							+ aClass.getSimpleName() + ".",
+					false);
 		}
 
 	}
@@ -680,7 +686,8 @@ public class M1PrivateTests {
 			assertTrue(
 					"The instance variable \"" + varName
 							+ "\" should not be declared in class "
-							+ aClass.getSimpleName() + ".", thrown);
+							+ aClass.getSimpleName() + ".",
+					thrown);
 		}
 	}
 
@@ -714,8 +721,9 @@ public class M1PrivateTests {
 			assertTrue("The \"" + varName + "\" instance variable in class "
 					+ aClass.getSimpleName() + " is a READ variable.", found);
 			assertTrue("Incorrect return type for " + methodName
-					+ " method in " + aClass.getSimpleName() + " class.", m
-					.getReturnType().isAssignableFrom(returnedType));
+					+ " method in " + aClass.getSimpleName() + " class.",
+					m
+							.getReturnType().isAssignableFrom(returnedType));
 		} else {
 			assertFalse("The \"" + varName + "\" instance variable in class "
 					+ aClass.getSimpleName() + " is not a READ variable.",
@@ -806,7 +814,8 @@ public class M1PrivateTests {
 				"The method \""
 						+ methodName
 						+ "\" in class Character should return the correct value of variable \""
-						+ name + "\".", value, m.invoke(createdObject));
+						+ name + "\".",
+				value, m.invoke(createdObject));
 
 	}
 
@@ -1016,7 +1025,8 @@ public class M1PrivateTests {
 		} else
 			assertFalse(
 					"Missing constructor with zero parameters in "
-							+ aClass.getSimpleName() + " class.", thrown);
+							+ aClass.getSimpleName() + " class.",
+					thrown);
 	}
 
 	private static void testEnumValues(String name, String path, String[] value) {
