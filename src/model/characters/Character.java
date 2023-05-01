@@ -1,6 +1,9 @@
 package model.characters;
 
 import java.awt.*;
+import java.util.ArrayList;
+import engine.Game;
+import model.world.*;
 
 public abstract class Character {
     private String name;
@@ -58,6 +61,49 @@ public abstract class Character {
 
     public void setTarget(Character x) {
         this.target = x;
+    }
+
+    public ArrayList<Character> getAdjacentCharacters() {
+        ArrayList<Character> list = new ArrayList<Character>();
+        int myI = 0;
+        int myJ = 0;
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (Game.map[i][j] instanceof CharacterCell) {
+                    if (((CharacterCell) Game.map[i][j]).getCharacter() == this) {
+                        myI = i;
+                        myJ = j;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if ((i <= myI + 1 && i >= myI - 1) && (j <= myJ + 1 && j >= myJ - 1) && (myI != i || myJ != j)) {
+                    list.add(((CharacterCell) Game.map[i][j]).getCharacter());
+                }
+            }
+        }
+        return list;
+    }
+
+    protected Character getAttackPriority() {
+        ArrayList<Character> list = getAdjacentCharacters();
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            Character current = list.remove(0);
+            if (current != null) {
+                if ((current instanceof Zombie && this instanceof Hero)
+                        || (current instanceof Hero && this instanceof Zombie)) {
+                    return current;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void attack() {
+
     }
 
 }
