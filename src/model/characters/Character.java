@@ -87,23 +87,18 @@ public abstract class Character {
         return list;
     }
 
-    protected Character getAttackPriority() {
-        ArrayList<Character> list = getAdjacentCharacters();
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            Character current = list.remove(0);
-            if (current != null) {
-                if ((current instanceof Zombie && this instanceof Hero)
-                        || (current instanceof Hero && this instanceof Zombie)) {
-                    return current;
-                }
-            }
+    public abstract void attack() {
+
+    }
+
+    public void defend(Character c) {
+        int attackValue = this.getAttackDmg() / 2;
+        int targetHP = c.getCurrentHp();
+        int newTargetHP = targetHP - attackValue;
+        if (newTargetHP > 0) {
+            c.setCurrentHp(newTargetHP);
+            return;
         }
-        return null;
+        // onCharacterDeath();
     }
-
-    public void attack() {
-
-    }
-
 }
