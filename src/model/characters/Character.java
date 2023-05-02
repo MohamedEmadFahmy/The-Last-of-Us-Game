@@ -3,6 +3,7 @@ package model.characters;
 import java.awt.*;
 import java.util.ArrayList;
 import engine.Game;
+import exceptions.InvalidTargetException;
 import model.world.*;
 
 public abstract class Character {
@@ -87,9 +88,7 @@ public abstract class Character {
         return list;
     }
 
-    public abstract void attack() {
-
-    }
+    public abstract void attack() throws InvalidTargetException;
 
     public void defend(Character c) {
         int attackValue = this.getAttackDmg() / 2;
@@ -100,5 +99,8 @@ public abstract class Character {
             return;
         }
         // onCharacterDeath();
+    }
+    public void onCharacterDeath() {
+
     }
 }

@@ -1,5 +1,6 @@
 package model.characters;
 
+import exceptions.InvalidTargetException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
@@ -48,5 +49,29 @@ public abstract class Hero extends Character {
     public ArrayList<Supply> getSupplyInventory() {
         return supplyInventory;
     }
+
+    public boolean isValidTarget() {
+        ArrayList<Character> adjacentCharacters = getAdjacentCharacters();
+        return adjacentCharacters.contains(this.getTarget());
+    }
+
+    public void attack() throws InvalidTargetException {
+        if (getTarget() instanceof  Hero || getTarget() == null || !isValidTarget()) {
+            throw new InvalidTargetException();
+        }
+        if (!(this instanceof Fighter && isSpecialAction())) {
+            setActionsAvailable(getActionsAvailable()-1);
+        }
+        Character myTarget = getTarget();
+        int TargetHP = myTarget.getCurrentHp();
+        int NewHP = TargetHP - getAttackDmg();
+        if (NewHP > 0) {
+            myTarget.setCurrentHp(NewHP);
+            myTarget.defend(this);
+            return;
+        }
+        //myTarget.onCharacterDeath()
+    }
+    public abstract void useSpecial();
 
 }

@@ -5,4 +5,9 @@ public class Medic extends Hero {
         super(Name, maxHp, attackDmg, maxActions);
     }
 
+    @Override
+    public void useSpecial() {
+
+    }
+
 }
