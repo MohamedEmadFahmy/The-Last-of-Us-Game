@@ -1,6 +1,8 @@
 package model.characters;
 
 import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+import exceptions.NoAvailableResourcesException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
@@ -72,6 +74,9 @@ public abstract class Hero extends Character {
         }
         //myTarget.onCharacterDeath()
     }
-    public abstract void useSpecial();
+    public abstract void useSpecial() throws InvalidTargetException,NotEnoughActionsException,NoAvailableResourcesException;
+
+    public void move(Direction D){}
+    
 
 }

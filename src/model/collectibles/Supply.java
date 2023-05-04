@@ -16,7 +16,8 @@ public class Supply implements Collectible {
     @Override
     public void use(Hero h) throws NoAvailableResourcesException {
         try {
-            h.getSupplyInventory().remove(0);
+            // h.getSupplyInventory().remove(0);
+            h.getSupplyInventory().remove(this);
         }
         catch (Exception e) {
             throw new NoAvailableResourcesException();
