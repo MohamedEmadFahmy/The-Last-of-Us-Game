@@ -57,26 +57,31 @@ public abstract class Hero extends Character {
         return adjacentCharacters.contains(this.getTarget());
     }
 
-    public void attack() throws InvalidTargetException {
-        if (getTarget() instanceof  Hero || getTarget() == null || !isValidTarget()) {
+    public void attack() throws InvalidTargetException, NotEnoughActionsException {
+        if (getTarget() instanceof Hero || getTarget() == null || !isValidTarget()) {
             throw new InvalidTargetException();
         }
         if (!(this instanceof Fighter && isSpecialAction())) {
-            setActionsAvailable(getActionsAvailable()-1);
+            if (actionsAvailable <= 0) {
+                throw new NotEnoughActionsException();
+            }
+            setActionsAvailable(getActionsAvailable() - 1);
         }
         Character myTarget = getTarget();
         int TargetHP = myTarget.getCurrentHp();
         int NewHP = TargetHP - getAttackDmg();
+        myTarget.defend(this);
         if (NewHP > 0) {
             myTarget.setCurrentHp(NewHP);
-            myTarget.defend(this);
             return;
         }
-        //myTarget.onCharacterDeath()
+        myTarget.onCharacterDeath();
     }
-    public abstract void useSpecial() throws InvalidTargetException,NotEnoughActionsException,NoAvailableResourcesException;
 
-    public void move(Direction D){}
-    
+    public abstract void useSpecial()
+            throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException;
+
+    public void move(Direction D) {
+    }
 
 }

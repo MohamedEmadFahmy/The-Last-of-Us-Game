@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import engine.Game;
 import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 import model.world.*;
 
 public abstract class Character {
@@ -88,7 +89,7 @@ public abstract class Character {
         return list;
     }
 
-    public abstract void attack() throws InvalidTargetException;
+    public abstract void attack() throws InvalidTargetException, NotEnoughActionsException;
 
     public void defend(Character c) {
         int attackValue = this.getAttackDmg() / 2;
@@ -98,9 +99,18 @@ public abstract class Character {
             c.setCurrentHp(newTargetHP);
             return;
         }
-        // onCharacterDeath();
+        onCharacterDeath();
     }
-    public void onCharacterDeath() {
 
+    public void onCharacterDeath() {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (Game.map[i][j] instanceof CharacterCell) {
+                    if (((CharacterCell) Game.map[i][j]).getCharacter() == this) {
+                        ((CharacterCell) Game.map[i][j]).setCharacter(null);
+                    }
+                }
+            }
+        }
     }
 }
