@@ -1,6 +1,6 @@
 package model.collectibles;
 
-import exceptions.NoAvailableResourcesException;
+// import exceptions.NoAvailableResourcesException;
 import model.characters.Hero;
 
 public class Supply implements Collectible {
@@ -10,17 +10,11 @@ public class Supply implements Collectible {
 
     @Override
     public void pickup(Hero h) {
-        h.getSupplyInventory().add(new Supply());
+        h.getSupplyInventory().add(this);
     }
 
     @Override
-    public void use(Hero h) throws NoAvailableResourcesException {
-        try {
-            // h.getSupplyInventory().remove(0);
-            h.getSupplyInventory().remove(this);
-        }
-        catch (Exception e) {
-            throw new NoAvailableResourcesException();
-        }
+    public void use(Hero h) {
+        h.getSupplyInventory().remove(this);
     }
 }

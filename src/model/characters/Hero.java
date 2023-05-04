@@ -58,7 +58,7 @@ public abstract class Hero extends Character {
     }
 
     public void attack() throws InvalidTargetException, NotEnoughActionsException {
-        if (getTarget() instanceof Hero || getTarget() == null || !isValidTarget()) {
+        if (!(getTarget() instanceof Zombie) || !isValidTarget()) {
             throw new InvalidTargetException();
         }
         if (!(this instanceof Fighter && isSpecialAction())) {
@@ -78,8 +78,7 @@ public abstract class Hero extends Character {
         myTarget.onCharacterDeath();
     }
 
-    public abstract void useSpecial()
-            throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException;
+    public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
     public void move(Direction D) {
     }

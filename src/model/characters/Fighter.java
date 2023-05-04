@@ -1,8 +1,7 @@
 package model.characters;
 
-import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
-import exceptions.NotEnoughActionsException;
+import model.collectibles.Supply;
 
 public class Fighter extends Hero {
     public Fighter(String Name, int maxHp, int attackDmg, int maxActions) {
@@ -10,8 +9,14 @@ public class Fighter extends Hero {
     }
 
     @Override
-    public void useSpecial()  {
-        if(!this.isSpecialAction()){
+    public void useSpecial() throws NoAvailableResourcesException {
+        try {
+            Supply supply = getSupplyInventory().get(0);
+            supply.use(this);
+        } catch (Exception e) {
+            throw new NoAvailableResourcesException();
+        }
+        if (isSpecialAction()) {
             System.out.println("Already in Use");
             return;
         }
