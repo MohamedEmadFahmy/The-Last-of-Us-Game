@@ -85,6 +85,7 @@ public abstract class Hero extends Character {
     public void move(Direction D) throws MovementException {
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
+        CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
         Cell targetCell;
         if (D == Direction.UP) {
             if (Y + 1 > 14) {
@@ -119,9 +120,11 @@ public abstract class Hero extends Character {
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
             collectible.pickup(this);
+            targetCell = new CharacterCell(this);
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
+            targetCell = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
                 onCharacterDeath();
@@ -138,6 +141,7 @@ public abstract class Hero extends Character {
                 }
             }
         }
+        prevCell.setCharacter(null);
     }
 
 }
