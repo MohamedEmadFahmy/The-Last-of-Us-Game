@@ -1,6 +1,11 @@
 package model.characters;
 
 import java.awt.*;
+import java.util.ArrayList;
+import engine.Game;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+import model.world.*;
 
 public abstract class Character {
     private String name;
@@ -16,9 +21,7 @@ public abstract class Character {
         this.attackDmg = attackDmg;
         this.currentHp = maxHp;
     }
-    public Character() {
 
-    }
     public String getName() {
         return this.name;
     }
@@ -26,28 +29,95 @@ public abstract class Character {
     public Point getLocation() {
         return location;
     }
+
     public void setLocation(Point x) {
         this.location = x;
     }
+
     public int getMaxHp() {
         return this.maxHp;
     }
+
     public int getCurrentHp() {
         return this.currentHp;
     }
+
     public void setCurrentHp(int x) {
-        this.currentHp = x;
+        if (x <= 0) {
+            currentHp = 0;
+
+        } else if (x > maxHp)
+            currentHp = maxHp;
+        else {
+            currentHp = x;
+        }
     }
+
     public int getAttackDmg() {
         return this.attackDmg;
     }
-    public Character getTarget(){
+
+    public Character getTarget() {
         return this.target;
     }
+
     public void setTarget(Character x) {
         this.target = x;
     }
-    public static void main(String[] args) {
-        // Character c = new Character();
+
+    public ArrayList<Character> getAdjacentCharacters() {
+        ArrayList<Character> list = new ArrayList<Character>();
+        int myI = 0;
+        int myJ = 0;
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (Game.map[i][j] instanceof CharacterCell) {
+                    if (((CharacterCell) Game.map[i][j]).getCharacter() == this) {
+                        myI = i;
+                        myJ = j;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if ((i <= myI + 1 && i >= myI - 1) && (j <= myJ + 1 && j >= myJ - 1) && (myI != i || myJ != j)) {
+                    list.add(((CharacterCell) Game.map[i][j]).getCharacter());
+                }
+            }
+        }
+        return list;
+    }
+
+    public abstract void attack() throws InvalidTargetException, NotEnoughActionsException;
+
+    public void defend(Character c) {
+        int attackValue = this.getAttackDmg() / 2;
+        int targetHP = c.getCurrentHp();
+        int newTargetHP = targetHP - attackValue;
+        if (newTargetHP > 0) {
+            c.setCurrentHp(newTargetHP);
+            return;
+        }
+        onCharacterDeath();
+    }
+
+    public void onCharacterDeath() {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (Game.map[i][j] instanceof CharacterCell) {
+                    CharacterCell currentCell = (CharacterCell) Game.map[i][j];
+                    Character character = currentCell.getCharacter();
+                    if (character == this) {
+                        currentCell.setCharacter(null);
+                        if (character instanceof Zombie) {
+                            // spawnZombie();
+                            return;
+                        }
+                        Game.heroes.remove(this);
+                    }
+                }
+            }
+        }
     }
 }

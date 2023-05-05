@@ -4,28 +4,17 @@ import model.characters.Hero;
 import model.characters.Zombie;
 import model.world.Cell;
 
-// import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import static engine.CSVReader.loadHeroesHelper;
+import static engine.CSVReader.loadHeroesCSV;
 
 public class Game {
-    public static ArrayList<Hero> availableHeroes;
-    public static ArrayList<Hero> heroes;
-    public static ArrayList<Zombie> zombies;
-    public static Cell[][] map;
+    public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
+    public static ArrayList<Hero> heroes = new ArrayList<Hero>();
+    public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+    public static Cell[][] map = new Cell[15][15];
 
-    public static void loadHeroes(String filePath) throws IOException {
-            availableHeroes = new ArrayList<Hero>();
-            loadHeroesHelper(availableHeroes, filePath);
-    }
-    public static void main(String[] args)  {
-        try {
-            loadHeroes("src\\CSV files\\Heros.csv");
-        }
-        catch(IOException e) {
-            System.out.println("Error while parsing file.");
-        }
+    public static void loadHeroes(String filePath) throws Exception {
+        loadHeroesCSV(availableHeroes, filePath);
     }
 }
