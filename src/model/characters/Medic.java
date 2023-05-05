@@ -21,15 +21,15 @@ public class Medic extends Hero {
         if (!(myTarget instanceof Hero)) {
             throw new InvalidTargetException();
         }
+        if (myTarget.getCurrentHp() == myTarget.getMaxHp()) {
+            throw new InvalidTargetException();
+        }
         try {
-            if (myTarget.getCurrentHp() == myTarget.getMaxHp()) {
-                throw new InvalidTargetException();
-            }
-            myTarget.setCurrentHp(myTarget.getMaxHp());
-            Supply supply = getSupplyInventory().get(0);
-            supply.use(this);
+        Supply supply = getSupplyInventory().get(0);
+        supply.use(this);
         } catch (Exception e) {
             throw new NoAvailableResourcesException();
         }
+        myTarget.setCurrentHp(myTarget.getMaxHp());
     }
 }
