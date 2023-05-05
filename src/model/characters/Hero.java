@@ -10,8 +10,6 @@ import engine.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import java.util.ArrayList;
-
 public abstract class Hero extends Character {
     private int actionsAvailable;
     private int maxActions;
