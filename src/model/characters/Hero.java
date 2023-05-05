@@ -127,7 +127,7 @@ public abstract class Hero extends Character {
             targetCell = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
-                onCharacterDeath();
+                this.onCharacterDeath();
                 return;
             }
             this.setCurrentHp(newHp);

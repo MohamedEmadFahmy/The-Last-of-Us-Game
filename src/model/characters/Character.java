@@ -89,25 +89,19 @@ public abstract class Character {
             c.setCurrentHp(newTargetHP);
             return;
         }
-        onCharacterDeath();
+        c.onCharacterDeath();
     }
 
     public void onCharacterDeath() {
         int x = this.getLocation().x;
         int y = this.getLocation().y;
 
-        if (Game.map[y][x] instanceof CharacterCell) {
-            CharacterCell currentCell = (CharacterCell) Game.map[y][x];
-            Character character = currentCell.getCharacter();
-            if (character == this) {
-                currentCell.setCharacter(null);
-                if (character instanceof Zombie) {
-                    // spawnZombie();
-                    return;
-                }
-                Game.heroes.remove(this);
-            }
+        CharacterCell currentCell = (CharacterCell) Game.map[y][x];
+        currentCell.setCharacter(null);
+        if (this instanceof Zombie) {
+            // spawnZombie();
+            return;
         }
-
+        Game.heroes.remove(this);
     }
 }
