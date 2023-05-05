@@ -67,18 +67,8 @@ public abstract class Character {
 
     public ArrayList<Character> getAdjacentCharacters() {
         ArrayList<Character> list = new ArrayList<Character>();
-        int myI = 0;
-        int myJ = 0;
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (Game.map[i][j] instanceof CharacterCell) {
-                    if (((CharacterCell) Game.map[i][j]).getCharacter() == this) {
-                        myI = i;
-                        myJ = j;
-                    }
-                }
-            }
-        }
+        int myI = this.getLocation().y;
+        int myJ = this.getLocation().x;
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if ((i <= myI + 1 && i >= myI - 1) && (j <= myJ + 1 && j >= myJ - 1) && (myI != i || myJ != j)) {
@@ -103,21 +93,19 @@ public abstract class Character {
     }
 
     public void onCharacterDeath() {
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (Game.map[i][j] instanceof CharacterCell) {
-                    CharacterCell currentCell = (CharacterCell) Game.map[i][j];
-                    Character character = currentCell.getCharacter();
-                    if (character == this) {
-                        currentCell.setCharacter(null);
-                        if (character instanceof Zombie) {
-                            // spawnZombie();
-                            return;
-                        }
-                        Game.heroes.remove(this);
-                    }
+        if (Game.map[this.getLocation().y][this.getLocation().x] instanceof CharacterCell) {
+            CharacterCell currentCell = (CharacterCell) Game.map[this.getLocation().y][this.getLocation().x];
+            Character character = currentCell.getCharacter();
+            if (character == this) {
+                currentCell.setCharacter(null);
+                if (character instanceof Zombie) {
+                    // spawnZombie();
+                    return;
                 }
+                Game.heroes.remove(this);
             }
         }
+
+
     }
 }

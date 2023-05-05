@@ -17,15 +17,18 @@ public class Medic extends Hero {
 
     @Override
     public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
-        try {
-            Supply supply = getSupplyInventory().get(0);
-            supply.use(this);
-        } catch (Exception e) {
-            throw new NoAvailableResourcesException();
-        }
         Character myTarget = getTarget();
         if (!(myTarget instanceof Hero)) {
             throw new InvalidTargetException();
+        }
+        if (myTarget.getCurrentHp() == myTarget.getMaxHp()) {
+            throw new InvalidTargetException();
+        }
+        try {
+        Supply supply = getSupplyInventory().get(0);
+        supply.use(this);
+        } catch (Exception e) {
+            throw new NoAvailableResourcesException();
         }
         myTarget.setCurrentHp(myTarget.getMaxHp());
     }
