@@ -85,8 +85,8 @@ public abstract class Hero extends Character {
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
     public void move(Direction D) throws MovementException {
-        int X = (int) this.getLocation().getX();
-        int Y = (int) this.getLocation().getY();
+        int X = this.getLocation().x;
+        int Y = this.getLocation().y;
         Cell targetCell;
         if (D == Direction.UP) {
             if (Y + 1 > 14) {

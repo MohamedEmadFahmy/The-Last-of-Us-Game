@@ -93,8 +93,11 @@ public abstract class Character {
     }
 
     public void onCharacterDeath() {
-        if (Game.map[this.getLocation().y][this.getLocation().x] instanceof CharacterCell) {
-            CharacterCell currentCell = (CharacterCell) Game.map[this.getLocation().y][this.getLocation().x];
+        int x = this.getLocation().x;
+        int y = this.getLocation().y;
+
+        if (Game.map[y][x] instanceof CharacterCell) {
+            CharacterCell currentCell = (CharacterCell) Game.map[y][x];
             Character character = currentCell.getCharacter();
             if (character == this) {
                 currentCell.setCharacter(null);
@@ -105,7 +108,6 @@ public abstract class Character {
                 Game.heroes.remove(this);
             }
         }
-
 
     }
 }
