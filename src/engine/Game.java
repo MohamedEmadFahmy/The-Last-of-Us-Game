@@ -4,6 +4,7 @@ import model.characters.Hero;
 import model.characters.Zombie;
 import model.world.Cell;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 import static engine.CSVReader.loadHeroesCSV;
@@ -16,5 +17,7 @@ public class Game {
 
     public static void loadHeroes(String filePath) throws Exception {
         loadHeroesCSV(availableHeroes, filePath);
+    }
+    public static void main(String args[]) {
     }
 }
