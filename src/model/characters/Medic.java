@@ -22,12 +22,12 @@ public class Medic extends Hero {
             throw new InvalidTargetException();
         }
         try {
-            Supply supply = getSupplyInventory().get(0);
-            supply.use(this);
             if (myTarget.getCurrentHp() == myTarget.getMaxHp()) {
                 throw new InvalidTargetException();
             }
             myTarget.setCurrentHp(myTarget.getMaxHp());
+            Supply supply = getSupplyInventory().get(0);
+            supply.use(this);
         } catch (Exception e) {
             throw new NoAvailableResourcesException();
         }
