@@ -22,7 +22,7 @@ public class Zombie extends Character {
             target.defend(this);
             return;
         }
-        // target.onCharacterDeath();
+        target.onCharacterDeath();
     }
 
     private Character getAttackPriority() {
