@@ -1,11 +1,5 @@
 package model.characters;
 
-import java.util.ArrayList;
-
-import model.characters.*;
-
-// import java.lang.annotation.Target;
-
 import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
 import model.collectibles.Supply;
@@ -25,8 +19,8 @@ public class Medic extends Hero {
             throw new InvalidTargetException();
         }
         try {
-        Supply supply = getSupplyInventory().get(0);
-        supply.use(this);
+            Supply supply = getSupplyInventory().get(0);
+            supply.use(this);
         } catch (Exception e) {
             throw new NoAvailableResourcesException();
         }

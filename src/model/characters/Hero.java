@@ -84,13 +84,7 @@ public abstract class Hero extends Character {
 
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
-    public boolean checkCharachterCell(Cell targetCell) {
-        Character character = ((CharacterCell) targetCell).getCharacter();
-        return character != null;
-    }
-
-    public void move(Direction D) throws MovementException { // checks if the cell the player is trying to move to is
-                                                             // available/empty
+    public void move(Direction D) throws MovementException {
         int X = (int) this.getLocation().getX();
         int Y = (int) this.getLocation().getY();
         Cell targetCell;
@@ -120,7 +114,7 @@ public abstract class Hero extends Character {
             targetCell = Game.map[Y][X];
         }
         if (targetCell instanceof CharacterCell) {
-            if (checkCharachterCell(targetCell)) {
+            if (((CharacterCell) targetCell).containsCharacter()) {
                 throw new MovementException();
             }
         }
