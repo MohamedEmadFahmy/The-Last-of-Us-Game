@@ -1,5 +1,6 @@
 package model.characters;
 
+import engine.Game.*;
 import exceptions.InvalidTargetException;
 import exceptions.MovementException;
 import exceptions.NotEnoughActionsException;
@@ -142,6 +143,19 @@ public abstract class Hero extends Character {
             }
         }
         prevCell.setCharacter(null);
+    }
+
+    public void cure() throws InvalidTargetException { // cures a zombie and turns it into a hero
+        if (!(this.isValidTarget()) || !(this.getTarget() instanceof Zombie)) {
+            throw new InvalidTargetException();
+        }
+        int size = Game.availableHeroes.size();
+        int index = (int) (Math.random() * size);
+        Hero newHero = Game.availableHeroes.remove(index); // if a random hero is to be chosen
+        int X = (int) this.getTarget().getLocation().getX();
+        int Y = (int) this.getTarget().getLocation().getY();
+        ((CharacterCell) Game.map[Y][X]).setCharacter(newHero);
+        Zombie.ZOMBIES_COUNT -= 1;
     }
 
 }
