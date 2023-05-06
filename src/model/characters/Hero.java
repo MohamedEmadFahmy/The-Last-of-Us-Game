@@ -151,9 +151,9 @@ public abstract class Hero extends Character {
         }
         int size = Game.availableHeroes.size();
         int index = (int) (Math.random() * size);
-        Hero newHero = Game.availableHeroes.remove(index); // if a random hero is to be chosen
-        int X = (int) this.getTarget().getLocation().getX();
-        int Y = (int) this.getTarget().getLocation().getY();
+        Hero newHero = Game.availableHeroes.remove(index);
+        int X = this.getTarget().getLocation().x;
+        int Y = this.getTarget().getLocation().y;
         ((CharacterCell) Game.map[Y][X]).setCharacter(newHero);
         Zombie.ZOMBIES_COUNT -= 1;
     }
