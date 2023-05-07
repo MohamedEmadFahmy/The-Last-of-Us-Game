@@ -117,17 +117,23 @@ public abstract class Hero extends Character {
             if (((CharacterCell) targetCell).containsCharacter()) {
                 throw new MovementException();
             }
+            ((CharacterCell) targetCell).setCharacter(this);
         }
+        prevCell.setCharacter(null);
+
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
             collectible.pickup(this);
-            targetCell = new CharacterCell(this);
+            Game.map[Y][X] = new CharacterCell(this);
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
-            targetCell = new CharacterCell(this);
+            // targetCell = new CharacterCell(this);
+            Game.map[Y][X] = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
+                Point newLocation = new Point(X, Y);
+                this.setLocation(newLocation);
                 this.onCharacterDeath();
                 return;
             }
@@ -142,7 +148,6 @@ public abstract class Hero extends Character {
                 }
             }
         }
-        prevCell.setCharacter(null);
     }
 
     public void cure() throws InvalidTargetException { // cures a zombie and turns it into a hero
