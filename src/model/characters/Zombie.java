@@ -2,6 +2,9 @@ package model.characters;
 
 import java.util.ArrayList;
 
+import engine.Game;
+import model.world.*;
+
 public class Zombie extends Character {
     static int ZOMBIES_COUNT = 0;
 
@@ -36,4 +39,5 @@ public class Zombie extends Character {
         }
         return null;
     }
+
 }
