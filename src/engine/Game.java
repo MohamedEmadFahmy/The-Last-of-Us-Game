@@ -139,24 +139,23 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         do {
             Direction d = null;
-            System.out.print("Direction: ");
-            String input = sc.nextLine();
-
-            switch (input) {
-                case "w":
-                    d = Direction.UP;
-                    break;
-                case "s":
-                    d = Direction.DOWN;
-                    break;
-                case "a":
-                    d = Direction.LEFT;
-                    break;
-                case "d":
-                    d = Direction.RIGHT;
-                    break;
-                default:
-                    return;
+            while (d == null) {
+                System.out.print("Direction: ");
+                String input = sc.nextLine();
+                switch (input) {
+                    case "w":
+                        d = Direction.UP;
+                        break;
+                    case "s":
+                        d = Direction.DOWN;
+                        break;
+                    case "a":
+                        d = Direction.LEFT;
+                        break;
+                    case "d":
+                        d = Direction.RIGHT;
+                        break;
+                }
             }
 
             if (heroes.get(0).getCurrentHp() <= 0) {
