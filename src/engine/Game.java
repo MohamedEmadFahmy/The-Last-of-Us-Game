@@ -73,12 +73,15 @@ public class Game {
         }
     }
 
-    public void startGame() {
-        int size = Game.availableHeroes.size();
-        int index = (int) (Math.random() * size);
-        Hero firstHero = Game.availableHeroes.remove(index);
-        heroes.add(firstHero);
-        Game.map[0][0] = new CharacterCell(firstHero);
+    public void startGame(Hero h) {
+        Game.availableHeroes.remove(h);
+        heroes.add(h);
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                Game.map[j][i] = new CharacterCell(null);
+            }
+        }
+        Game.map[0][0] = new CharacterCell(h);
         spawnSupplies();
         spawnVaccines();
         spawnTraps();

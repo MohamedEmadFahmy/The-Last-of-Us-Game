@@ -23,13 +23,12 @@ public abstract class Cell {
         if ((this instanceof CharacterCell) && (((CharacterCell) this).getCharacter() != null)) {
             return true;
         }
-        if ((this instanceof TrapCell)) {
+        if (this instanceof TrapCell) {
             return true;
         }
-        if ((this instanceof CollectibleCell) && (((CollectibleCell) this).getCollectible() != null)) {
+        if (this instanceof CollectibleCell) {
             return true;
         }
         return false;
     }
-
 }

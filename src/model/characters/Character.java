@@ -99,7 +99,7 @@ public abstract class Character {
         CharacterCell currentCell = (CharacterCell) Game.map[y][x];
         currentCell.setCharacter(null);
         if (this instanceof Zombie) {
-            // spawnZombie();
+            Game.spawnZombie();
             return;
         }
         Game.heroes.remove(this);
