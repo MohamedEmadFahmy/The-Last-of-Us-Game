@@ -135,9 +135,9 @@ public abstract class Hero extends Character {
                 Point newLocation = new Point(X, Y);
                 this.setLocation(newLocation);
                 this.onCharacterDeath();
-                return;
+            } else {
+                this.setCurrentHp(newHp);
             }
-            this.setCurrentHp(newHp);
         }
         Point newLocation = new Point(X, Y);
         this.setLocation(newLocation);
