@@ -121,7 +121,7 @@ public abstract class Hero extends Character {
         }
 
         prevCell.setCharacter(null);
-        Point newLocation = new Point(X, Y);
+        Point newLocation = new Point(X, Y); // update location of Hero and set previous cell to be empty
         this.setLocation(newLocation);
 
         if (targetCell instanceof CollectibleCell) {
@@ -140,26 +140,26 @@ public abstract class Hero extends Character {
                 this.setCurrentHp(newHp);
             }
         }
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (((j == X) || (j == X + 1) || (j == X - 1)) && ((i == Y) || (i == Y + 1) || (i == Y - 1))) {
-                    Game.map[i][j].setVisible(true);
-                }
-            }
-        }
+        Game.updateVisibility(newLocation);
+    }
+
+    public void spawnHero(int x, int y) {
+        int size = Game.availableHeroes.size();
+        int index = (int) (Math.random() * size);
+        Hero newHero = Game.availableHeroes.remove(index);
+
+        ((CharacterCell) Game.map[y][x]).setCharacter(newHero);
+        newHero.setLocation(new Point(x, y));
+        Game.heroes.add(newHero);
     }
 
     public void cure() throws InvalidTargetException { // cures a zombie and turns it into a hero
         if (!(this.isValidTarget()) || !(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
-        int size = Game.availableHeroes.size();
-        int index = (int) (Math.random() * size);
-        Hero newHero = Game.availableHeroes.remove(index);
         int X = this.getTarget().getLocation().x;
         int Y = this.getTarget().getLocation().y;
-        ((CharacterCell) Game.map[Y][X]).setCharacter(newHero);
+        spawnHero(X, Y);
         Zombie.ZOMBIES_COUNT -= 1;
     }
-
 }
