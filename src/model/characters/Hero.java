@@ -119,7 +119,10 @@ public abstract class Hero extends Character {
             }
             ((CharacterCell) targetCell).setCharacter(this);
         }
+
         prevCell.setCharacter(null);
+        Point newLocation = new Point(X, Y);
+        this.setLocation(newLocation);
 
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
@@ -132,15 +135,11 @@ public abstract class Hero extends Character {
             Game.map[Y][X] = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
-                Point newLocation = new Point(X, Y);
-                this.setLocation(newLocation);
                 this.onCharacterDeath();
             } else {
                 this.setCurrentHp(newHp);
             }
         }
-        Point newLocation = new Point(X, Y);
-        this.setLocation(newLocation);
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if (((j == X) || (j == X + 1) || (j == X - 1)) && ((i == Y) || (i == Y + 1) || (i == Y - 1))) {
