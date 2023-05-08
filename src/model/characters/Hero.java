@@ -87,10 +87,7 @@ public abstract class Hero extends Character {
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
         CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
-        Cell targetCell;
-        if (this.getActionsAvailable() == 0) {
-            throw new NotEnoughActionsException();
-        }
+        Cell targetCell = null;
         if (D == Direction.UP) {
             if (Y + 1 > 14) {
                 throw new MovementException();
@@ -109,7 +106,7 @@ public abstract class Hero extends Character {
             }
             X += 1;
             targetCell = Game.map[Y][X];
-        } else {
+        } else if (D == Direction.DOWN) {
             if (Y - 1 < 0) {
                 throw new MovementException();
             }
@@ -157,7 +154,8 @@ public abstract class Hero extends Character {
         Game.heroes.add(newHero);
     }
 
-    public void cure() throws InvalidTargetException, NotEnoughActionsException { // cures a zombie and turns it into a hero
+    public void cure() throws InvalidTargetException, NotEnoughActionsException { // cures a zombie and turns it into a
+                                                                                  // hero
         if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
         }
