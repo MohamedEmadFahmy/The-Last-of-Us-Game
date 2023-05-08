@@ -130,7 +130,7 @@ public abstract class Hero extends Character {
 
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
-            collectible.pickup(this);
+            collectible.pickUp(this);
             Game.map[Y][X] = new CharacterCell(this);
         }
         if (targetCell instanceof TrapCell) {
@@ -157,8 +157,14 @@ public abstract class Hero extends Character {
         Game.heroes.add(newHero);
     }
 
-    public void cure() throws InvalidTargetException { // cures a zombie and turns it into a hero
-        if (!(this.isValidTarget()) || !(this.getTarget() instanceof Zombie)) {
+    public void cure() throws InvalidTargetException, NotEnoughActionsException { // cures a zombie and turns it into a hero
+        if (this.getActionsAvailable() <= 0) {
+            throw new NotEnoughActionsException();
+        }
+        if (!(this.isValidTarget())) {
+            throw new InvalidTargetException();
+        }
+        if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
         int X = this.getTarget().getLocation().x;
