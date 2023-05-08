@@ -1,6 +1,5 @@
 package model.characters;
 
-import engine.Game.*;
 import exceptions.InvalidTargetException;
 import exceptions.MovementException;
 import exceptions.NotEnoughActionsException;
@@ -60,6 +59,7 @@ public abstract class Hero extends Character {
         return adjacentCharacters.contains(this.getTarget());
     }
 
+    @Override
     public void attack() throws InvalidTargetException, NotEnoughActionsException {
         if (!(getTarget() instanceof Zombie) || !isValidTarget()) {
             throw new InvalidTargetException();

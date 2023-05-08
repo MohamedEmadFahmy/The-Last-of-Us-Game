@@ -249,5 +249,6 @@ public class Game {
             printBoard();
             System.out.println(heroes);
         } while (!heroes.isEmpty());
+        sc.close();
     }
 }
