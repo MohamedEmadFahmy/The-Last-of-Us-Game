@@ -15,9 +15,6 @@ public class Medic extends Hero {
         if (!(myTarget instanceof Hero)) {
             throw new InvalidTargetException();
         }
-        if (myTarget.getCurrentHp() == myTarget.getMaxHp()) {
-            throw new InvalidTargetException();
-        }
         try {
             Supply supply = getSupplyInventory().get(0);
             supply.use(this);
