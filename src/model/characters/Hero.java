@@ -83,11 +83,14 @@ public abstract class Hero extends Character {
 
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
-    public void move(Direction D) throws MovementException {
+    public void move(Direction D) throws MovementException, NotEnoughActionsException {
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
         CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
         Cell targetCell;
+        if (this.getActionsAvailable() == 0) {
+            throw new NotEnoughActionsException();
+        }
         if (D == Direction.UP) {
             if (Y + 1 > 14) {
                 throw new MovementException();
@@ -120,6 +123,7 @@ public abstract class Hero extends Character {
             ((CharacterCell) targetCell).setCharacter(this);
         }
 
+        this.setActionsAvailable(this.getActionsAvailable() - 1);
         prevCell.setCharacter(null);
         Point newLocation = new Point(X, Y); // update location of Hero and set previous cell to be empty
         this.setLocation(newLocation);
