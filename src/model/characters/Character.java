@@ -73,7 +73,9 @@ public abstract class Character {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if ((i <= myI + 1 && i >= myI - 1) && (j <= myJ + 1 && j >= myJ - 1) && (myI != i || myJ != j)) {
-                    list.add(((CharacterCell) Game.map[i][j]).getCharacter());
+                    if (Game.map[j][i] instanceof CharacterCell && ((CharacterCell) Game.map[j][i]).getCharacter() != null) {
+                        list.add(((CharacterCell) Game.map[j][i]).getCharacter());
+                    }
                 }
             }
         }

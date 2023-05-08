@@ -9,7 +9,7 @@ public class Vaccine implements Collectible {
     }
 
     @Override
-    public void pickup(Hero h) {
+    public void pickUp(Hero h) {
         h.getVaccineInventory().add(this);
     }
 
