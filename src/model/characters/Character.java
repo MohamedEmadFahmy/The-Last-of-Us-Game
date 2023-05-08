@@ -69,6 +69,7 @@ public abstract class Character {
         ArrayList<Character> list = new ArrayList<Character>();
         int myI = this.getLocation().y;
         int myJ = this.getLocation().x;
+
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if ((i <= myI + 1 && i >= myI - 1) && (j <= myJ + 1 && j >= myJ - 1) && (myI != i || myJ != j)) {
@@ -91,8 +92,8 @@ public abstract class Character {
         }
         c.onCharacterDeath();
     }
-
     public void onCharacterDeath() {
+
         int x = this.getLocation().x;
         int y = this.getLocation().y;
 
