@@ -29,6 +29,7 @@ public class Game {
             Y = (int) (Math.random() * 15);
         }
         Zombie spawnedZombie = new Zombie();
+        spawnedZombie.setLocation(new Point(X,Y));
         Game.map[Y][X] = new CharacterCell(spawnedZombie);
     }
 

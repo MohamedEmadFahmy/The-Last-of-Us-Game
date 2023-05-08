@@ -170,6 +170,7 @@ public abstract class Hero extends Character {
         int X = this.getTarget().getLocation().x;
         int Y = this.getTarget().getLocation().y;
         spawnHero(X, Y);
+
         Zombie.ZOMBIES_COUNT -= 1;
     }
 }
