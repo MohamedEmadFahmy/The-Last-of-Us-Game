@@ -135,6 +135,9 @@ public class Game {
     }
 
     public static boolean checkWin() {
+        if (heroes.size() < 5) {
+            return false;
+        }
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 Cell currentCell = Game.map[i][j];

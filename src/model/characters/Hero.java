@@ -88,7 +88,7 @@ public abstract class Hero extends Character {
         int Y = this.getLocation().y;
         CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
         Cell targetCell;
-        if (this.getActionsAvailable() == 0) {
+        if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
         }
         if (D == Direction.UP) {
