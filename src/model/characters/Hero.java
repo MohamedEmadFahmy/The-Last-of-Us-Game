@@ -84,33 +84,36 @@ public abstract class Hero extends Character {
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
     public void move(Direction D) throws MovementException, NotEnoughActionsException {
+        if (this.actionsAvailable < 1) {
+            throw new NotEnoughActionsException();
+        }
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
         CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
         Cell targetCell = null;
         if (D == Direction.UP) {
-            if (Y + 1 > 14) {
-                throw new MovementException();
-            }
-            Y += 1;
-            targetCell = Game.map[Y][X];
-        } else if (D == Direction.LEFT) {
-            if (X - 1 < 0) {
-                throw new MovementException();
-            }
-            X -= 1;
-            targetCell = Game.map[Y][X];
-        } else if (D == Direction.RIGHT) {
             if (X + 1 > 14) {
                 throw new MovementException();
             }
             X += 1;
             targetCell = Game.map[Y][X];
-        } else if (D == Direction.DOWN) {
+        } else if (D == Direction.LEFT) {
             if (Y - 1 < 0) {
                 throw new MovementException();
             }
             Y -= 1;
+            targetCell = Game.map[Y][X];
+        } else if (D == Direction.RIGHT) {
+            if (Y + 1 > 14) {
+                throw new MovementException();
+            }
+            Y += 1;
+            targetCell = Game.map[Y][X];
+        } else if (D == Direction.DOWN) {
+            if (X - 1 < 0) {
+                throw new MovementException();
+            }
+            X -= 1;
             targetCell = Game.map[Y][X];
         }
         if (targetCell instanceof CharacterCell) {
@@ -154,10 +157,13 @@ public abstract class Hero extends Character {
         Game.heroes.add(newHero);
     }
 
-    public void cure() throws InvalidTargetException, NotEnoughActionsException { // cures a zombie and turns it into a
+    public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException { // cures a zombie and turns it into a
                                                                                   // hero
         if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
+        }
+        if (this.vaccineInventory.isEmpty()) {
+            throw new NoAvailableResourcesException();
         }
         if (!(this.isValidTarget())) {
             throw new InvalidTargetException();
@@ -165,6 +171,8 @@ public abstract class Hero extends Character {
         if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
+        this.setActionsAvailable(this.getActionsAvailable() - 1);
+        this.getVaccineInventory().remove(0);
         int X = this.getTarget().getLocation().x;
         int Y = this.getTarget().getLocation().y;
         spawnHero(X, Y);

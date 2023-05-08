@@ -81,6 +81,7 @@ public class Game {
     public static void startGame(Hero h) {
         Game.availableHeroes.remove(h);
         heroes.add(h);
+        h.setLocation(new Point(0,0));
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 Game.map[j][i] = new CharacterCell(null);
@@ -130,7 +131,7 @@ public class Game {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if (((j == x) || (j == x + 1) || (j == x - 1)) && ((i == y) || (i == y + 1) || (i == y - 1))) {
-                    Game.map[i][j].setVisible(true);
+                    Game.map[j][i].setVisible(true);
                 }
             }
         }
@@ -161,7 +162,39 @@ public class Game {
     }
 
     public static boolean checkGameOver() {
-        return Game.heroes.isEmpty();
+        if (!zombies.isEmpty()) {
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 15; j++) {
+                    if (map[i][j] instanceof CollectibleCell) {
+                        if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        if (availableHeroes.isEmpty()) {
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 15; j++) {
+                    if (map[i][j] instanceof CollectibleCell) {
+                        if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        for (int i = 0; i < heroes.size(); i++){
+            if (!(heroes.get(i).getVaccineInventory().isEmpty())) {
+                return false;
+            }
+        }
+        if (Game.heroes.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     public static void endTurn() {
@@ -187,6 +220,8 @@ public class Game {
 
         for (int i = 0; i < heroes.size(); i++) {
             Hero hero = heroes.get(i);
+            hero.setTarget(null);
+            hero.setSpecialAction(false);
             hero.setActionsAvailable(hero.getMaxActions());
         }
 
