@@ -9,6 +9,7 @@ public class Zombie extends Character {
         super("Zombie " + ++ZOMBIES_COUNT, 40, 10);
     }
 
+    @Override
     public void attack() {
         Character target = getAttackPriority();
         setTarget(target);
@@ -36,4 +37,5 @@ public class Zombie extends Character {
         }
         return null;
     }
+
 }

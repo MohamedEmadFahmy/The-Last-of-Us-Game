@@ -15,4 +15,16 @@ public abstract class Cell {
         this.isVisible = x;
     }
 
+    public boolean isOccupied() { // used to check if a cell is occupied or not, used in random spawning methods
+        if ((this instanceof CharacterCell) && ((CharacterCell) this).getCharacter() != null) {
+            return true;
+        }
+        if (this instanceof TrapCell) {
+            return true;
+        }
+        if (this instanceof CollectibleCell) {
+            return true;
+        }
+        return false;
+    }
 }

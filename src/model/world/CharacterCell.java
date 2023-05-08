@@ -33,4 +33,8 @@ public class CharacterCell extends Cell {
         this.character = x;
     }
 
+    public boolean containsCharacter() {
+        Character character = this.getCharacter();
+        return character != null;
+    }
 }

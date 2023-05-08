@@ -17,4 +17,5 @@ public class Vaccine implements Collectible {
     public void use(Hero h) {
         h.getVaccineInventory().remove(this);
     }
+
 }
