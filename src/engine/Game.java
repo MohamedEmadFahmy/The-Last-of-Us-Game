@@ -29,6 +29,7 @@ public class Game {
             Y = (int) (Math.random() * 15);
         }
         Zombie spawnedZombie = new Zombie();
+        zombies.add(spawnedZombie);
         spawnedZombie.setLocation(new Point(X,Y));
         Game.map[Y][X] = new CharacterCell(spawnedZombie);
     }
@@ -177,17 +178,9 @@ public class Game {
         }
 
         // make zombies attack
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                Cell currentCell = Game.map[i][j];
-                if (currentCell instanceof CharacterCell) {
-                    Character character = ((CharacterCell) currentCell).getCharacter();
-                    if (character instanceof Zombie) {
-                        Zombie zombie = (Zombie) character;
-                        zombie.attack();
-                    }
-                }
-            }
+        for (int i = 0; i < zombies.size(); i++) {
+            Zombie curr = zombies.get(i);
+            curr.attack();
         }
 
         // reset actions available for every hero

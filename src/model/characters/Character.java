@@ -105,6 +105,7 @@ public abstract class Character {
         currentCell.setCharacter(null);
         if (this instanceof Zombie) {
             Game.spawnZombie();
+            Game.zombies.remove(this);
             return;
         }
         Game.heroes.remove(this);
