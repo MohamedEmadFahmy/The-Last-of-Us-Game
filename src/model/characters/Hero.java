@@ -87,7 +87,7 @@ public abstract class Hero extends Character {
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
         CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
-        Cell targetCell;
+        Cell targetCell = null;
         if (D == Direction.UP) {
             if (Y + 1 > 14) {
                 throw new MovementException();
@@ -106,7 +106,7 @@ public abstract class Hero extends Character {
             }
             X += 1;
             targetCell = Game.map[Y][X];
-        } else {
+        } else if (D == Direction.DOWN) {
             if (Y - 1 < 0) {
                 throw new MovementException();
             }
