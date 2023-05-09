@@ -1,7 +1,6 @@
 package engine;
 
 import model.characters.*;
-import model.characters.Character;
 import model.collectibles.*;
 import model.world.*;
 
