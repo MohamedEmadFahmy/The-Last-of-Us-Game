@@ -135,15 +135,14 @@ public abstract class Hero extends Character {
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
-            // targetCell = new CharacterCell(this);
-            Game.map[X][Y] = new CharacterCell(this);
+            targetCell = new CharacterCell(this);
+            // Game.map[X][Y] = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
                 this.onCharacterDeath();
                 return;
-            } else {
-                this.setCurrentHp(newHp);
             }
+            this.setCurrentHp(newHp);
         }
         Game.updateVisibility(newLocation);
     }
@@ -152,12 +151,12 @@ public abstract class Hero extends Character {
         if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
         }
-        if (this.getVaccineInventory().isEmpty()) {
-            throw new NoAvailableResourcesException();
-        }
-        if (!(this.isValidTarget())) {
-            throw new InvalidTargetException();
-        }
+        // if (this.getVaccineInventory().isEmpty()) {
+        // throw new NoAvailableResourcesException();
+        // }
+        // if (!(this.isValidTarget())) {
+        // throw new InvalidTargetException();
+        // }
         if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
