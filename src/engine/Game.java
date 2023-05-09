@@ -79,14 +79,14 @@ public class Game {
     }
 
     public static void startGame(Hero h) {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                Game.map[i][j] = new CharacterCell(null);
+            }
+        }
         Game.availableHeroes.remove(h);
         heroes.add(h);
         h.setLocation(new Point(0, 0));
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                Game.map[j][i] = new CharacterCell(null);
-            }
-        }
         Game.map[0][0] = new CharacterCell(h);
         spawnSupplies();
         spawnVaccines();
@@ -94,6 +94,7 @@ public class Game {
         for (int i = 0; i < 10; i++) {
             spawnZombie();
         }
+        updateVisibility(new Point(0, 0));
     }
 
     public static void printBoard() {
@@ -130,11 +131,12 @@ public class Game {
         int y = location.y;
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                if (((j == x) || (j == x + 1) || (j == x - 1)) && ((i == y) || (i == y + 1) || (i == y - 1))) {
-                    Game.map[j][i].setVisible(true);
+                if (((i == x) || (i == x + 1) || (i == x - 1)) && ((j == y) || (j == y + 1) || (j == y - 1))) {
+                    map[i][j].setVisible(true);
                 }
             }
         }
+        map[x][y].setVisible(true);
     }
 
     public static boolean checkWin() {
