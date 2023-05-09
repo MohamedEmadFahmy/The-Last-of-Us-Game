@@ -77,6 +77,17 @@ public class Game {
         }
     }
 
+    public static void spawnHero(int x, int y) {
+        int size = availableHeroes.size();
+        int index = (int) (Math.random() * size);
+        Hero newHero = availableHeroes.remove(index);
+
+        map[x][y] = new CharacterCell(newHero);
+        // ((CharacterCell) map[x][y]).setCharacter(newHero);
+        newHero.setLocation(new Point(x, y));
+        heroes.add(newHero);
+    }
+
     public static void startGame(Hero h) {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -100,6 +111,10 @@ public class Game {
         for (int i = 14; i >= 0; i--) {
             for (int j = 0; j < 15; j++) {
                 Cell currentCell = map[i][j];
+                if (currentCell.isVisible() == false) {
+                    System.out.print("X ");
+                    continue;
+                }
                 if (currentCell instanceof CharacterCell) {
                     if (((CharacterCell) currentCell).getCharacter() == null) {
                         System.out.print("_ ");
@@ -202,7 +217,7 @@ public class Game {
         // update visibility
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                Game.map[i][j].setVisible(false); // set all cells to be non visible initially
+                map[i][j].setVisible(false); // set all cells to be non visible initially
             }
         }
 
@@ -215,6 +230,7 @@ public class Game {
         for (int i = 0; i < zombies.size(); i++) {
             Zombie curr = zombies.get(i);
             curr.attack();
+            curr.setTarget(null);
         }
 
         // reset actions available for every hero
@@ -232,12 +248,12 @@ public class Game {
 
     public static void main(String[] args) {
 
-        Medic f = new Medic("Mohamed", 1, 20, 5);
+        Medic f = new Medic("Mohamed", 1, 20, 6);
         f.setLocation(new Point(0, 0));
 
         startGame(f);
 
-        Explorer exp = new Explorer("Mohamed", 1, 20, 5);
+        Explorer exp = new Explorer("Mohamed", 1, 20, 999);
         exp.setLocation(new Point(2, 2));
         ((CharacterCell) Game.map[2][2]).setCharacter(exp);
         heroes.add(exp);
@@ -247,6 +263,11 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         do {
             Direction d = null;
+            if (heroes.get(0).getActionsAvailable() <= 0) {
+                endTurn();
+                System.out.println("Turn Ended");
+                printBoard();
+            }
             while (d == null) {
                 System.out.print("Direction: ");
                 String input = sc.nextLine();
@@ -263,6 +284,10 @@ public class Game {
                     case "d":
                         d = Direction.RIGHT;
                         break;
+                    // case "e":
+                    // endTurn();
+                    // System.out.println("Turn ended");
+                    // break;
                 }
             }
 
@@ -280,7 +305,9 @@ public class Game {
             System.out.println("-------------------");
             System.out.println();
             printBoard();
-            System.out.println(heroes);
+            // System.out.println(heroes);
+            // System.out.println(heroes.get(0).getVaccineInventory());
+            System.out.println(heroes.get(0).getAdjacentCharacters());
         } while (!heroes.isEmpty());
         sc.close();
     }

@@ -16,11 +16,10 @@ public class Fighter extends Hero {
         } catch (Exception e) {
             throw new NoAvailableResourcesException();
         }
-        if (isSpecialAction()) {
-            System.out.println("Already in Use");
-            return;
-        }
-        setSpecialAction(true);
+        // if (isSpecialAction()) {
+        // System.out.println("Already in Use");
+        // return;
+        // }
     }
 
 }

@@ -140,6 +140,7 @@ public abstract class Hero extends Character {
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
                 this.onCharacterDeath();
+                return;
             } else {
                 this.setCurrentHp(newHp);
             }
@@ -147,29 +148,11 @@ public abstract class Hero extends Character {
         Game.updateVisibility(newLocation);
     }
 
-    public void spawnHero(int x, int y) {
-        int size = Game.availableHeroes.size();
-        int index = (int) (Math.random() * size);
-        Hero newHero = Game.availableHeroes.remove(index);
-
-        ((CharacterCell) Game.map[x][y]).setCharacter(newHero);
-        newHero.setLocation(new Point(x, y));
-        Game.heroes.add(newHero);
-    }
-
-    public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException { // cures
-                                                                                                                 // a
-                                                                                                                 // zombie
-                                                                                                                 // and
-                                                                                                                 // turns
-                                                                                                                 // it
-                                                                                                                 // into
-                                                                                                                 // a
-        // hero
+    public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException {
         if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
         }
-        if (this.vaccineInventory.isEmpty()) {
+        if (this.getVaccineInventory().isEmpty()) {
             throw new NoAvailableResourcesException();
         }
         if (!(this.isValidTarget())) {
@@ -179,11 +162,8 @@ public abstract class Hero extends Character {
             throw new InvalidTargetException();
         }
         this.setActionsAvailable(this.getActionsAvailable() - 1);
-        this.getVaccineInventory().remove(0);
-        int X = this.getTarget().getLocation().x;
-        int Y = this.getTarget().getLocation().y;
-        spawnHero(X, Y);
-        Game.zombies.remove(this.getTarget());
+        Vaccine v = this.getVaccineInventory().get(0);
+        v.use(this);
         Zombie.ZOMBIES_COUNT -= 1;
     }
 }
