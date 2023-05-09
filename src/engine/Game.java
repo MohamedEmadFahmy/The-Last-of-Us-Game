@@ -24,25 +24,25 @@ public class Game {
     public static void spawnZombie() { // used when killing a zombie or starting a game
         int X = (int) (Math.random() * 15);
         int Y = (int) (Math.random() * 15);
-        while (Game.map[Y][X].isOccupied()) {
+        while (Game.map[X][Y].isOccupied()) {
             X = (int) (Math.random() * 15);
             Y = (int) (Math.random() * 15);
         }
         Zombie spawnedZombie = new Zombie();
         zombies.add(spawnedZombie);
-        spawnedZombie.setLocation(new Point(X,Y));
-        Game.map[Y][X] = new CharacterCell(spawnedZombie);
+        spawnedZombie.setLocation(new Point(X, Y));
+        Game.map[X][Y] = new CharacterCell(spawnedZombie);
     }
 
     public static void spawnTraps() { // spawns 5 traps at the start of the game
         for (int i = 0; i < 5; i++) {
             int X = (int) (Math.random() * 15);
             int Y = (int) (Math.random() * 15);
-            while (Game.map[Y][X].isOccupied()) {
+            while (Game.map[X][Y].isOccupied()) {
                 X = (int) (Math.random() * 15);
                 Y = (int) (Math.random() * 15);
             }
-            Game.map[Y][X] = new TrapCell();
+            Game.map[X][Y] = new TrapCell();
         }
     }
 
@@ -53,12 +53,12 @@ public class Game {
             Vaccine vaccine = new Vaccine();
             X = (int) (Math.random() * 15);
             Y = (int) (Math.random() * 15);
-            while (Game.map[Y][X].isOccupied()) {
+            while (Game.map[X][Y].isOccupied()) {
                 X = (int) (Math.random() * 15);
                 Y = (int) (Math.random() * 15);
             }
 
-            Game.map[Y][X] = new CollectibleCell(vaccine);
+            Game.map[X][Y] = new CollectibleCell(vaccine);
         }
     }
 
@@ -69,19 +69,19 @@ public class Game {
             Supply supply = new Supply();
             X = (int) (Math.random() * 15);
             Y = (int) (Math.random() * 15);
-            while (Game.map[Y][X].isOccupied()) {
+            while (Game.map[X][Y].isOccupied()) {
                 X = (int) (Math.random() * 15);
                 Y = (int) (Math.random() * 15);
             }
 
-            Game.map[Y][X] = new CollectibleCell(supply);
+            Game.map[X][Y] = new CollectibleCell(supply);
         }
     }
 
     public static void startGame(Hero h) {
         Game.availableHeroes.remove(h);
         heroes.add(h);
-        h.setLocation(new Point(0,0));
+        h.setLocation(new Point(0, 0));
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 Game.map[j][i] = new CharacterCell(null);
@@ -186,7 +186,7 @@ public class Game {
             }
             return true;
         }
-        for (int i = 0; i < heroes.size(); i++){
+        for (int i = 0; i < heroes.size(); i++) {
             if (!(heroes.get(i).getVaccineInventory().isEmpty())) {
                 return false;
             }

@@ -89,32 +89,32 @@ public abstract class Hero extends Character {
         }
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
-        CharacterCell prevCell = (CharacterCell) Game.map[Y][X];
+        CharacterCell prevCell = (CharacterCell) Game.map[X][Y];
         Cell targetCell = null;
         if (D == Direction.UP) {
             if (X + 1 > 14) {
                 throw new MovementException();
             }
             X += 1;
-            targetCell = Game.map[Y][X];
+            targetCell = Game.map[X][Y];
         } else if (D == Direction.LEFT) {
             if (Y - 1 < 0) {
                 throw new MovementException();
             }
             Y -= 1;
-            targetCell = Game.map[Y][X];
+            targetCell = Game.map[X][Y];
         } else if (D == Direction.RIGHT) {
             if (Y + 1 > 14) {
                 throw new MovementException();
             }
             Y += 1;
-            targetCell = Game.map[Y][X];
+            targetCell = Game.map[X][Y];
         } else if (D == Direction.DOWN) {
             if (X - 1 < 0) {
                 throw new MovementException();
             }
             X -= 1;
-            targetCell = Game.map[Y][X];
+            targetCell = Game.map[X][Y];
         }
         if (targetCell instanceof CharacterCell) {
             if (((CharacterCell) targetCell).containsCharacter()) {
@@ -131,12 +131,12 @@ public abstract class Hero extends Character {
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
             collectible.pickUp(this);
-            Game.map[Y][X] = new CharacterCell(this);
+            Game.map[X][Y] = new CharacterCell(this);
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
             // targetCell = new CharacterCell(this);
-            Game.map[Y][X] = new CharacterCell(this);
+            Game.map[X][Y] = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             if (newHp <= 0) {
                 this.onCharacterDeath();
@@ -152,13 +152,20 @@ public abstract class Hero extends Character {
         int index = (int) (Math.random() * size);
         Hero newHero = Game.availableHeroes.remove(index);
 
-        ((CharacterCell) Game.map[y][x]).setCharacter(newHero);
+        ((CharacterCell) Game.map[x][y]).setCharacter(newHero);
         newHero.setLocation(new Point(x, y));
         Game.heroes.add(newHero);
     }
 
-    public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException { // cures a zombie and turns it into a
-                                                                                  // hero
+    public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException { // cures
+                                                                                                                 // a
+                                                                                                                 // zombie
+                                                                                                                 // and
+                                                                                                                 // turns
+                                                                                                                 // it
+                                                                                                                 // into
+                                                                                                                 // a
+        // hero
         if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
         }
