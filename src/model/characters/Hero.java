@@ -161,6 +161,7 @@ public abstract class Hero extends Character {
             throw new InvalidTargetException();
         }
         Game.updateVisibility(this.getTarget().getLocation());
+        this.setTarget(null);
         this.setActionsAvailable(this.getActionsAvailable() - 1);
         Vaccine v = this.getVaccineInventory().get(0);
         v.use(this);
