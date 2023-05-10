@@ -18,9 +18,9 @@ public class Zombie extends Character {
         }
         int targetHP = target.getCurrentHp();
         int newTargetHP = targetHP - this.getAttackDmg();
+        target.defend(this);
         if (newTargetHP > 0) {
             target.setCurrentHp(newTargetHP);
-            target.defend(this);
             return;
         }
         target.onCharacterDeath();

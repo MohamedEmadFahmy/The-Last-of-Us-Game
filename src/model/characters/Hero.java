@@ -151,15 +151,16 @@ public abstract class Hero extends Character {
         if (this.getActionsAvailable() <= 0) {
             throw new NotEnoughActionsException();
         }
-        // if (this.getVaccineInventory().isEmpty()) {
-        // throw new NoAvailableResourcesException();
-        // }
-        // if (!(this.isValidTarget())) {
-        // throw new InvalidTargetException();
-        // }
+        if (this.getVaccineInventory().isEmpty()) {
+            throw new NoAvailableResourcesException();
+        }
+        if (!(this.isValidTarget())) {
+            throw new InvalidTargetException();
+        }
         if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
+        Game.updateVisibility(this.getTarget().getLocation());
         this.setActionsAvailable(this.getActionsAvailable() - 1);
         Vaccine v = this.getVaccineInventory().get(0);
         v.use(this);
