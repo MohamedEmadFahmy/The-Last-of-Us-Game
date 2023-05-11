@@ -2,6 +2,9 @@ package model.characters;
 
 import java.util.ArrayList;
 
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+
 public class Zombie extends Character {
     static int ZOMBIES_COUNT = 0;
 
@@ -9,19 +12,14 @@ public class Zombie extends Character {
         super("Zombie " + ++ZOMBIES_COUNT, 40, 10);
     }
 
-    // @Override
-    public void attack() {
+    @Override
+    public void attack() throws InvalidTargetException, NotEnoughActionsException {
         Character target = getAttackPriority();
         setTarget(target);
         if (getTarget() == null) {
             return;
         }
-        try {
-            super.attack();
-        } catch (Exception e) {
-            // TODO: handle exception
-            return;
-        }
+        super.attack();
     }
 
     private Character getAttackPriority() {

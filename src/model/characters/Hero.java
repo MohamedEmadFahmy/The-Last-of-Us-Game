@@ -68,6 +68,9 @@ public abstract class Hero extends Character {
             throw new InvalidTargetException();
         }
         if (!(this instanceof Fighter && isSpecialAction())) {
+            if (getActionsAvailable() <= 0) {
+                throw new NotEnoughActionsException();
+            }
             setActionsAvailable(getActionsAvailable() - 1);
         }
         super.attack();
@@ -76,7 +79,7 @@ public abstract class Hero extends Character {
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
     public void move(Direction D) throws MovementException, NotEnoughActionsException {
-        if (this.actionsAvailable < 1) {
+        if (this.actionsAvailable <= 0) {
             throw new NotEnoughActionsException();
         }
         int X = this.getLocation().x;
@@ -127,7 +130,7 @@ public abstract class Hero extends Character {
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
-            targetCell = new CharacterCell(this);
+            // targetCell = new CharacterCell(this);
             // Game.map[X][Y] = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             this.setCurrentHp(newHp);
@@ -153,11 +156,11 @@ public abstract class Hero extends Character {
         if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
+        Vaccine v = this.getVaccineInventory().get(0);
+        v.use(this);
         Game.updateVisibility(this.getTarget().getLocation());
         this.setTarget(null);
         this.setActionsAvailable(this.getActionsAvailable() - 1);
-        Vaccine v = this.getVaccineInventory().get(0);
-        v.use(this);
         Zombie.ZOMBIES_COUNT -= 1;
     }
 }

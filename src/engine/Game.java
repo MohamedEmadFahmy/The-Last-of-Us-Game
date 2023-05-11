@@ -8,6 +8,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+
 import static engine.CSVReader.loadHeroesCSV;
 
 public class Game {
@@ -223,7 +226,7 @@ public class Game {
         return VaccineDone;
     }
 
-    public static void endTurn() {
+    public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
         // update visibility
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -256,7 +259,7 @@ public class Game {
         spawnZombie();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidTargetException, NotEnoughActionsException {
 
         Medic f = new Medic("Mohamed", 1, 999, 6);
         f.setLocation(new Point(0, 0));
