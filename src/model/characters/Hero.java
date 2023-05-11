@@ -158,9 +158,6 @@ public abstract class Hero extends Character {
         }
         Vaccine v = this.getVaccineInventory().get(0);
         v.use(this);
-        Game.updateVisibility(this.getTarget().getLocation());
-        this.setTarget(null);
-        this.setActionsAvailable(this.getActionsAvailable() - 1);
         Zombie.ZOMBIES_COUNT -= 1;
     }
 }
