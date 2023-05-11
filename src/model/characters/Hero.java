@@ -64,7 +64,12 @@ public abstract class Hero extends Character {
         if (!(getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
-        if (!isValidTarget()) {
+
+        int targetX =this.getTarget().getLocation().x;
+        int targetY =this.getTarget().getLocation().y;
+        int X = this.getLocation().x;
+        int Y = this.getLocation().y;
+        if (!((targetX <= X + 1 && targetX >= X - 1) && (targetY <= Y + 1 && targetX >= Y - 1))) {
             throw new InvalidTargetException();
         }
         if (!(this instanceof Fighter && isSpecialAction())) {
@@ -130,8 +135,7 @@ public abstract class Hero extends Character {
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
-            // targetCell = new CharacterCell(this);
-            // Game.map[X][Y] = new CharacterCell(this);
+            targetCell = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             this.setCurrentHp(newHp);
             if (newHp <= 0) {
@@ -150,10 +154,14 @@ public abstract class Hero extends Character {
         if (this.getVaccineInventory().isEmpty()) {
             throw new NoAvailableResourcesException();
         }
-        if (!(this.isValidTarget())) {
+        if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
-        if (!(this.getTarget() instanceof Zombie)) {
+        int targetX =this.getTarget().getLocation().x;
+        int targetY =this.getTarget().getLocation().y;
+        int X = this.getLocation().x;
+        int Y = this.getLocation().y;
+        if (!((targetX <= X + 1 && targetX >= X - 1) && (targetY <= Y + 1 && targetX >= Y - 1))) {
             throw new InvalidTargetException();
         }
         Vaccine v = this.getVaccineInventory().get(0);

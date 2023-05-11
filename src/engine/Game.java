@@ -86,7 +86,6 @@ public class Game {
         Hero newHero = availableHeroes.remove(index);
 
         map[x][y] = new CharacterCell(newHero);
-        // ((CharacterCell) map[x][y]).setCharacter(newHero);
         newHero.setLocation(new Point(x, y));
         heroes.add(newHero);
     }
@@ -153,7 +152,6 @@ public class Game {
                 }
             }
         }
-        map[x][y].setVisible(true);
     }
 
     public static boolean checkWin() {
