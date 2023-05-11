@@ -98,11 +98,10 @@ public abstract class Character {
         int attackValue = this.getAttackDmg() / 2;
         int targetHP = c.getCurrentHp();
         int newTargetHP = targetHP - attackValue;
-        if (newTargetHP > 0) {
-            c.setCurrentHp(newTargetHP);
-            return;
+        c.setCurrentHp(newTargetHP);
+        if (newTargetHP <= 0) {
+            c.onCharacterDeath();
         }
-        c.onCharacterDeath();
     }
 
     public void onCharacterDeath() {
