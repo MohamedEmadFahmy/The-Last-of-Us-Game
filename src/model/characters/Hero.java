@@ -61,12 +61,14 @@ public abstract class Hero extends Character {
 
     @Override
     public void attack() throws InvalidTargetException, NotEnoughActionsException {
-        if (!(getTarget() instanceof Character)) {
-
+        if (!(getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
         if (!isValidTarget()) {
             throw new InvalidTargetException();
+        }
+        if (!(this instanceof Fighter && isSpecialAction())) {
+            setActionsAvailable(getActionsAvailable() - 1);
         }
         super.attack();
     }

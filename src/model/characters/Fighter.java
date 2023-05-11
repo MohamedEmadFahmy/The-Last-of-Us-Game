@@ -11,17 +11,6 @@ public class Fighter extends Hero {
     }
 
     @Override
-    public void attack() throws NotEnoughActionsException, InvalidTargetException {
-        if (isSpecialAction()) {
-            super.attack();
-            return;
-        }
-        if (getActionsAvailable() <= 0) {
-            throw new NotEnoughActionsException();
-        }
-    }
-
-    @Override
     public void useSpecial() throws NoAvailableResourcesException {
         try {
             Supply supply = getSupplyInventory().get(0);
