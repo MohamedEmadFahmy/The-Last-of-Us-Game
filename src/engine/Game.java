@@ -210,7 +210,17 @@ public class Game {
         if (Game.heroes.isEmpty()) {
             return true;
         }
-        return false;
+        boolean VaccineDone = true;
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (map[i][j] instanceof CollectibleCell) {
+                    if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
+                        VaccineDone = false;
+                    }
+                }
+            }
+        }
+        return VaccineDone;
     }
 
     public static void endTurn() {
@@ -248,7 +258,7 @@ public class Game {
 
     public static void main(String[] args) {
 
-        Medic f = new Medic("Mohamed", 1, 20, 6);
+        Medic f = new Medic("Mohamed", 1, 999, 6);
         f.setLocation(new Point(0, 0));
 
         startGame(f);
@@ -283,6 +293,9 @@ public class Game {
                         break;
                     case "d":
                         d = Direction.RIGHT;
+                        break;
+                    case "h":
+                        // heroes.get(0).attack();
                         break;
                     // case "e":
                     // endTurn();

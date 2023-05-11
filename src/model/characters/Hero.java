@@ -61,24 +61,14 @@ public abstract class Hero extends Character {
 
     @Override
     public void attack() throws InvalidTargetException, NotEnoughActionsException {
-        if (!(getTarget() instanceof Zombie) || !isValidTarget()) {
+        if (!(getTarget() instanceof Character)) {
+
             throw new InvalidTargetException();
         }
-        if (!(this instanceof Fighter && isSpecialAction())) {
-            if (actionsAvailable <= 0) {
-                throw new NotEnoughActionsException();
-            }
-            setActionsAvailable(getActionsAvailable() - 1);
+        if (!isValidTarget()) {
+            throw new InvalidTargetException();
         }
-        Character myTarget = getTarget();
-        int TargetHP = myTarget.getCurrentHp();
-        int NewHP = TargetHP - getAttackDmg();
-        myTarget.defend(this);
-        if (NewHP > 0) {
-            myTarget.setCurrentHp(NewHP);
-            return;
-        }
-        myTarget.onCharacterDeath();
+        super.attack();
     }
 
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;

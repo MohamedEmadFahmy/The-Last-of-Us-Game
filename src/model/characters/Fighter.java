@@ -1,11 +1,24 @@
 package model.characters;
 
+import exceptions.InvalidTargetException;
 import exceptions.NoAvailableResourcesException;
+import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 
 public class Fighter extends Hero {
     public Fighter(String Name, int maxHp, int attackDmg, int maxActions) {
         super(Name, maxHp, attackDmg, maxActions);
+    }
+
+    @Override
+    public void attack() throws NotEnoughActionsException, InvalidTargetException {
+        if (isSpecialAction()) {
+            super.attack();
+            return;
+        }
+        if (getActionsAvailable() <= 0) {
+            throw new NotEnoughActionsException();
+        }
     }
 
     @Override

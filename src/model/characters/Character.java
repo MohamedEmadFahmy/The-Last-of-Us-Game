@@ -83,7 +83,17 @@ public abstract class Character {
         return list;
     }
 
-    public abstract void attack() throws InvalidTargetException, NotEnoughActionsException;
+    public void attack() throws InvalidTargetException, NotEnoughActionsException {
+        Character myTarget = getTarget();
+        int TargetHP = myTarget.getCurrentHp();
+        int NewHP = TargetHP - getAttackDmg();
+        myTarget.defend(this);
+        if (NewHP > 0) {
+            myTarget.setCurrentHp(NewHP);
+            return;
+        }
+        myTarget.onCharacterDeath();
+    }
 
     public void defend(Character c) {
         int attackValue = this.getAttackDmg() / 2;

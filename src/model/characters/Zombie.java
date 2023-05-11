@@ -9,21 +9,19 @@ public class Zombie extends Character {
         super("Zombie " + ++ZOMBIES_COUNT, 40, 10);
     }
 
-    @Override
+    // @Override
     public void attack() {
         Character target = getAttackPriority();
         setTarget(target);
         if (getTarget() == null) {
             return;
         }
-        int targetHP = target.getCurrentHp();
-        int newTargetHP = targetHP - this.getAttackDmg();
-        target.defend(this);
-        if (newTargetHP > 0) {
-            target.setCurrentHp(newTargetHP);
+        try {
+            super.attack();
+        } catch (Exception e) {
+            // TODO: handle exception
             return;
         }
-        target.onCharacterDeath();
     }
 
     private Character getAttackPriority() {
