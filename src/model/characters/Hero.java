@@ -138,14 +138,13 @@ public abstract class Hero extends Character {
             int newHp = this.getCurrentHp() - TrapDamage;
             this.setCurrentHp(newHp);
             Game.map[X][Y] = new CharacterCell(this);
-            if (newHp <= 0) {
-                ((CharacterCell) Game.map[X][Y]).setCharacter(null);
-                this.onCharacterDeath();
-                return;
-            }
         }
         if (this.getCurrentHp() > 0) {
             Game.updateVisibility(newLocation);
+        }
+        else {
+            ((CharacterCell) Game.map[X][Y]).setCharacter(null);
+            this.onCharacterDeath();
         }
     }
 
