@@ -61,10 +61,12 @@ public abstract class Hero extends Character {
 
     @Override
     public void attack() throws InvalidTargetException, NotEnoughActionsException {
+        if (this.getCurrentHp() <= 0) {
+            this.onCharacterDeath();
+        }
         if (!(getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
-
         int targetX =this.getTarget().getLocation().x;
         int targetY =this.getTarget().getLocation().y;
         int X = this.getLocation().x;
@@ -84,11 +86,16 @@ public abstract class Hero extends Character {
     public abstract void useSpecial() throws InvalidTargetException, NoAvailableResourcesException;
 
     public void move(Direction D) throws MovementException, NotEnoughActionsException {
+        int X = this.getLocation().x;
+        int Y = this.getLocation().y;
+        if (this.getCurrentHp() <= 0) {
+            ((CharacterCell) Game.map[X][Y]).setCharacter(null);
+            this.onCharacterDeath();
+            return;
+        }
         if (this.actionsAvailable <= 0) {
             throw new NotEnoughActionsException();
         }
-        int X = this.getLocation().x;
-        int Y = this.getLocation().y;
         CharacterCell prevCell = (CharacterCell) Game.map[X][Y];
         Cell targetCell = null;
         if (D == Direction.UP) {
@@ -139,13 +146,7 @@ public abstract class Hero extends Character {
             this.setCurrentHp(newHp);
             Game.map[X][Y] = new CharacterCell(this);
         }
-        if (this.getCurrentHp() > 0) {
-            Game.updateVisibility(newLocation);
-        }
-        else {
-            ((CharacterCell) Game.map[X][Y]).setCharacter(null);
-            this.onCharacterDeath();
-        }
+        Game.updateVisibility(newLocation);
     }
 
     public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException {
