@@ -148,7 +148,9 @@ public class Game {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if (((i == x) || (i == x + 1) || (i == x - 1)) && ((j == y) || (j == y + 1) || (j == y - 1))) {
-                    map[i][j].setVisible(true);
+                    if (map[i][j] != null) {
+                        map[i][j].setVisible(true);
+                    }
                 }
             }
         }
