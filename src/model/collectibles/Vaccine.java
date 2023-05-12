@@ -3,6 +3,8 @@ package model.collectibles;
 import engine.Game;
 // import exceptions.NoAvailableResourcesException;
 import model.characters.Hero;
+
+import java.awt.*;
 // import model.characters.Zombie;
 
 public class Vaccine implements Collectible {
@@ -20,9 +22,9 @@ public class Vaccine implements Collectible {
         h.getVaccineInventory().remove(this);
         int X = h.getTarget().getLocation().x;
         int Y = h.getTarget().getLocation().y;
-        Game.spawnHero(X, Y);
+        Game.updateVisibility(new Point(X,Y));
         Game.zombies.remove(h.getTarget());
-        Game.updateVisibility(h.getTarget().getLocation());
+        Game.spawnHero(X, Y);
         h.setTarget(null);
         h.setActionsAvailable(h.getActionsAvailable() - 1);
         // Zombie.ZOMBIES_COUNT -= 1;
