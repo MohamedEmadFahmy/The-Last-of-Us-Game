@@ -135,16 +135,18 @@ public abstract class Hero extends Character {
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
-            targetCell = new CharacterCell(this);
             int newHp = this.getCurrentHp() - TrapDamage;
             this.setCurrentHp(newHp);
+            Game.map[X][Y] = new CharacterCell(this);
             if (newHp <= 0) {
-                ((CharacterCell) targetCell).setCharacter(null);
+                ((CharacterCell) Game.map[X][Y]).setCharacter(null);
                 this.onCharacterDeath();
                 return;
             }
         }
-        Game.updateVisibility(newLocation);
+        if (this.getCurrentHp() > 0) {
+            Game.updateVisibility(newLocation);
+        }
     }
 
     public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException {
