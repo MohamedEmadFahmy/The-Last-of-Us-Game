@@ -12,7 +12,7 @@ public class Medic extends Hero {
     @Override
     public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
         Character myTarget = getTarget();
-        if (!(myTarget instanceof Hero) || !this.isValidTarget()) {
+        if (!(myTarget instanceof Hero) || !this.hasValidTarget()) {
             throw new InvalidTargetException();
         }
         try {

@@ -22,12 +22,11 @@ public class Vaccine implements Collectible {
         h.getVaccineInventory().remove(this);
         int X = h.getTarget().getLocation().x;
         int Y = h.getTarget().getLocation().y;
-        Game.updateVisibility(new Point(X,Y));
+        Game.updateVisibility(new Point(X, Y));
         Game.zombies.remove(h.getTarget());
         Game.spawnHero(X, Y);
         h.setTarget(null);
         h.setActionsAvailable(h.getActionsAvailable() - 1);
-        // Zombie.ZOMBIES_COUNT -= 1;
     }
 
 }

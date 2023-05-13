@@ -90,9 +90,9 @@ public abstract class Character {
         int NewHP = TargetHP - getAttackDmg();
         myTarget.defend(this);
         myTarget.setCurrentHp(NewHP);
-        // if (NewHP <= 0) {
-        // myTarget.onCharacterDeath();
-        // }
+        if (myTarget.getCurrentHp() == 0) {
+            this.setTarget(null);
+        }
     }
 
     public void defend(Character c) {
@@ -100,9 +100,6 @@ public abstract class Character {
         int targetHP = c.getCurrentHp();
         int newTargetHP = targetHP - attackValue;
         c.setCurrentHp(newTargetHP);
-        // if (newTargetHP <= 0) {
-        // c.onCharacterDeath();
-        // }
     }
 
     public void onCharacterDeath() {
