@@ -203,7 +203,7 @@ public class Game {
                     }
                 }
             }
-            return true;
+            return heroes.size() < 5;
         }
         for (int i = 0; i < heroes.size(); i++) {
             if (!(heroes.get(i).getVaccineInventory().isEmpty())) {
