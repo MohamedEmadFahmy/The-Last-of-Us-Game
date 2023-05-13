@@ -90,6 +90,9 @@ public abstract class Character {
         int NewHP = TargetHP - getAttackDmg();
         myTarget.defend(this);
         myTarget.setCurrentHp(NewHP);
+        if (myTarget.getCurrentHp() == 0) {
+            this.setTarget(null);
+        }
     }
 
     public void defend(Character c) {
@@ -107,7 +110,6 @@ public abstract class Character {
         CharacterCell currentCell = (CharacterCell) Game.map[x][y];
         currentCell.setCharacter(null);
         if (this instanceof Zombie) {
-            Zombie.ZOMBIES_COUNT--;
             Game.spawnZombie();
             Game.zombies.remove(this);
             return;

@@ -54,9 +54,12 @@ public abstract class Hero extends Character {
         return supplyInventory;
     }
 
-    public boolean isValidTarget() {
-        ArrayList<Character> adjacentCharacters = getAdjacentCharacters();
-        return adjacentCharacters.contains(this.getTarget());
+    public boolean hasValidTarget() {
+        int targetX = this.getTarget().getLocation().x;
+        int targetY = this.getTarget().getLocation().y;
+        int X = this.getLocation().x;
+        int Y = this.getLocation().y;
+        return ((targetX <= X + 1 && targetX >= X - 1) && (targetY <= Y + 1 && targetX >= Y - 1));
     }
 
     @Override
@@ -68,12 +71,12 @@ public abstract class Hero extends Character {
         if (!(getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
-        int targetX = this.getTarget().getLocation().x;
-        int targetY = this.getTarget().getLocation().y;
-        int X = this.getLocation().x;
-        int Y = this.getLocation().y;
-        if (!((targetX <= X + 1 && targetX >= X - 1) && (targetY <= Y + 1 && targetX >= Y - 1))) {
+        if (!(hasValidTarget())) {
             throw new InvalidTargetException();
+        }
+        if (this.getTarget().getCurrentHp() <= 0) {
+            this.getTarget().onCharacterDeath();
+            return;
         }
         if (!(this instanceof Fighter && isSpecialAction())) {
             if (getActionsAvailable() <= 0) {
@@ -128,9 +131,9 @@ public abstract class Hero extends Character {
             if (((CharacterCell) targetCell).containsCharacter()) {
                 throw new MovementException();
             }
-            ((CharacterCell) targetCell).setCharacter(this);
         }
 
+        Game.map[X][Y] = new CharacterCell(this);
         this.setActionsAvailable(this.getActionsAvailable() - 1);
         prevCell.setCharacter(null);
         Point newLocation = new Point(X, Y); // update location of Hero and set previous cell to be empty
@@ -139,13 +142,11 @@ public abstract class Hero extends Character {
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
             collectible.pickUp(this);
-            Game.map[X][Y] = new CharacterCell(this);
         }
         if (targetCell instanceof TrapCell) {
             int TrapDamage = ((TrapCell) targetCell).getTrapDamage();
             int newHp = this.getCurrentHp() - TrapDamage;
             this.setCurrentHp(newHp);
-            Game.map[X][Y] = new CharacterCell(this);
         }
         Game.updateVisibility(newLocation);
     }
@@ -164,6 +165,10 @@ public abstract class Hero extends Character {
         if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
         }
+        if (this.getTarget().getCurrentHp() <= 0) {
+            this.getTarget().onCharacterDeath();
+            return;
+        }
         int targetX = this.getTarget().getLocation().x;
         int targetY = this.getTarget().getLocation().y;
         int X = this.getLocation().x;
@@ -173,6 +178,5 @@ public abstract class Hero extends Character {
         }
         Vaccine v = this.getVaccineInventory().get(0);
         v.use(this);
-        Zombie.ZOMBIES_COUNT -= 1;
     }
 }
