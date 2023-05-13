@@ -46,6 +46,7 @@ public abstract class Character {
         if (x <= 0) {
             currentHp = 0;
             this.onCharacterDeath();
+
         } else if (x > maxHp)
             currentHp = maxHp;
         else {
@@ -89,6 +90,9 @@ public abstract class Character {
         int NewHP = TargetHP - getAttackDmg();
         myTarget.defend(this);
         myTarget.setCurrentHp(NewHP);
+        if (myTarget.getCurrentHp() == 0) {
+            this.setTarget(null);
+        }
     }
 
     public void defend(Character c) {
@@ -112,5 +116,6 @@ public abstract class Character {
             return;
         }
         Game.heroes.remove(this);
+        // hi
     }
 }
