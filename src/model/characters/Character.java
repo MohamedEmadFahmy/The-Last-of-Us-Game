@@ -116,5 +116,6 @@ public abstract class Character {
             return;
         }
         Game.heroes.remove(this);
+        // hi
     }
 }
