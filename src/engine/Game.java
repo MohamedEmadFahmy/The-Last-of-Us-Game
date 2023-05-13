@@ -181,38 +181,46 @@ public class Game {
     }
 
     public static boolean checkGameOver() {
+        // // if there are zombies check if there are vaccines or not if there are game
+        // is
+        // // not over
+        // if there none game is over
         if (!zombies.isEmpty()) {
-            for (int i = 0; i < 15; i++) {
-                for (int j = 0; j < 15; j++) {
-                    if (map[i][j] instanceof CollectibleCell) {
-                        if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+            if (map[i][j] instanceof CollectibleCell) {
+            if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
+            return false;
+        }
+        }
+        }
+        }
+        return true;
         }
         if (availableHeroes.isEmpty()) {
-            for (int i = 0; i < 15; i++) {
-                for (int j = 0; j < 15; j++) {
-                    if (map[i][j] instanceof CollectibleCell) {
-                        if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
+        for (int i = 0; i < 15; i++) {
+        for (int j = 0; j < 15; j++) {
+        if (map[i][j] instanceof CollectibleCell) {
+        if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
+        return false;
         }
+        }
+        }
+        }
+        return true;
+        }
+
+        // if any hero has vaccine , game is not over
         for (int i = 0; i < heroes.size(); i++) {
-            if (!(heroes.get(i).getVaccineInventory().isEmpty())) {
-                return false;
-            }
+        if (!(heroes.get(i).getVaccineInventory().isEmpty())) {
+        return false;
         }
+        // }
+        // // if no more heroes are left return true
         if (Game.heroes.isEmpty()) {
             return true;
         }
+        // if there are vaccines left on the map game is not over
         boolean VaccineDone = true;
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -224,6 +232,19 @@ public class Game {
             }
         }
         return VaccineDone;
+        // if (zombies.isEmpty()) {
+        // return true;
+        // }
+        // if (checkWin()) {
+        // return true;
+        // }
+        // if (heroes.isEmpty()) {
+        // return true;
+        // }
+        // if (availableHeroes.isEmpty()) {
+        // return true;
+        // }
+        // return false;
     }
 
     public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {

@@ -45,6 +45,7 @@ public abstract class Character {
     public void setCurrentHp(int x) {
         if (x <= 0) {
             currentHp = 0;
+            this.onCharacterDeath();
 
         } else if (x > maxHp)
             currentHp = maxHp;
@@ -89,9 +90,9 @@ public abstract class Character {
         int NewHP = TargetHP - getAttackDmg();
         myTarget.defend(this);
         myTarget.setCurrentHp(NewHP);
-        if (NewHP <= 0) {
-            myTarget.onCharacterDeath();
-        }
+        // if (NewHP <= 0) {
+        // myTarget.onCharacterDeath();
+        // }
     }
 
     public void defend(Character c) {
@@ -99,9 +100,9 @@ public abstract class Character {
         int targetHP = c.getCurrentHp();
         int newTargetHP = targetHP - attackValue;
         c.setCurrentHp(newTargetHP);
-        if (newTargetHP <= 0) {
-            c.onCharacterDeath();
-        }
+        // if (newTargetHP <= 0) {
+        // c.onCharacterDeath();
+        // }
     }
 
     public void onCharacterDeath() {
@@ -112,6 +113,7 @@ public abstract class Character {
         CharacterCell currentCell = (CharacterCell) Game.map[x][y];
         currentCell.setCharacter(null);
         if (this instanceof Zombie) {
+            Zombie.ZOMBIES_COUNT--; // doesnt do anything idk leh
             Game.spawnZombie();
             Game.zombies.remove(this);
             return;
