@@ -74,10 +74,6 @@ public abstract class Hero extends Character {
         if (!(hasValidTarget())) {
             throw new InvalidTargetException();
         }
-        if (this.getTarget().getCurrentHp() <= 0) {
-            this.getTarget().onCharacterDeath();
-            return;
-        }
         if (!(this instanceof Fighter && isSpecialAction())) {
             if (getActionsAvailable() <= 0) {
                 throw new NotEnoughActionsException();
@@ -93,7 +89,6 @@ public abstract class Hero extends Character {
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
         if (this.getCurrentHp() <= 0) {
-            ((CharacterCell) Game.map[X][Y]).setCharacter(null);
             this.onCharacterDeath();
             return;
         }
@@ -164,10 +159,6 @@ public abstract class Hero extends Character {
         }
         if (!(this.getTarget() instanceof Zombie)) {
             throw new InvalidTargetException();
-        }
-        if (this.getTarget().getCurrentHp() <= 0) {
-            this.getTarget().onCharacterDeath();
-            return;
         }
         int targetX = this.getTarget().getLocation().x;
         int targetY = this.getTarget().getLocation().y;
