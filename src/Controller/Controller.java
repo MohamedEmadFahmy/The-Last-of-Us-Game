@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Controller extends Application {
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -27,11 +28,6 @@ public class Controller extends Application {
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
-
-        /*
-         * Parent root = FXMLLoader.load(getClass().getResource("MainScene.fxml"));
-         * Scene scene = new Scene(root);
-         */
 
         Scene scene = new Scene(root, 300, 250);
 
