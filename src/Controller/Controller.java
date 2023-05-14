@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -23,6 +24,7 @@ public class Controller extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Hello World!");
+                primaryStage.close();
             }
         });
 
@@ -31,6 +33,8 @@ public class Controller extends Application {
 
         Scene scene = new Scene(root, 300, 250);
 
+        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
