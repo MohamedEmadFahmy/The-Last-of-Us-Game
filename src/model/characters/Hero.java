@@ -133,7 +133,6 @@ public abstract class Hero extends Character {
         prevCell.setCharacter(null);
         Point newLocation = new Point(X, Y); // update location of Hero and set previous cell to be empty
         this.setLocation(newLocation);
-        Game.map[X][Y] = new CharacterCell(this);
 
         if (targetCell instanceof CollectibleCell) {
             Collectible collectible = ((CollectibleCell) targetCell).getCollectible();
@@ -144,9 +143,7 @@ public abstract class Hero extends Character {
             int newHp = this.getCurrentHp() - TrapDamage;
             this.setCurrentHp(newHp);
         }
-        if (this.getCurrentHp() != 0) {
-            Game.updateVisibility(newLocation);
-        }
+        Game.updateVisibility(newLocation);
     }
 
     public void cure() throws InvalidTargetException, NotEnoughActionsException, NoAvailableResourcesException {
