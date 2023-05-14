@@ -45,6 +45,7 @@ public abstract class Character {
     public void setCurrentHp(int x) {
         if (x <= 0) {
             currentHp = 0;
+            this.onCharacterDeath();
 
         } else if (x > maxHp)
             currentHp = maxHp;
@@ -67,41 +68,53 @@ public abstract class Character {
 
     public ArrayList<Character> getAdjacentCharacters() {
         ArrayList<Character> list = new ArrayList<Character>();
-        int myI = this.getLocation().y;
-        int myJ = this.getLocation().x;
+        int y = this.getLocation().y;
+        int x = this.getLocation().x;
+
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                if ((i <= myI + 1 && i >= myI - 1) && (j <= myJ + 1 && j >= myJ - 1) && (myI != i || myJ != j)) {
-                    list.add(((CharacterCell) Game.map[i][j]).getCharacter());
+                if ((j <= y + 1 && j >= y - 1) && (i <= x + 1 && i >= x - 1) && (y != j || x != i)) {
+                    if (Game.map[i][j] instanceof CharacterCell
+                            && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
+                        list.add(((CharacterCell) Game.map[i][j]).getCharacter());
+                    }
                 }
             }
         }
         return list;
     }
 
-    public abstract void attack() throws InvalidTargetException, NotEnoughActionsException;
+    public void attack() throws InvalidTargetException, NotEnoughActionsException {
+        Character myTarget = getTarget();
+        int TargetHP = myTarget.getCurrentHp();
+        int NewHP = TargetHP - getAttackDmg();
+        myTarget.defend(this);
+        myTarget.setCurrentHp(NewHP);
+        if (myTarget.getCurrentHp() == 0) {
+            this.setTarget(null);
+        }
+    }
 
     public void defend(Character c) {
         int attackValue = this.getAttackDmg() / 2;
         int targetHP = c.getCurrentHp();
         int newTargetHP = targetHP - attackValue;
-        if (newTargetHP > 0) {
-            c.setCurrentHp(newTargetHP);
-            return;
-        }
-        c.onCharacterDeath();
+        c.setCurrentHp(newTargetHP);
     }
 
     public void onCharacterDeath() {
+
         int x = this.getLocation().x;
         int y = this.getLocation().y;
 
-        CharacterCell currentCell = (CharacterCell) Game.map[y][x];
+        CharacterCell currentCell = (CharacterCell) Game.map[x][y];
         currentCell.setCharacter(null);
         if (this instanceof Zombie) {
-            // Game.spawnZombie();
+            Game.spawnZombie();
+            Game.zombies.remove(this);
             return;
         }
         Game.heroes.remove(this);
+        // hi
     }
 }
