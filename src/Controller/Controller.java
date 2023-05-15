@@ -1,19 +1,18 @@
 package controller;
 
-import javax.swing.GroupLayout.Alignment;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-// 
+import views.characterSelect;
+import views.mainMenu;
 
 public class Controller extends Application {
 
@@ -23,30 +22,44 @@ public class Controller extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-                primaryStage.close();
-            }
-        });
-
-        // GridPane root = new GridPane();
-        TilePane root = new TilePane();
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().add(btn);
-
-        // Scene scene = new Scene(root, 300, 250);
-        Scene scene = new Scene(root, 600, 600);
 
         // primaryStage.setFullScreen(true);
+        // primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("q"));
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
+        primaryStage.setTitle("The Game");
+
+        // Scene scene = new Scene(root, 300, 250);
+        // Scene scene = new Scene(new GridPane(), Color.BLACK);
+        // Scene scene = new Scene(root, 600, 600);
+        // Scene scene = new Scene(new TilePane(), 600, 600, Color.AQUAMARINE);
+        Parent root2 = null;
+        Scene scene = null;
+        try {
+            root2 = FXMLLoader
+                    .load(getClass().getResource("helloWorld.fxml"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        scene = new Scene(root2, 600, 600, Color.AQUAMARINE);
+
+        // Import scene from mainMenu Class in views
+        mainMenu mainMenu = new mainMenu(primaryStage);
+        Scene mainMenuScene = mainMenu.scene;
+        primaryStage.setScene(mainMenuScene);
         primaryStage.show();
+
+        for (int i = 0; i < 1000000000; i++) {
+            for (int j = 0; j < 100000; j++) {
+                i--;
+            }
+        }
+
+        characterSelect characterSelect = new characterSelect(primaryStage);
+        Scene selectCharacterScene = characterSelect.scene;
+        primaryStage.setScene(selectCharacterScene);
+        primaryStage.show();
+
     }
 
 }
