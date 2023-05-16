@@ -1,0 +1,19 @@
+.button {
+    -fx-pref-width: 340px;
+    -fx-pref-height: 120px;
+    -fx-padding: 0;
+
+
+    -fx-background-color: rgb(0, 0, 0);
+    -fx-background-radius: 40px;
+
+    -fx-border-radius: 8px;
+    -fx-border-color:gold;
+    -fx-border-width: 10px;
+
+
+
+    -fx-font-size: 55px;
+    -fx-font-family: "The Bomb Sound";
+    -fx-text-fill: white;
+}
