@@ -1,6 +1,10 @@
 package views;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
 import javafx.application.Application;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,6 +17,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Controller extends Application {
     double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
@@ -40,12 +45,17 @@ public class Controller extends Application {
         scene.getStylesheets().add(mainMenuCSS);
         ImagePattern pattern = new ImagePattern(new Image("/views/imgs/bgfinal.png"));
         scene.setFill(pattern);
-
         Button startGameBtn = new Button("START GAME");
+        ScaleTransition st = new ScaleTransition(Duration.millis(30),startGameBtn);
+        st.setCycleCount(1);
+        st.setInterpolator(Interpolator.EASE_BOTH);
         startGameBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 startGameBtn.getStyleClass().add("hover");
+                st.setToX(1.15);
+                st.setToY(1.15);
+                st.playFromStart();
             }
         });
 
@@ -53,6 +63,9 @@ public class Controller extends Application {
             @Override
             public void handle(MouseEvent t) {
                 startGameBtn.getStyleClass().remove("hover");
+                st.setToX(1);
+                st.setToY(1);
+                st.playFromStart();
             }
         });
         startGameBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -67,10 +80,14 @@ public class Controller extends Application {
         root.setBottom(startGameBtn);
 
         Button exitGameBtn = new Button("EXIT GAME");
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(30),exitGameBtn);
         exitGameBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 exitGameBtn.getStyleClass().add("hover");
+                st2.setToX(1.15);
+                st2.setToY(1.15);
+                st2.playFromStart();
             }
         });
 
@@ -78,6 +95,9 @@ public class Controller extends Application {
             @Override
             public void handle(MouseEvent t) {
                 exitGameBtn.getStyleClass().remove("hover");
+                st2.setToX(1);
+                st2.setToY(1);
+                st2.playFromStart();
             }
         });
         exitGameBtn.setOnAction(new EventHandler<ActionEvent>() {
