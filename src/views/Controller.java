@@ -4,31 +4,43 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class Controller extends Application {
 
     @Override
     public void start(Stage primaryStage) {
 
-        // primaryStage.setFullScreen(true);
-        // primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("q"));
-        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("q"));
         primaryStage.setTitle("The Game");
-        switchToMainMenu(primaryStage);
-        switchToCharacterSelect(primaryStage);
-
+        try {
+            switchToMainMenu(primaryStage);
+        }
+        catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
     }
 
-    public void switchToMainMenu(Stage primaryStage) {
-        Group root = new Group();
-        Scene scene = new Scene(root, 600, 600, Color.AQUAMARINE);
+    public void switchToMainMenu(Stage primaryStage) throws FileNotFoundException {
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        BorderPane root = new BorderPane();
+        Scene scene = new Scene(root, 1920, 1080);
+        ImagePattern pattern = new ImagePattern(new Image("file:src/views/imgs/hallo.jpg"));
+        scene.setFill(pattern);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
