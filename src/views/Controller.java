@@ -25,15 +25,10 @@ public class Controller extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setFullScreen(true);
-        primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("q"));
-        primaryStage.getIcons().add();
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("esc"));
+        primaryStage.getIcons().add(new Image("file:src/views/imgs/icon.jpg"));
         primaryStage.setTitle("The Game");
-        try {
-            switchToMainMenu(primaryStage);
-        }
-        catch (Exception e) {
-            System.out.print(e.getMessage());
-        }
+        switchToMainMenu(primaryStage);
     }
 
     public void switchToMainMenu(Stage primaryStage) {
@@ -42,6 +37,9 @@ public class Controller extends Application {
         Scene scene = new Scene(root, 1920, 1080);
         ImagePattern pattern = new ImagePattern(new Image("file:src/views/imgs/bgfinal.png"));
         scene.setFill(pattern);
+        Button button = new Button("Start game");
+        root.setBottom(button);
+        root.setBackground(null);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
