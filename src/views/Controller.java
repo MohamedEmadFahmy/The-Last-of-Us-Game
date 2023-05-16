@@ -35,11 +35,11 @@ public class Controller extends Application {
         }
     }
 
-    public void switchToMainMenu(Stage primaryStage) throws FileNotFoundException {
+    public void switchToMainMenu(Stage primaryStage) {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 1920, 1080);
-        ImagePattern pattern = new ImagePattern(new Image("file:src/views/imgs/hallo.jpg"));
+        ImagePattern pattern = new ImagePattern(new Image("file:src/views/imgs/bgfinal.png"));
         scene.setFill(pattern);
         primaryStage.setScene(scene);
         primaryStage.show();
