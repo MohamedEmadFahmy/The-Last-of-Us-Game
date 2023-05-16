@@ -26,6 +26,7 @@ public class Controller extends Application {
 
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("q"));
+        primaryStage.getIcons().add();
         primaryStage.setTitle("The Game");
         try {
             switchToMainMenu(primaryStage);
