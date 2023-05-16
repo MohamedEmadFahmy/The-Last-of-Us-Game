@@ -20,5 +20,4 @@ public class mainMenu extends Application {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'start'");
     }
-
 }

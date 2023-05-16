@@ -16,10 +16,6 @@ import views.mainMenu;
 
 public class Controller extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) {
 
@@ -49,17 +45,15 @@ public class Controller extends Application {
         primaryStage.setScene(mainMenuScene);
         primaryStage.show();
 
-        for (int i = 0; i < 1000000000; i++) {
-            for (int j = 0; j < 100000; j++) {
-                i--;
-            }
-        }
-
         characterSelect characterSelect = new characterSelect(primaryStage);
         Scene selectCharacterScene = characterSelect.scene;
         primaryStage.setScene(selectCharacterScene);
         primaryStage.show();
 
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
 }
