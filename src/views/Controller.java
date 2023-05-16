@@ -4,17 +4,40 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class characterSelect extends Application {
-    public TilePane root = new TilePane();
+public class Controller extends Application {
 
-    public Scene scene;
+    @Override
+    public void start(Stage primaryStage) {
 
-    public characterSelect(Stage primaryStage) {
+        // primaryStage.setFullScreen(true);
+        // primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("q"));
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        primaryStage.setTitle("The Game");
+        switchToMainMenu(primaryStage);
+
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    public void switchToMainMenu(Stage primaryStage) {
+        Group root = new Group();
+        Scene scene = new Scene(root, 600, 600, Color.AQUAMARINE);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void switchToCharacterSelect(Stage primaryStage) {
+        TilePane root = new TilePane();
         // GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
         root.setPrefRows(2);
@@ -38,12 +61,9 @@ public class characterSelect extends Application {
                 }
             });
         }
-        scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 600, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'start'");
-    }
 }
