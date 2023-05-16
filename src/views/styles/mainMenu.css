@@ -24,4 +24,7 @@
 
 .button.hover {
     -fx-text-fill: gold;
+    -fx-pref-height: 90px;
+    -fx-pref-width: 350px;
+    -fx-font-size: 100px;
 }
