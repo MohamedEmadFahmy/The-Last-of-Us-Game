@@ -22,11 +22,8 @@ public class Controller extends Application {
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setTitle("The Game");
         switchToMainMenu(primaryStage);
+        switchToCharacterSelect(primaryStage);
 
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     public void switchToMainMenu(Stage primaryStage) {
@@ -38,7 +35,6 @@ public class Controller extends Application {
 
     public void switchToCharacterSelect(Stage primaryStage) {
         TilePane root = new TilePane();
-        // GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
         root.setPrefRows(2);
         root.setPrefTileWidth(130);
@@ -66,4 +62,7 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
