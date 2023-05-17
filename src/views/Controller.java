@@ -13,13 +13,20 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 
 public class Controller extends Application {
+    static Media hover = new Media(new File("src/views/sounds/click.wav").toURI().toString());
+    static Media click = new Media(new File("src/views/sounds/mouse_click.wav").toURI().toString());
+    static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
     double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
     double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
@@ -36,7 +43,11 @@ public class Controller extends Application {
         primaryStage.setTitle("The Game");
         switchToMainMenu(primaryStage);
     }
-
+    private void play(Media media) {
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(0.3);
+        mediaPlayer.play();
+    }
     public void switchToMainMenu(Stage primaryStage) {
         // primaryStage.initStyle(StageStyle.TRANSPARENT);
         BorderPane root = new BorderPane();
@@ -49,6 +60,7 @@ public class Controller extends Application {
         ScaleTransition st = new ScaleTransition(Duration.millis(30),startGameBtn);
         st.setCycleCount(1);
         st.setInterpolator(Interpolator.EASE_BOTH);
+        play(main);
         startGameBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -56,6 +68,7 @@ public class Controller extends Application {
                 st.setToX(1.15);
                 st.setToY(1.15);
                 st.playFromStart();
+                play(hover);
             }
         });
 
@@ -71,6 +84,7 @@ public class Controller extends Application {
         startGameBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
+                play(click);
                 System.out.println("Switch to character selection scene");
             }
         });
@@ -88,6 +102,7 @@ public class Controller extends Application {
                 st2.setToX(1.15);
                 st2.setToY(1.15);
                 st2.playFromStart();
+                play(hover);
             }
         });
 
