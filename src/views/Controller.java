@@ -169,9 +169,9 @@ public class Controller extends Application {
         ArrayList<Hero> current = new ArrayList<Hero>();
 
         ArrayList<Image> imageArray = new ArrayList<Image>();
-        imageArray.add(new Image("/views/imgs/1.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/2.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/3.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/Joel.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/Ellie.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/tess.png", 100, 100, false, false));
         imageArray.add(new Image("/views/imgs/4.png", 100, 100, false, false));
         imageArray.add(new Image("/views/imgs/5.png", 100, 100, false, false));
         imageArray.add(new Image("/views/imgs/6.png", 100, 100, false, false));
@@ -196,7 +196,7 @@ public class Controller extends Application {
         MaxHp.setTranslateY(screenHeight - (screenHeight*0.70));
         ActionPoints.setTranslateY(screenHeight - (screenHeight*0.65));
         Damage.setTranslateY(screenHeight - (screenHeight*0.60));
-        CharSelect.setTranslateY(screenHeight*0.8);
+        CharSelect.setTranslateY(-screenHeight*0.30);
 
 
         root.getChildren().addAll(Name,Class,MaxHp,ActionPoints,Damage,CharSelect);
@@ -291,6 +291,32 @@ public class Controller extends Application {
                 if (index < 6) {
                     updateImages(++index,rightChar,middleChar,leftChar,imageArray);
                 }
+            }
+        });
+        leftChar.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                if (index < 6) {
+                    updateImages(++index,rightChar,middleChar,leftChar,imageArray);
+                }
+            }
+        });
+        leftChar.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                // start game with ArrayList current index - 1
+            }
+        });
+        rightChar.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                // start game with ArrayList current index + 1
+            }
+        });
+        middleChar.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                // start game with ArrayList current index
             }
         });
         root.setBackground(null);
