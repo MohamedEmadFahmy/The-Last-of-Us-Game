@@ -341,10 +341,10 @@ public class Controller extends Application {
         selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
 
         Label Ellie = new Label();
-        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", 64, 64, false, false)));
+        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", 48, 48, false, false)));
 
         Label Joel = new Label();
-        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", 64, 64, false, false)));
+        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", 48, 48, false, false)));
 
         Label Name = new Label();
         Label Class = new Label();
@@ -364,10 +364,7 @@ public class Controller extends Application {
         Class.setTranslateY(-screenHeight*0.05);
         ActionPoints.setTranslateY(screenHeight*0.05);
         Damage.setTranslateY(screenHeight*0.1);
-
-
-
-
+        
         EventHandler<MouseEvent> eventHandler =
                 new EventHandler<MouseEvent>() {
 
@@ -498,19 +495,19 @@ public class Controller extends Application {
                         }
                         else {
                             Label Zombie = new Label();
-                            Zombie.setGraphic(new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 64, 64, false, false)));
+                            Zombie.setGraphic(new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
                             stackpane.getChildren().add(0,Zombie);
                         }
                     }
                     if (Game.map[i][j] instanceof CollectibleCell) {
                         if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
                             Label Vaccine = new Label();
-                            Vaccine.setGraphic(new ImageView(new Image("file:src/views/imgs/vaccine.png", 64, 64, false, false)));
+                            Vaccine.setGraphic(new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
                             stackpane.getChildren().add(0,Vaccine);
                         }
                         else {
                             Label Supply = new Label();
-                            Supply.setGraphic(new ImageView(new Image("file:src/views/imgs/supply.png", 64, 64, false, false)));
+                            Supply.setGraphic(new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
                             stackpane.getChildren().add(0, Supply);
                         }
                     }
