@@ -25,7 +25,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import model.characters.Character;
 import model.characters.Hero;
+import model.collectibles.Vaccine;
+import model.world.CharacterCell;
+import model.world.CollectibleCell;
 
 import javax.swing.*;
 import java.io.File;
@@ -323,175 +327,134 @@ public class Controller extends Application {
         GridPane game = new GridPane();
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
+        Label selectOverlay = new Label();
+        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+        Label selected = new Label();
+        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+//        BackgroundImage selectOverlay = new BackgroundImage(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false),null,null,null,null);
+        Game.startGame(h);
+        Label Ellie = new Label();
+        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie.png", 64, 64, false, false)));
+        Label Joel = new Label();
+        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel.png", 64, 64, false, false)));
+        Label Vaccine = new Label();
+        Vaccine.setGraphic(new ImageView(new Image("file:src/views/imgs/vaccine.png", 64, 64, false, false)));
         EventHandler<MouseEvent> eventHandler =
                 new EventHandler<MouseEvent>() {
 
                     @Override
                     public void handle(MouseEvent e) {
-                        Button button = ((Button) e.getSource());
-                        String URL = ((ImageView) ((Button) e.getSource()).getGraphic()).getImage().getUrl();
+                        Button button = (Button) e.getSource();
+                        StackPane stackpane = (StackPane) button.getParent();
                         if (e.getEventType().equals(MouseEvent.MOUSE_ENTERED)) {
-                            switch (URL) {
-                                case "file:src/views/imgs/bottomleft_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomleft_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/bottomright_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomright_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/bottom_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottom_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/topleft_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topleft_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/topright_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topright_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/top_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/top_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/left_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/left_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/right_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/right_visible_hovered.png")));
-                                    break;
-                                case "file:src/views/imgs/default_visible.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/default_visible_hovered.png")));
-                                    break;
-                            }
+                            stackpane.getChildren().add(0, selectOverlay);
                         }
                         else if (e.getEventType().equals(MouseEvent.MOUSE_EXITED)) {
-                            switch (URL) {
-                                case "file:src/views/imgs/bottomleft_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomleft_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/bottomright_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomright_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/bottom_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottom_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/topleft_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topleft_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/topright_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topright_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/top_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/top_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/left_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/left_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/right_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/right_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/default_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/default_visible.png")));
-                                    break;
-                            }
+                            stackpane.getChildren().remove(selectOverlay);
                         }
                         else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
-                            switch (URL) {
-                                case "file:src/views/imgs/bottomleft_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomleft_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/bottomright_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomright_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/bottom_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottom_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/topleft_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topleft_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/topright_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topright_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/top_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/top_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/left_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/left_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/right_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/right_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/default_visible_hovered.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/default_visible_hovered_selected.png")));
-                                    break;
-                                case "file:src/views/imgs/bottomleft_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomleft_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/bottomright_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomright_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/bottom_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottom_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/topleft_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topleft_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/topright_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/topright_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/top_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/top_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/left_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/left_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/right_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/right_visible.png")));
-                                    break;
-                                case "file:src/views/imgs/default_visible_hovered_selected.png":
-                                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/default_visible.png")));
-                                    break;
+                            if (stackpane.getChildren().contains(selected)) {
+                                stackpane.getChildren().remove(selected);
+                            }
+                            else {
+                                stackpane.getChildren().add(0,selected);
                             }
                         }
                     }
                 };
-
+        //initializeGame
         for (int i = 0 ; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
+                StackPane stackpane = new StackPane();
                 Button button = new Button();
-                button.setMaxSize(64,64);
-                if (i == 0) {
-                    if (j == 0) {
-                        button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomleft_visible.png", 64, 64, false, false)));
+                button.setMaxSize(64, 64);
+                button.setMinSize(64, 64);
+                if (!(Game.map[i][j].isVisible())) {
+                    if (i == 0) {
+                        if (j == 0) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomleft_notvisible.png", 64, 64, false, false), null, null, null, null)));
+                        } else if (j == 14) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomright_notvisible.png", 64, 64, false, false), null, null, null, null)));
+                        } else {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottom_notvisible.png", 64, 64, false, false), null, null, null, null)));
+                        }
+                    } else if (i == 14) {
+                        if (j == 0) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topleft_notvisible.png", 64, 64, false, false), null, null, null, null)));
+
+                        } else if (j == 14) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topright_notvisible.png", 64, 64, false, false), null, null, null, null)));
+
+                        } else {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/top_notvisible.png", 64, 64, false, false), null, null, null, null)));
+                        }
+                    } else if (j == 0) {
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/left_notvisible.png", 64, 64, false, false), null, null, null, null)));
+
+                    } else if (j == 14) {
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/right_notvisible.png", 64, 64, false, false), null, null, null, null)));
+
+                    } else {
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_notvisible.png", 64, 64, false, false), null, null, null, null)));
+
                     }
-                    else if (j == 14) {
-                        button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottomright_visible.png", 64, 64, false, false)));
-                    }
-                    else {
-                        button.setGraphic(new ImageView(new Image("file:src/views/imgs/bottom_visible.png", 64, 64, false, false)));
-                    }
-                }
-                else if (i == 14) {
-                    if (j == 0) {
-                        button.setGraphic(new ImageView(new Image("file:src/views/imgs/topleft_visible.png", 64, 64, false, false)));
-                    }
-                    else if (j == 14) {
-                        button.setGraphic(new ImageView(new Image("file:src/views/imgs/topright_visible.png", 64, 64, false, false)));
-                    }
-                    else {
-                        button.setGraphic(new ImageView(new Image("file:src/views/imgs/top_visible.png", 64, 64, false, false)));
-                    }
-                }
-                else if (j == 0) {
-                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/left_visible.png", 64, 64, false, false)));
-                }
-                else if (j == 14) {
-                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/right_visible.png", 64, 64, false, false)));
                 }
                 else {
-                    button.setGraphic(new ImageView(new Image("file:src/views/imgs/default_visible.png", 64, 64, false, false)));
+                    if (i == 0) {
+                        if (j == 0) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomleft_visible.png", 64, 64, false, false), null, null, null, null)));
+                        } else if (j == 14) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomright_visible.png", 64, 64, false, false), null, null, null, null)));
+                        } else {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottom_visible.png", 64, 64, false, false), null, null, null, null)));
+                        }
+                    } else if (i == 14) {
+                        if (j == 0) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topleft_visible.png", 64, 64, false, false), null, null, null, null)));
+
+                        } else if (j == 14) {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topright_visible.png", 64, 64, false, false), null, null, null, null)));
+
+                        } else {
+                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/top_visible.png", 64, 64, false, false), null, null, null, null)));
+                        }
+                    } else if (j == 0) {
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/left_visible.png", 64, 64, false, false), null, null, null, null)));
+
+                    } else if (j == 14) {
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/right_visible.png", 64, 64, false, false), null, null, null, null)));
+
+                    } else {
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_visible.png", 64, 64, false, false), null, null, null, null)));
+
+                    }
+                    if (Game.map[i][j] instanceof CharacterCell && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
+                        String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
+                        switch (name) {
+                            case ("Joel Miller"):
+                                stackpane.getChildren().add(0,Joel);
+                                System.out.print(stackpane.getChildren());
+                                break;
+                            case ("Ellie Williams"):
+                                stackpane.getChildren().add(0,Ellie);
+                                break;
+                                //add rest of characters
+                        }
+                    }
+                    if (Game.map[i][j] instanceof CollectibleCell) {
+                        if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                            stackpane.getChildren().add(0,Vaccine);
+                        }
+                        else {
+
+                        }
+                    }
                 }
-                button.addEventHandler(MouseEvent.MOUSE_ENTERED,eventHandler);
-                button.addEventHandler(MouseEvent.MOUSE_EXITED,eventHandler);
-                button.addEventHandler(MouseEvent.MOUSE_CLICKED,eventHandler);
-                game.add(button,j,14 - i);
+                button.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
+                button.addEventHandler(MouseEvent.MOUSE_EXITED, eventHandler);
+                button.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+                stackpane.getChildren().add(button);
+                game.add(stackpane, j, 14 - i);
             }
         }
         game.setVgap(0);
@@ -499,7 +462,6 @@ public class Controller extends Application {
 
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
-        Game.startGame(h);
         root.setBackground(null);
         primaryStage.show();
     }
