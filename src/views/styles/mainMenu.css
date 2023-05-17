@@ -21,7 +21,11 @@
     -fx-font-family: "Aka-AcidGR-Compacta";
     -fx-text-fill: white;
 }
-
+.label {
+    -fx-font-size: 30px;
+    -fx-font-family: "The Bomb Sound";
+    -fx-text-fill: white;
+}
 .button.hover {
     -fx-text-fill: gold;
 }

@@ -1,5 +1,6 @@
 package views;
 
+import engine.Game;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
@@ -7,9 +8,12 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -21,9 +25,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import model.characters.Hero;
+
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Queue;
 
 public class Controller extends Application {
+    static int index = 1;
     static Media hover = new Media(new File("src/views/sounds/click.wav").toURI().toString());
     static Media click = new Media(new File("src/views/sounds/mouse_click.wav").toURI().toString());
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
@@ -31,7 +41,6 @@ public class Controller extends Application {
     double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
-
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setHeight(screenHeight);
@@ -43,11 +52,13 @@ public class Controller extends Application {
         primaryStage.setTitle("The Game");
         switchToMainMenu(primaryStage);
     }
+
     private void play(Media media) {
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0.3);
         mediaPlayer.play();
     }
+
     public void switchToMainMenu(Stage primaryStage) {
         // primaryStage.initStyle(StageStyle.TRANSPARENT);
         BorderPane root = new BorderPane();
@@ -57,7 +68,7 @@ public class Controller extends Application {
         ImagePattern pattern = new ImagePattern(new Image("/views/imgs/bgfinal.png"));
         scene.setFill(pattern);
         Button startGameBtn = new Button("START GAME");
-        ScaleTransition st = new ScaleTransition(Duration.millis(30),startGameBtn);
+        ScaleTransition st = new ScaleTransition(Duration.millis(30), startGameBtn);
         st.setCycleCount(1);
         st.setInterpolator(Interpolator.EASE_BOTH);
         play(main);
@@ -65,8 +76,8 @@ public class Controller extends Application {
             @Override
             public void handle(MouseEvent t) {
                 startGameBtn.getStyleClass().add("hover");
-                st.setToX(1.15);
-                st.setToY(1.15);
+                st.setToX(1.05);
+                st.setToY(1.05);
                 st.playFromStart();
                 play(hover);
             }
@@ -85,7 +96,12 @@ public class Controller extends Application {
             @Override
             public void handle(ActionEvent t) {
                 play(click);
-                System.out.println("Switch to character selection scene");
+                try {
+                    switchToCharacterSelect(primaryStage);
+                }
+                catch (Exception e) {
+                    System.out.print("something went wrong.");
+                }
             }
         });
 
@@ -94,13 +110,13 @@ public class Controller extends Application {
         root.setBottom(startGameBtn);
 
         Button exitGameBtn = new Button("EXIT GAME");
-        ScaleTransition st2 = new ScaleTransition(Duration.millis(30),exitGameBtn);
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(30), exitGameBtn);
         exitGameBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 exitGameBtn.getStyleClass().add("hover");
-                st2.setToX(1.15);
-                st2.setToY(1.15);
+                st2.setToX(1.05);
+                st2.setToY(1.05);
                 st2.playFromStart();
                 play(hover);
             }
@@ -135,32 +151,154 @@ public class Controller extends Application {
         launch(args);
     }
 
-    // public void switchToCharacterSelect(Stage primaryStage) {
-    // TilePane root = new TilePane();
-    // root.setAlignment(Pos.CENTER);
-    // root.setPrefRows(2);
-    // root.setPrefTileWidth(130);
-    // root.setPrefTileHeight(150);
-    // // root.getChildren().add(btn);
-    // for (int i = 0; i < 8; i++) {
-    // Button btn = new Button();
-    // btn.setText("Button " + (i + 1));
-    // btn.setMinHeight(100);
-    // btn.setMinWidth(110);
-    // // btn.scaleYProperty(100);
-    // root.getChildren().add(btn);
+    public void switchToCharacterSelect(Stage primaryStage) throws Exception {
+        StackPane root = new StackPane();
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(root);
+        Button leftSel = new Button();
+        Button rightChar = new Button();
+        Button leftChar = new Button();
+        Button middleChar = new Button();
+        Button rightSel = new Button();
+        HBox Characters = new HBox();
+        Characters.getChildren().addAll(leftSel,leftChar,middleChar,rightChar,rightSel);
+        Characters.setAlignment(Pos.CENTER);
+        root.getChildren().add(Characters);
 
-    // btn.setOnAction(new EventHandler<ActionEvent>() {
+        Game.loadHeroes("src/CSV files/Heros.csv");
+        ArrayList<Hero> current = new ArrayList<Hero>();
 
-    // @Override
-    // public void handle(ActionEvent event) {
-    // System.out.println("Hello World!");
-    // primaryStage.close();
-    // }
-    // });
-    // }
-    // Scene scene = new Scene(root, 1920, 1040);
-    // primaryStage.setScene(scene);
-    // primaryStage.show();
-    // }
+        ArrayList<Image> imageArray = new ArrayList<Image>();
+        imageArray.add(new Image("/views/imgs/1.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/2.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/3.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/4.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/5.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/6.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/7.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/8.png", 100, 100, false, false));
+
+        rightChar.setGraphic(new ImageView(imageArray.get(2)));
+        middleChar.setGraphic(new ImageView(imageArray.get(1)));
+        leftChar.setGraphic(new ImageView(imageArray.get(0)));
+        leftSel.setGraphic(new ImageView(new Image("/views/imgs/arrowleft.png", 100, 100, false, false)));
+        rightSel.setGraphic(new ImageView(new Image("/views/imgs/arrowright.png", 100, 100, false, false)));
+
+        Label Name = new Label("Name: ");
+        Label Class = new Label("Class: ");
+        Label MaxHp = new Label("Max Health: ");
+        Label ActionPoints = new Label("Action Points: ");
+        Label Damage = new Label("Attack Damage: ");
+        Label CharSelect = new Label("SELECT YOUR CHARACTER");
+
+        Name.setTranslateY(screenHeight - (screenHeight*0.8));
+        Class.setTranslateY(screenHeight  - (screenHeight*0.75));
+        MaxHp.setTranslateY(screenHeight - (screenHeight*0.70));
+        ActionPoints.setTranslateY(screenHeight - (screenHeight*0.65));
+        Damage.setTranslateY(screenHeight - (screenHeight*0.60));
+        CharSelect.setTranslateY(screenHeight*0.8);
+
+
+        root.getChildren().addAll(Name,Class,MaxHp,ActionPoints,Damage,CharSelect);
+
+
+        for (int i = 0; i < Game.availableHeroes.size(); i++) {
+            current.add(Game.availableHeroes.get(i));
+        }
+        ScaleTransition st = new ScaleTransition(Duration.millis(30), rightChar);
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(30), leftChar);
+        ScaleTransition st3 = new ScaleTransition(Duration.millis(30), middleChar);
+        rightChar.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                st.setToX(1.05);
+                st.setToY(1.05);
+                st.playFromStart();
+                Name.setText("Name: " + current.get(index + 1).getName());
+                Class.setText("Class: " + current.get(index + 1).getClass().getSimpleName());
+                MaxHp.setText("Max Health: " + current.get(index + 1).getMaxHp());
+                ActionPoints.setText("Max Actions: " + current.get(index + 1).getMaxActions());
+                Damage.setText("Damage: " + current.get(index + 1).getAttackDmg());
+                play(hover);
+            }
+        });
+
+        rightChar.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                st.setToX(1);
+                st.setToY(1);
+                st.playFromStart();
+            }
+        });
+        leftChar.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                st2.setToX(1.05);
+                st2.setToY(1.05);
+                st2.playFromStart();
+                Name.setText("Name: " + current.get(index - 1).getName());
+                Class.setText("Class: " + current.get(index - 1).getClass().getSimpleName());
+                MaxHp.setText("Max Health: " + current.get(index - 1).getMaxHp());
+                ActionPoints.setText("Max Actions: " + current.get(index - 1).getMaxActions());
+                Damage.setText("Damage: " + current.get(index - 1).getAttackDmg());
+                play(hover);
+            }
+        });
+
+        leftChar.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                st2.setToX(1);
+                st2.setToY(1);
+                st2.playFromStart();
+            }
+        });
+        middleChar.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                st3.setToX(1.05);
+                st3.setToY(1.05);
+                st3.playFromStart();
+                Name.setText("Name: " + current.get(index).getName());
+                Class.setText("Class: " + current.get(index).getClass().getSimpleName());
+                MaxHp.setText("Max Health: " + current.get(index).getMaxHp());
+                ActionPoints.setText("Max Actions: " + current.get(index).getMaxActions());
+                Damage.setText("Damage: " + current.get(index).getAttackDmg());
+                play(hover);
+            }
+        });
+
+        middleChar.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                st3.setToX(1);
+                st3.setToY(1);
+                st3.playFromStart();
+            }
+        });
+        leftSel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                if (index > 1) {
+                    updateImages(--index, rightChar, middleChar, leftChar, imageArray);
+                }
+            }
+        });
+        rightSel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                if (index < 6) {
+                    updateImages(++index,rightChar,middleChar,leftChar,imageArray);
+                }
+            }
+        });
+        root.setBackground(null);
+        primaryStage.show();
+    }
+    public void updateImages(int i,Button rightChar,Button middleChar,Button leftChar, ArrayList<Image> imageArray) {
+        rightChar.setGraphic(new ImageView(imageArray.get(index + 1)));
+        middleChar.setGraphic(new ImageView(imageArray.get(index)));
+        leftChar.setGraphic(new ImageView(imageArray.get(index - 1)));
+    }
 }
