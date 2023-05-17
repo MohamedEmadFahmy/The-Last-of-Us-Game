@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
@@ -327,18 +328,46 @@ public class Controller extends Application {
         GridPane game = new GridPane();
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
+
+        Game.startGame(h);
+
         Label selectOverlay = new Label();
         selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+
         Label selected = new Label();
         selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
-//        BackgroundImage selectOverlay = new BackgroundImage(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false),null,null,null,null);
-        Game.startGame(h);
+
+        Label selected1 = new Label();
+        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+
         Label Ellie = new Label();
-        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie.png", 64, 64, false, false)));
+        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", 64, 64, false, false)));
+
         Label Joel = new Label();
-        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel.png", 64, 64, false, false)));
-        Label Vaccine = new Label();
-        Vaccine.setGraphic(new ImageView(new Image("file:src/views/imgs/vaccine.png", 64, 64, false, false)));
+        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", 64, 64, false, false)));
+
+        Label Name = new Label();
+        Label Class = new Label();
+        Label MaxHp = new Label();
+        Label ActionPoints = new Label();
+        Label Damage = new Label();
+
+        root.getChildren().addAll(Name,Class,MaxHp,ActionPoints,Damage);
+
+        Name.setTranslateX(screenWidth/3);
+        Class.setTranslateX(screenWidth/3);
+        MaxHp.setTranslateX(screenWidth/3);
+        ActionPoints.setTranslateX(screenWidth/3);
+        Damage.setTranslateX(screenWidth/3);
+
+        Name.setTranslateY(-screenHeight*0.1);
+        Class.setTranslateY(-screenHeight*0.05);
+        ActionPoints.setTranslateY(screenHeight*0.05);
+        Damage.setTranslateY(screenHeight*0.1);
+
+
+
+
         EventHandler<MouseEvent> eventHandler =
                 new EventHandler<MouseEvent>() {
 
@@ -346,6 +375,9 @@ public class Controller extends Application {
                     public void handle(MouseEvent e) {
                         Button button = (Button) e.getSource();
                         StackPane stackpane = (StackPane) button.getParent();
+                        int row1 = GridPane.getRowIndex(stackpane);
+                        int row = 14 - row1;
+                        int col = GridPane.getColumnIndex(stackpane);
                         if (e.getEventType().equals(MouseEvent.MOUSE_ENTERED)) {
                             stackpane.getChildren().add(0, selectOverlay);
                         }
@@ -353,12 +385,35 @@ public class Controller extends Application {
                             stackpane.getChildren().remove(selectOverlay);
                         }
                         else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
-                            if (stackpane.getChildren().contains(selected)) {
-                                stackpane.getChildren().remove(selected);
+                            if (e.getButton() == MouseButton.PRIMARY) {
+                                if (stackpane.getChildren().contains(selected1)) {
+                                    stackpane.getChildren().remove(selected1);
+                                }
+                                else {
+                                    stackpane.getChildren().add(0,selected1);
+                                }
+                            } else if (e.getButton() == MouseButton.SECONDARY) {
+                                if (Game.map[row][col] instanceof CharacterCell && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero ) {
+                                    if (stackpane.getChildren().contains(selected)) {
+                                        stackpane.getChildren().remove(selected);
+                                        Name.setText("");
+                                        Class.setText("");
+                                        MaxHp.setText("");
+                                        ActionPoints.setText("");
+                                        Damage.setText("");
+                                    }
+                                    else {
+                                        Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
+                                        Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass().getSimpleName());
+                                        MaxHp.setText("Health: " + ((CharacterCell) Game.map[row][col]).getCharacter().getCurrentHp() + "/" + ((CharacterCell) Game.map[row][col]).getCharacter().getMaxHp());
+                                        ActionPoints.setText("Actions Available: " + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getActionsAvailable() + "/" + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getMaxActions());
+                                        Damage.setText("Attack Damage: " +((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getAttackDmg());
+                                        stackpane.getChildren().add(0,selected);
+                                    }
+                                }
                             }
-                            else {
-                                stackpane.getChildren().add(0,selected);
-                            }
+
+
                         }
                     }
                 };
@@ -429,24 +484,34 @@ public class Controller extends Application {
 
                     }
                     if (Game.map[i][j] instanceof CharacterCell && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
-                        String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
-                        switch (name) {
-                            case ("Joel Miller"):
-                                stackpane.getChildren().add(0,Joel);
-                                System.out.print(stackpane.getChildren());
-                                break;
-                            case ("Ellie Williams"):
-                                stackpane.getChildren().add(0,Ellie);
-                                break;
+                        if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
+                            String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
+                            switch (name) {
+                                case ("Joel Miller"):
+                                    stackpane.getChildren().add(0, Joel);
+                                    break;
+                                case ("Ellie Williams"):
+                                    stackpane.getChildren().add(0, Ellie);
+                                    break;
                                 //add rest of characters
+                            }
+                        }
+                        else {
+                            Label Zombie = new Label();
+                            Zombie.setGraphic(new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 64, 64, false, false)));
+                            stackpane.getChildren().add(0,Zombie);
                         }
                     }
                     if (Game.map[i][j] instanceof CollectibleCell) {
                         if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                            Label Vaccine = new Label();
+                            Vaccine.setGraphic(new ImageView(new Image("file:src/views/imgs/vaccine.png", 64, 64, false, false)));
                             stackpane.getChildren().add(0,Vaccine);
                         }
                         else {
-
+                            Label Supply = new Label();
+                            Supply.setGraphic(new ImageView(new Image("file:src/views/imgs/supply.png", 64, 64, false, false)));
+                            stackpane.getChildren().add(0, Supply);
                         }
                     }
                 }
