@@ -45,20 +45,29 @@ public class Controller extends Application {
     static Media hover = new Media(new File("src/views/sounds/click.wav").toURI().toString());
     static Media click = new Media(new File("src/views/sounds/mouse_click.wav").toURI().toString());
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
+    static boolean playing = false;
+    static ArrayList<Hero> current = new ArrayList<Hero>();
     double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
     double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setFullScreen(true);
         primaryStage.setHeight(screenHeight);
         primaryStage.setWidth(screenWidth);
+        StackPane temp = new StackPane();
         // primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("esc"));
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.getIcons().add(new Image("file:src/views/imgs/icon.jpg"));
-        primaryStage.setTitle("The Game");
+        primaryStage.setTitle("The Last Of Us Legacy");
+        Scene scene = new Scene(temp, screenHeight, screenWidth);
+        primaryStage.setScene(scene);
         switchToMainMenu(primaryStage);
+        Game.loadHeroes("src/CSV files/Heros.csv");
+        for (int i = 0; i < Game.availableHeroes.size(); i++) {
+            current.add(Game.availableHeroes.get(i));
+        }
     }
 
     private void play(Media media) {
@@ -68,9 +77,9 @@ public class Controller extends Application {
     }
 
     public void updateImages(int i,Label rightChar,Label middleChar,Label leftChar, ArrayList<Image> imageArray) {
-        rightChar.setGraphic(new ImageView(imageArray.get(index + 1)));
-        middleChar.setGraphic(new ImageView(imageArray.get(index)));
-        leftChar.setGraphic(new ImageView(imageArray.get(index - 1)));
+        rightChar.setGraphic(new ImageView(imageArray.get(i + 1)));
+        middleChar.setGraphic(new ImageView(imageArray.get(i)));
+        leftChar.setGraphic(new ImageView(imageArray.get(i - 1)));
     }
     public void updateLabels(Label Name, Label Class, Label MaxHp, Label ActionPoints, Label Damage, ArrayList<Hero> current,int index) {
         Name.setText("Name: " + current.get(index).getName());
@@ -83,7 +92,8 @@ public class Controller extends Application {
     public void switchToMainMenu(Stage primaryStage) {
         // primaryStage.initStyle(StageStyle.TRANSPARENT);
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root, screenHeight, screenWidth);
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(root);
         String mainMenuCSS = this.getClass().getResource("/views/styles/mainMenu.css").toExternalForm();
         scene.getStylesheets().add(mainMenuCSS);
         ImagePattern pattern = new ImagePattern(new Image("/views/imgs/bgfinal.png"));
@@ -92,7 +102,11 @@ public class Controller extends Application {
         ScaleTransition st = new ScaleTransition(Duration.millis(30), startGameBtn);
         st.setCycleCount(1);
         st.setInterpolator(Interpolator.EASE_BOTH);
-        play(main);
+        if(playing == false) {
+            play(main);
+            playing = true;
+        }
+
         startGameBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -168,7 +182,7 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
-    public void switchToCharacterSelect(Stage primaryStage) throws Exception {
+    public void switchToCharacterSelect(Stage primaryStage) {
         StackPane root = new StackPane();
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
@@ -179,18 +193,19 @@ public class Controller extends Application {
         Label middleChar = new Label();
         Button rightSel = new Button();
         Button Continue = new Button("Continue");
+        Button backToMenu = new Button("Back");
         rightSel.setMaxSize(200,200);
         HBox Characters = new HBox(100);
         Characters.getChildren().addAll(leftSel,leftChar,middleChar,rightChar,rightSel);
         Characters.setAlignment(Pos.CENTER);
 
-        root.getChildren().addAll(Characters,Continue);
+        root.getChildren().addAll(Characters,Continue,backToMenu);
 
         Continue.setTranslateY(screenHeight*0.40);
         Continue.setTranslateX(screenWidth*0.40);
+        backToMenu.setTranslateY(screenHeight*0.40);
+        backToMenu.setTranslateX(-screenWidth*0.40);
 
-        Game.loadHeroes("src/CSV files/Heros.csv");
-        ArrayList<Hero> current = new ArrayList<Hero>();
 
         ArrayList<Image> imageArray = new ArrayList<Image>();
         imageArray.add(new Image("/views/imgs/Joel.png", 200, 200, false, false));
@@ -222,13 +237,7 @@ public class Controller extends Application {
         Damage.setTranslateY(screenHeight - (screenHeight*0.60));
         CharSelect.setTranslateY(-screenHeight*0.30);
 
-
         root.getChildren().addAll(Name,Class,MaxHp,ActionPoints,Damage,CharSelect);
-
-
-        for (int i = 0; i < Game.availableHeroes.size(); i++) {
-            current.add(Game.availableHeroes.get(i));
-        }
 
 
         ScaleTransition st3 = new ScaleTransition(Duration.millis(30), middleChar);
@@ -288,31 +297,40 @@ public class Controller extends Application {
                 switchToGame(primaryStage,current.get(index));
             }
         });
+        backToMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                index = 1;
+                switchToMainMenu(primaryStage);
+            }
+        });
         root.setBackground(null);
         primaryStage.show();
     }
     public void switchToGame(Stage primaryStage, Hero h) {
         StackPane root = new StackPane();
         GridPane game = new GridPane();
+        game.setMaxSize(screenHeight*0.8,screenHeight*0.8);
+        game.setPrefSize(screenHeight*0.8,screenHeight*0.8);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
 
         Game.startGame(h);
 
         Label selectOverlay = new Label();
-        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false)));
 
         Label selected = new Label();
-        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false)));
 
         Label selected1 = new Label();
-        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", 64, 64, false, false)));
+        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false)));
 
         Label Ellie = new Label();
-        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", 48, 48, false, false)));
+        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", screenHeight*0.75*0.8/15, screenHeight*0.75*0.8/15, false, false)));
 
         Label Joel = new Label();
-        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", 48, 48, false, false)));
+        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", screenHeight*0.75*0.8/15, screenHeight*0.75*0.8/15, false, false)));
 
         Label Name = new Label();
         Label Class = new Label();
@@ -388,66 +406,14 @@ public class Controller extends Application {
                 StackPane stackpane = new StackPane();
                 Button button = new Button();
                 button.setMaxSize(64, 64);
-                button.setMinSize(64, 64);
+                button.setMinSize(32, 32);
+                button.setPrefSize(64,64);
                 if (!(Game.map[i][j].isVisible())) {
-                    if (i == 0) {
-                        if (j == 0) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomleft_notvisible.png", 64, 64, false, false), null, null, null, null)));
-                        } else if (j == 14) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomright_notvisible.png", 64, 64, false, false), null, null, null, null)));
-                        } else {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottom_notvisible.png", 64, 64, false, false), null, null, null, null)));
-                        }
-                    } else if (i == 14) {
-                        if (j == 0) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topleft_notvisible.png", 64, 64, false, false), null, null, null, null)));
-
-                        } else if (j == 14) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topright_notvisible.png", 64, 64, false, false), null, null, null, null)));
-
-                        } else {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/top_notvisible.png", 64, 64, false, false), null, null, null, null)));
-                        }
-                    } else if (j == 0) {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/left_notvisible.png", 64, 64, false, false), null, null, null, null)));
-
-                    } else if (j == 14) {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/right_notvisible.png", 64, 64, false, false), null, null, null, null)));
-
-                    } else {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_notvisible.png", 64, 64, false, false), null, null, null, null)));
-
-                    }
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_notvisible.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false), null, null, null, null)));
                 }
                 else {
-                    if (i == 0) {
-                        if (j == 0) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomleft_visible.png", 64, 64, false, false), null, null, null, null)));
-                        } else if (j == 14) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottomright_visible.png", 64, 64, false, false), null, null, null, null)));
-                        } else {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/bottom_visible.png", 64, 64, false, false), null, null, null, null)));
-                        }
-                    } else if (i == 14) {
-                        if (j == 0) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topleft_visible.png", 64, 64, false, false), null, null, null, null)));
+                    stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_visible.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false), null, null, null, null)));
 
-                        } else if (j == 14) {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/topright_visible.png", 64, 64, false, false), null, null, null, null)));
-
-                        } else {
-                            stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/top_visible.png", 64, 64, false, false), null, null, null, null)));
-                        }
-                    } else if (j == 0) {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/left_visible.png", 64, 64, false, false), null, null, null, null)));
-
-                    } else if (j == 14) {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/right_visible.png", 64, 64, false, false), null, null, null, null)));
-
-                    } else {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_visible.png", 64, 64, false, false), null, null, null, null)));
-
-                    }
                     if (Game.map[i][j] instanceof CharacterCell && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
                         if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
                             String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
@@ -487,8 +453,7 @@ public class Controller extends Application {
                 game.add(stackpane, j, 14 - i);
             }
         }
-        game.setVgap(0);
-        game.setHgap(0);
+
 
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
