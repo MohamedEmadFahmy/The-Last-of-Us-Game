@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -50,9 +51,9 @@ public class Controller extends Application {
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setFullScreen(true);
         primaryStage.setHeight(screenHeight);
         primaryStage.setWidth(screenWidth);
-        primaryStage.setFullScreen(true);
         // primaryStage.setFullScreenExitKeyCombination(KeyCombination.keyCombination("esc"));
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.getIcons().add(new Image("file:src/views/imgs/icon.jpg"));
@@ -66,10 +67,17 @@ public class Controller extends Application {
         mediaPlayer.play();
     }
 
-    public void updateImages(int i,Button rightChar,Button middleChar,Button leftChar, ArrayList<Image> imageArray) {
+    public void updateImages(int i,Label rightChar,Label middleChar,Label leftChar, ArrayList<Image> imageArray) {
         rightChar.setGraphic(new ImageView(imageArray.get(index + 1)));
         middleChar.setGraphic(new ImageView(imageArray.get(index)));
         leftChar.setGraphic(new ImageView(imageArray.get(index - 1)));
+    }
+    public void updateLabels(Label Name, Label Class, Label MaxHp, Label ActionPoints, Label Damage, ArrayList<Hero> current,int index) {
+        Name.setText("Name: " + current.get(index).getName());
+        Class.setText("Class: " + current.get(index).getClass().getSimpleName());
+        MaxHp.setText("Max Health: " + current.get(index).getMaxHp());
+        ActionPoints.setText("Max Actions: " + current.get(index).getMaxActions());
+        Damage.setText("Damage: " + current.get(index).getAttackDmg());
     }
 
     public void switchToMainMenu(Stage primaryStage) {
@@ -165,27 +173,34 @@ public class Controller extends Application {
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
         Button leftSel = new Button();
-        Button rightChar = new Button();
-        Button leftChar = new Button();
-        Button middleChar = new Button();
+        leftSel.setMaxSize(200,200);
+        Label rightChar = new Label();
+        Label leftChar = new Label();
+        Label middleChar = new Label();
         Button rightSel = new Button();
-        HBox Characters = new HBox();
+        Button Continue = new Button("Continue");
+        rightSel.setMaxSize(200,200);
+        HBox Characters = new HBox(100);
         Characters.getChildren().addAll(leftSel,leftChar,middleChar,rightChar,rightSel);
         Characters.setAlignment(Pos.CENTER);
-        root.getChildren().add(Characters);
+
+        root.getChildren().addAll(Characters,Continue);
+
+        Continue.setTranslateY(screenHeight*0.40);
+        Continue.setTranslateX(screenWidth*0.40);
 
         Game.loadHeroes("src/CSV files/Heros.csv");
         ArrayList<Hero> current = new ArrayList<Hero>();
 
         ArrayList<Image> imageArray = new ArrayList<Image>();
-        imageArray.add(new Image("/views/imgs/Joel.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/Ellie.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/tess.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/4.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/5.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/6.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/7.png", 100, 100, false, false));
-        imageArray.add(new Image("/views/imgs/8.png", 100, 100, false, false));
+        imageArray.add(new Image("/views/imgs/Joel.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/Ellie.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/tess.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/4.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/5.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/6.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/7.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/8.png", 200, 200, false, false));
 
         rightChar.setGraphic(new ImageView(imageArray.get(2)));
         middleChar.setGraphic(new ImageView(imageArray.get(1)));
@@ -193,11 +208,11 @@ public class Controller extends Application {
         leftSel.setGraphic(new ImageView(new Image("/views/imgs/arrowleft.png", 100, 100, false, false)));
         rightSel.setGraphic(new ImageView(new Image("/views/imgs/arrowright.png", 100, 100, false, false)));
 
-        Label Name = new Label("Name: ");
-        Label Class = new Label("Class: ");
-        Label MaxHp = new Label("Max Health: ");
-        Label ActionPoints = new Label("Action Points: ");
-        Label Damage = new Label("Attack Damage: ");
+        Label Name = new Label("Name: Ellie Williams ");
+        Label Class = new Label("Class: Medic ");
+        Label MaxHp = new Label("Max Health: 110");
+        Label ActionPoints = new Label("Action Points: 6");
+        Label Damage = new Label("Attack Damage: 15");
         Label CharSelect = new Label("SELECT YOUR CHARACTER");
 
         Name.setTranslateY(screenHeight - (screenHeight*0.8));
@@ -214,83 +229,33 @@ public class Controller extends Application {
         for (int i = 0; i < Game.availableHeroes.size(); i++) {
             current.add(Game.availableHeroes.get(i));
         }
-        ScaleTransition st = new ScaleTransition(Duration.millis(30), rightChar);
-        ScaleTransition st2 = new ScaleTransition(Duration.millis(30), leftChar);
+
+
         ScaleTransition st3 = new ScaleTransition(Duration.millis(30), middleChar);
-        rightChar.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                st.setToX(1.05);
-                st.setToY(1.05);
-                st.playFromStart();
-                Name.setText("Name: " + current.get(index + 1).getName());
-                Class.setText("Class: " + current.get(index + 1).getClass().getSimpleName());
-                MaxHp.setText("Max Health: " + current.get(index + 1).getMaxHp());
-                ActionPoints.setText("Max Actions: " + current.get(index + 1).getMaxActions());
-                Damage.setText("Damage: " + current.get(index + 1).getAttackDmg());
-                play(hover);
-            }
-        });
+        st3.setToX(1.25);
+        st3.setToY(1.25);
+        st3.playFromStart();
 
-        rightChar.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                st.setToX(1);
-                st.setToY(1);
-                st.playFromStart();
-            }
-        });
-        leftChar.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                st2.setToX(1.05);
-                st2.setToY(1.05);
-                st2.playFromStart();
-                Name.setText("Name: " + current.get(index - 1).getName());
-                Class.setText("Class: " + current.get(index - 1).getClass().getSimpleName());
-                MaxHp.setText("Max Health: " + current.get(index - 1).getMaxHp());
-                ActionPoints.setText("Max Actions: " + current.get(index - 1).getMaxActions());
-                Damage.setText("Damage: " + current.get(index - 1).getAttackDmg());
-                play(hover);
-            }
-        });
-
-        leftChar.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                st2.setToX(1);
-                st2.setToY(1);
-                st2.playFromStart();
-            }
-        });
-        middleChar.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                st3.setToX(1.05);
-                st3.setToY(1.05);
-                st3.playFromStart();
-                Name.setText("Name: " + current.get(index).getName());
-                Class.setText("Class: " + current.get(index).getClass().getSimpleName());
-                MaxHp.setText("Max Health: " + current.get(index).getMaxHp());
-                ActionPoints.setText("Max Actions: " + current.get(index).getMaxActions());
-                Damage.setText("Damage: " + current.get(index).getAttackDmg());
-                play(hover);
-            }
-        });
-
-        middleChar.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                st3.setToX(1);
-                st3.setToY(1);
-                st3.playFromStart();
-            }
-        });
         leftSel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 if (index > 1) {
-                    updateImages(--index, rightChar, middleChar, leftChar, imageArray);
+                    updateLabels(Name,Class,MaxHp,ActionPoints,Damage,current, --index);
+                    updateImages(index, rightChar, middleChar, leftChar, imageArray);
+                }
+                else if (index == 1) {
+                    updateLabels(Name,Class,MaxHp,ActionPoints,Damage,current, 0);
+                    rightChar.setGraphic(new ImageView(imageArray.get(1)));
+                    middleChar.setGraphic(new ImageView(imageArray.get(0)));
+                    leftChar.setGraphic(new ImageView(imageArray.get(current.size()-1)));
+                    index--;
+                }
+                else if (index == 0) {
+                    index = 7;
+                    updateLabels(Name,Class,MaxHp,ActionPoints,Damage,current, 7);
+                    rightChar.setGraphic(new ImageView(imageArray.get(0)));
+                    middleChar.setGraphic(new ImageView(imageArray.get(index)));
+                    leftChar.setGraphic(new ImageView(imageArray.get(index-1)));
                 }
             }
         });
@@ -299,25 +264,28 @@ public class Controller extends Application {
             public void handle(ActionEvent t) {
                 if (index < 6) {
                     updateImages(++index,rightChar,middleChar,leftChar,imageArray);
+                    updateLabels(Name,Class,MaxHp,ActionPoints,Damage,current, index);
+                }
+                else if (index == 6) {
+                    updateLabels(Name,Class,MaxHp,ActionPoints,Damage,current, 7);
+                    rightChar.setGraphic(new ImageView(imageArray.get(0)));
+                    middleChar.setGraphic(new ImageView(imageArray.get(7)));
+                    leftChar.setGraphic(new ImageView(imageArray.get(6)));
+                    index++;
+                }
+                else {
+                    index = 0;
+                    updateLabels(Name,Class,MaxHp,ActionPoints,Damage,current, 0);
+                    rightChar.setGraphic(new ImageView(imageArray.get(index + 1)));
+                    middleChar.setGraphic(new ImageView(imageArray.get(index)));
+                    leftChar.setGraphic(new ImageView(imageArray.get(current.size()-1)));
                 }
             }
         });
-        leftChar.setOnAction(new EventHandler<ActionEvent>() {
+        Continue.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent t) {
-                switchToGame(primaryStage, current.get(index - 1));
-            }
-        });
-        rightChar.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                switchToGame(primaryStage, current.get(index + 1));
-            }
-        });
-        middleChar.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                switchToGame(primaryStage, current.get(index));
+            public void handle(ActionEvent actionEvent) {
+                switchToGame(primaryStage,current.get(index));
             }
         });
         root.setBackground(null);
