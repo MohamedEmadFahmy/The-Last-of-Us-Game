@@ -69,13 +69,11 @@ public class Controller extends Application {
             current.add(Game.availableHeroes.get(i));
         }
     }
-
     private void play(Media media) {
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0.3);
         mediaPlayer.play();
     }
-
     public void updateImages(int i,Label rightChar,Label middleChar,Label leftChar, ArrayList<Image> imageArray) {
         rightChar.setGraphic(new ImageView(imageArray.get(i + 1)));
         middleChar.setGraphic(new ImageView(imageArray.get(i)));
@@ -88,7 +86,6 @@ public class Controller extends Application {
         ActionPoints.setText("Max Actions: " + current.get(index).getMaxActions());
         Damage.setText("Damage: " + current.get(index).getAttackDmg());
     }
-
     public void switchToMainMenu(Stage primaryStage) {
         // primaryStage.initStyle(StageStyle.TRANSPARENT);
         BorderPane root = new BorderPane();
@@ -181,7 +178,6 @@ public class Controller extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
     public void switchToCharacterSelect(Stage primaryStage) {
         StackPane root = new StackPane();
         Scene scene = primaryStage.getScene();
@@ -310,21 +306,21 @@ public class Controller extends Application {
     public void switchToGame(Stage primaryStage, Hero h) {
         StackPane root = new StackPane();
         GridPane game = new GridPane();
-        game.setMaxSize(screenHeight*0.8,screenHeight*0.8);
-        game.setPrefSize(screenHeight*0.8,screenHeight*0.8);
+        game.setMaxSize(screenHeight*0.9,screenHeight*0.9);
+        game.setPrefSize(screenHeight*0.9,screenHeight*0.9);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
 
         Game.startGame(h);
 
         Label selectOverlay = new Label();
-        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false)));
+        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.9/15, screenHeight*0.9/15, false, false)));
 
         Label selected = new Label();
-        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false)));
+        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.9/15, screenHeight*0.9/15, false, false)));
 
         Label selected1 = new Label();
-        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false)));
+        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight*0.9/15, screenHeight*0.9/15, false, false)));
 
         Label Ellie = new Label();
         Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", screenHeight*0.75*0.8/15, screenHeight*0.75*0.8/15, false, false)));
@@ -409,10 +405,10 @@ public class Controller extends Application {
                 button.setMinSize(32, 32);
                 button.setPrefSize(64,64);
                 if (!(Game.map[i][j].isVisible())) {
-                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_notvisible.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false), null, null, null, null)));
+                        stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_notvisible.png", screenHeight*0.9/15, screenHeight*0.9/15, false, false), null, null, null, null)));
                 }
                 else {
-                    stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_visible.png", screenHeight*0.8/15, screenHeight*0.8/15, false, false), null, null, null, null)));
+                    stackpane.setBackground(new Background(new BackgroundImage(new Image("file:src/views/imgs/default_visible.png", screenHeight*0.9/15, screenHeight*0.9/15, false, false), null, null, null, null)));
 
                     if (Game.map[i][j] instanceof CharacterCell && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
                         if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
