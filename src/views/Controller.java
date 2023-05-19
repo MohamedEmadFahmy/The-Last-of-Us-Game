@@ -436,6 +436,19 @@ public class Controller extends Application {
                 }
                 try {
                     currentHero.move(direction);
+                    Name.setText("Name: " + currentHero.getName());
+                    Class.setText("Class: " + currentHero.getClass()
+                            .getSimpleName());
+                    MaxHp.setText(
+                            "Health: " + currentHero.getCurrentHp()
+                                    + "/" + currentHero.getMaxHp());
+                    ActionPoints.setText("Actions Available: "
+                            + ((Hero) currentHero)
+                                    .getActionsAvailable()
+                            + "/"
+                            + ((Hero) currentHero).getMaxActions());
+                    Damage.setText("Attack Damage: "
+                            + ((Hero) currentHero).getAttackDmg());
                     updateGridUI(game, eventHandler);
                 } catch (MovementException movementException) {
                     // TODO Auto-generated catch block
