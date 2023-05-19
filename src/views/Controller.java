@@ -45,8 +45,8 @@ public class Controller extends Application {
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
     static boolean playing = false;
     static ArrayList<Hero> current = new ArrayList<Hero>();
-    double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
-    double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+    static double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
+    static double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
 
