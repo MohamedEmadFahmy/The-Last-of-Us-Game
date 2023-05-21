@@ -1,0 +1,31 @@
+.button {
+    -fx-pref-height: 80px;
+    -fx-pref-width: 315px;
+    -fx-padding: 0;
+
+
+    -fx-background-color: transparent;
+    
+    
+    
+    /* -fx-border-color:gold; */
+    /* -fx-border-width: 8px; */
+    /* -fx-border-radius: 20px; */
+    /* -fx-background-color: black; */
+    
+    
+    
+    /* -fx-font-family: "The Bomb Sound"; */
+    -fx-font-size: 90px;
+    /* -fx-font-weight: 900; */
+    -fx-font-family: "Aka-AcidGR-Compacta";
+    -fx-text-fill: white;
+}
+.label {
+    -fx-font-size: 30px;
+    -fx-font-family: "The Bomb Sound";
+    -fx-text-fill: white;
+}
+.button.hover {
+    -fx-text-fill: gold;
+}
