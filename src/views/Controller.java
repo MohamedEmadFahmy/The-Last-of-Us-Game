@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import model.characters.Medic;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
@@ -511,6 +512,40 @@ public class Controller extends Application {
                             System.out.println("Not enough vaccines");
                         }
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,currentHero.getLocation().x ,currentHero.getLocation().y, game);
+                    case Q:
+                        if (currentHero instanceof Medic) {
+                            currentHero.setTarget((currentTarget));
+                            try {
+                                currentHero.useSpecial();
+                            } catch (InvalidTargetException ex) {
+                                System.out.println("Target Out of range");
+                            } catch (NoAvailableResourcesException ex) {
+                                System.out.println("Not enough Supplies");
+                            }
+                        }
+                        else {
+                            try {
+                                currentHero.useSpecial();
+                            } catch (InvalidTargetException ex) {
+                                    System.out.println("Target Out of range");
+                            } catch (NoAvailableResourcesException ex) {
+                                System.out.println("Not enough Supplies");
+                            }
+                        }
+                    case E:
+                        try {
+                            currentHero.setTarget(currentTarget);
+                            try {
+                                currentHero.attack();
+                            } catch (InvalidTargetException ex) {
+                                System.out.println("Target Out of range");
+                            } catch (NotEnoughActionsException ex) {
+                                System.out.println("Not enough Actions");
+                            }
+                        } catch (NullPointerException ex) {
+                            System.out.println("No target is currently selected");
+                    }
+
                 }
                 if (direction != null) {
                     try {
@@ -556,9 +591,6 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
-    private void updateGridUI(GridPane game, EventHandler<MouseEvent> eventHandler) {
-
-    }
     private void updateMoveUI(int x, int y, int oldx,int oldy, GridPane gridPane) {
         Label Ellie = new Label();
         Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", screenHeight * 0.75 * 0.8 / 15,
