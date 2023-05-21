@@ -337,32 +337,27 @@ public class Controller extends Application {
         selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
                 screenHeight * 0.9 / 15, false, false)));
 
-        Label Ellie = new Label();
-        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", screenHeight * 0.75 * 0.8 / 15,
-                screenHeight * 0.75 * 0.8 / 15, false, false)));
-
-        Label Joel = new Label();
-        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", screenHeight * 0.75 * 0.8 / 15,
-                screenHeight * 0.75 * 0.8 / 15, false, false)));
-
         Label Name = new Label();
         Label Class = new Label();
         Label MaxHp = new Label();
         Label ActionPoints = new Label();
         Label Damage = new Label();
+        Label VaccinesLeft = new Label();
 
-        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage);
+        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft);
 
-        Name.setTranslateX(screenWidth / 3);
-        Class.setTranslateX(screenWidth / 3);
-        MaxHp.setTranslateX(screenWidth / 3);
-        ActionPoints.setTranslateX(screenWidth / 3);
-        Damage.setTranslateX(screenWidth / 3);
+        Name.setTranslateX(screenWidth / 2.5);
+        Class.setTranslateX(screenWidth / 2.5);
+        MaxHp.setTranslateX(screenWidth / 2.5);
+        ActionPoints.setTranslateX(screenWidth / 2.5);
+        Damage.setTranslateX(screenWidth / 2.5);
+        VaccinesLeft.setTranslateX(screenWidth / 2.5);
 
         Name.setTranslateY(-screenHeight * 0.1);
         Class.setTranslateY(-screenHeight * 0.05);
         ActionPoints.setTranslateY(screenHeight * 0.05);
         Damage.setTranslateY(screenHeight * 0.1);
+        VaccinesLeft.setTranslateY(screenHeight * 0.15);
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
@@ -402,6 +397,7 @@ public class Controller extends Application {
                                 MaxHp.setText("");
                                 ActionPoints.setText("");
                                 Damage.setText("");
+                                VaccinesLeft.setText("");
                                 currentHero = null;
                             } else {
                                 Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
@@ -417,6 +413,10 @@ public class Controller extends Application {
                                         + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getMaxActions());
                                 Damage.setText("Attack Damage: "
                                         + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getAttackDmg());
+                                VaccinesLeft.setText("Vaccines Left: "
+                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                                .getVaccineInventory().size()
+                                        + " / 5");
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
                                 currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
                             }
@@ -456,9 +456,9 @@ public class Controller extends Application {
                             StackPane prev = (StackPane) game.getChildren()
                                     .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
                             prev.getChildren().remove(0);
-                            Game.printBoard();
+                            // Game.printBoard();
                         } catch (InvalidTargetException ex) {
-                            System.out.println("You have to select a valid zombies");
+                            System.out.println("You have to select a valid zombie");
                         } catch (NotEnoughActionsException ex) {
                             System.out.println("Not enough actions");
                         } catch (NoAvailableResourcesException ex) {
@@ -466,6 +466,8 @@ public class Controller extends Application {
                         }
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
                                 currentHero.getLocation().x, currentHero.getLocation().y, game);
+                        VaccinesLeft.setText("Vaccines Left: "
+                                + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
                         break;
                     case Q:
                         if (currentHero instanceof Medic) {
@@ -523,7 +525,8 @@ public class Controller extends Application {
                                 + ((Hero) currentHero).getMaxActions());
                         Damage.setText("Attack Damage: "
                                 + ((Hero) currentHero).getAttackDmg());
-
+                        VaccinesLeft.setText("Vaccines Left: "
+                                + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
                     } catch (MovementException movementException) {
                         // TODO Auto-generated catch block
@@ -536,9 +539,7 @@ public class Controller extends Application {
                         System.out.println("You have to select a character");
                     }
                 }
-                if (currentHero != null) {
-                    System.out.println(currentHero.getVaccineInventory());
-                }
+                // Game.printBoard();
             }
         };
 
