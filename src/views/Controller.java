@@ -536,6 +536,9 @@ public class Controller extends Application {
                         System.out.println("You have to select a character");
                     }
                 }
+                if (currentHero != null) {
+                    System.out.println(currentHero.getVaccineInventory());
+                }
             }
         };
 
@@ -581,25 +584,25 @@ public class Controller extends Application {
                                     new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
                                             screenHeight * 0.75 * 0.8 / 15, false, false)));
                             stackpane.getChildren().add(0, Hero);
+                        } else {
+                            Label Zombie = new Label();
+                            Zombie.setGraphic(new ImageView(
+                                    new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Zombie);
                         }
-                    } else {
-                        Label Zombie = new Label();
-                        Zombie.setGraphic(new ImageView(
-                                new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
-                        stackpane.getChildren().add(0, Zombie);
                     }
-                }
-                if (Game.map[i][j] instanceof CollectibleCell) {
-                    if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
-                        Label Vaccine = new Label();
-                        Vaccine.setGraphic(
-                                new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
-                        stackpane.getChildren().add(0, Vaccine);
-                    } else {
-                        Label Supply = new Label();
-                        Supply.setGraphic(
-                                new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
-                        stackpane.getChildren().add(0, Supply);
+                    if (Game.map[i][j] instanceof CollectibleCell) {
+                        if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                            Label Vaccine = new Label();
+                            Vaccine.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Vaccine);
+                        } else {
+                            Label Supply = new Label();
+                            Supply.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Supply);
+                        }
                     }
                 }
                 button.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
@@ -607,6 +610,7 @@ public class Controller extends Application {
                 button.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
                 stackpane.getChildren().add(button);
                 game.add(stackpane, j, 14 - i);
+                // -----
             }
         }
     }
@@ -618,7 +622,7 @@ public class Controller extends Application {
             for (int j = Math.max(0, y - 1); j <= Math.min(14, y + 1); j++) {
                 StackPane stackpane = (StackPane) gridPane.getChildren().get((i) * 15 + j);
                 if (stackpane.getChildren().size() > 1) {
-                    System.out.println(stackpane.getChildren().size());
+                    // System.out.println(stackpane.getChildren().size());
                     stackpane.getChildren().remove(0);
                 }
                 stackpane
