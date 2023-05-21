@@ -447,27 +447,28 @@ public class Controller extends Application {
                         direction = Direction.RIGHT;
                         break;
                     case V:
-                        if (currentHero == null) {
-                            break;
+                        if (currentHero != null) {
+                            try {
+                                currentHero.setTarget(currentTarget);
+                                currentHero.cure();
+                                StackPane prev = (StackPane) game.getChildren()
+                                        .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
+                                prev.getChildren().remove(0);
+                                // Game.printBoard();
+                            } catch (InvalidTargetException ex) {
+                                System.out.println("You have to select a valid zombie");
+                            } catch (NotEnoughActionsException ex) {
+                                System.out.println("Not enough actions");
+                            } catch (NoAvailableResourcesException ex) {
+                                System.out.println("Not enough vaccines");
+                            }
+                            updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
+                                    currentHero.getLocation().x, currentHero.getLocation().y, game);
+                            VaccinesLeft.setText("Vaccines Left: "
+                                    + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                        } else {
+                            System.out.println("Current Hero is null");
                         }
-                        try {
-                            currentHero.setTarget(currentTarget);
-                            currentHero.cure();
-                            StackPane prev = (StackPane) game.getChildren()
-                                    .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
-                            prev.getChildren().remove(0);
-                            // Game.printBoard();
-                        } catch (InvalidTargetException ex) {
-                            System.out.println("You have to select a valid zombie");
-                        } catch (NotEnoughActionsException ex) {
-                            System.out.println("Not enough actions");
-                        } catch (NoAvailableResourcesException ex) {
-                            System.out.println("Not enough vaccines");
-                        }
-                        updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
-                                currentHero.getLocation().x, currentHero.getLocation().y, game);
-                        VaccinesLeft.setText("Vaccines Left: "
-                                + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
                         break;
                     case Q:
                         if (currentHero instanceof Medic) {
