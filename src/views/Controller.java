@@ -457,6 +457,8 @@ public class Controller extends Application {
                                 // Game.printBoard();
                             } catch (InvalidTargetException ex) {
                                 System.out.println("You have to select a valid zombie");
+                                // System.out.println(currentHero.getLocation());
+                                // System.out.println(currentTarget.getLocation());
                             } catch (NotEnoughActionsException ex) {
                                 System.out.println("Not enough actions");
                             } catch (NoAvailableResourcesException ex) {
