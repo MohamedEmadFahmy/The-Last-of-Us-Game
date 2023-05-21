@@ -384,7 +384,7 @@ public class Controller extends Application {
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected1);
                                 currentTarget = ((CharacterCell) Game.map[row][col])
                                         .getCharacter();
-                                System.out.println("Target selected " + currentTarget.getName());
+                                // System.out.println("Target selected " + currentTarget.getName());
                             }
                         }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
@@ -468,6 +468,7 @@ public class Controller extends Application {
                                     currentHero.getLocation().x, currentHero.getLocation().y, game);
                             VaccinesLeft.setText("Vaccines Left: "
                                     + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                            currentTarget = null;
                         } else {
                             System.out.println("Current Hero is null");
                         }
