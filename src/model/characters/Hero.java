@@ -164,8 +164,15 @@ public abstract class Hero extends Character {
         int targetY = this.getTarget().getLocation().y;
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
-        if (!((targetX <= X + 1 && targetX >= X - 1) && (targetY <= Y + 1 && targetX >= Y - 1))) {
+        // if (!((targetX <= X + 1 && targetX >= X - 1) && (targetY <= Y + 1 && targetX
+        // >= Y - 1))) {
+        // System.out.println("Out of range");
+        // throw new InvalidTargetException();
+        // }
+        if (targetX > X + 1 || targetX < X - 1 || targetY > Y + 1 || targetY < Y - 1) {
+            System.out.println("Out of range");
             throw new InvalidTargetException();
+
         }
         Vaccine v = this.getVaccineInventory().get(0);
         v.use(this);
