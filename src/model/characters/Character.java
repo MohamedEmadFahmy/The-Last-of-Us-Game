@@ -117,4 +117,17 @@ public abstract class Character {
         Game.heroes.remove(this);
         // hi
     }
+    // public static void main(String[] args) {
+    // int x = 6;
+    // int y = 6;
+    // for (int i = 0; i < 15; i++) {
+    // for (int j = 0; j < 15; j++) {
+    // if ((j <= y + 1 && j >= y - 1) && (i <= x + 1 && i >= x - 1) && (y != j || x
+    // != i)) {
+    // System.out.println("(" + i + ", " + j + ")");
+    // }
+    // }
+    // }
+
+    // }
 }
