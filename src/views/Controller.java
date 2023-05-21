@@ -28,13 +28,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import model.characters.Medic;
+import model.characters.*;
+import model.characters.Character;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
-import model.characters.Hero;
-import model.characters.Character;
-import model.characters.Direction;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -341,6 +339,8 @@ public class Controller extends Application {
         Label ActionPoints = new Label();
         Label Damage = new Label();
         Label VaccinesLeft = new Label();
+        Label Special = new Label()
+
 
         root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft);
 
@@ -350,12 +350,14 @@ public class Controller extends Application {
         ActionPoints.setTranslateX(screenWidth / 2.5);
         Damage.setTranslateX(screenWidth / 2.5);
         VaccinesLeft.setTranslateX(screenWidth / 2.5);
+        Special.setTranslateX(screenWidth / 2.5);
 
         Name.setTranslateY(-screenHeight * 0.1);
         Class.setTranslateY(-screenHeight * 0.05);
         ActionPoints.setTranslateY(screenHeight * 0.05);
         Damage.setTranslateY(screenHeight * 0.1);
         VaccinesLeft.setTranslateY(screenHeight * 0.15);
+        Special.setTranslateY(screenHeight * 0.15);
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
@@ -396,6 +398,7 @@ public class Controller extends Application {
                                 ActionPoints.setText("");
                                 Damage.setText("");
                                 VaccinesLeft.setText("");
+                                Special.setText("")
                                 currentHero = null;
                             } else {
                                 Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
@@ -415,6 +418,7 @@ public class Controller extends Application {
                                         + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
                                                 .getVaccineInventory().size()
                                         + " / 5");
+                                Special.setText(("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).isSpecialAction());
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
                                 currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
                             }
@@ -478,17 +482,22 @@ public class Controller extends Application {
                         break;
                     case Q:
                         if (currentHero instanceof Medic) {
-                            currentHero.setTarget((currentTarget));
                             try {
+                                currentHero.setTarget((currentTarget));
                                 currentHero.useSpecial();
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                             } catch (NoAvailableResourcesException ex) {
                                 System.out.println("Not enough Supplies");
+                            } catch (NullPointerException ex) {
+                                System.out.println("You must select a character to heal");
                             }
                         } else {
                             try {
                                 currentHero.useSpecial();
+                                if (currentHero instanceof Explorer) {
+                                    updateUI(game);
+                                }
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                             } catch (NoAvailableResourcesException ex) {
@@ -534,6 +543,7 @@ public class Controller extends Application {
                                 + ((Hero) currentHero).getAttackDmg());
                         VaccinesLeft.setText("Vaccines Left: "
                                 + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                        Special.setText("Special: " + ((Hero) currentHero).isSpecialAction());
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
                     } catch (MovementException movementException) {
                         // TODO Auto-generated catch block
@@ -671,6 +681,53 @@ public class Controller extends Application {
                 }
             }
         }
+    }
+    private void updateUI(GridPane gridPane) {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                StackPane stackpane = (StackPane) gridPane.getChildren().get((i) * 15 + j);
+                    if (stackpane.getChildren().size() > 1) {
+                        // System.out.println(stackpane.getChildren().size());
+                        stackpane.getChildren().remove(0);
+                    }
+                    stackpane
+                            .setBackground(
+                                    new Background(
+                                            new BackgroundImage(
+                                                    new Image("file:src/views/imgs/default_visible2.png",
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                    null, null, null, null)));
+                    if (Game.map[i][j] instanceof CharacterCell
+                            && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
+                        if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
+                            String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
+                            Label Hero = new Label();
+                            Hero.setGraphic(new ImageView(
+                                    new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
+                                            screenHeight * 0.75 * 0.8 / 15, false, false)));
+                            stackpane.getChildren().add(0, Hero);
+                        } else {
+                            Label Zombie = new Label();
+                            Zombie.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Zombie);
+                        }
+                    }
+                    if (Game.map[i][j] instanceof CollectibleCell) {
+                        if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                            Label Vaccine = new Label();
+                            Vaccine.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Vaccine);
+                        } else {
+                            Label Supply = new Label();
+                            Supply.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Supply);
+                        }
+                    }
+                }
+            }
     }
 
     public static void main(String[] args) {
