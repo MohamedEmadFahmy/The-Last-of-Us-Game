@@ -220,9 +220,9 @@ public class Controller extends Application {
         backToMenu.setTranslateX(-screenWidth * 0.40);
 
         ArrayList<Image> imageArray = new ArrayList<Image>();
-        imageArray.add(new Image("/views/imgs/Joel.png", 200, 200, false, false));
-        imageArray.add(new Image("/views/imgs/Ellie.png", 200, 200, false, false));
-        imageArray.add(new Image("/views/imgs/tess.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/JoelBig.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/EllieBig.png", 200, 200, false, false));
+        imageArray.add(new Image("/views/imgs/TessBig.png", 200, 200, false, false));
         imageArray.add(new Image("/views/imgs/4.png", 200, 200, false, false));
         imageArray.add(new Image("/views/imgs/5.png", 200, 200, false, false));
         imageArray.add(new Image("/views/imgs/6.png", 200, 200, false, false));
@@ -427,69 +427,7 @@ public class Controller extends Application {
             }
         };
         // initializeGame
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                StackPane stackpane = new StackPane();
-                Button button = new Button();
-                button.setMaxSize(64, 64);
-                button.setMinSize(32, 32);
-                button.setPrefSize(64, 64);
-                if (!(Game.map[i][j].isVisible())) {
-                    stackpane
-                            .setBackground(
-                                    new Background(new BackgroundImage(
-                                            new Image("file:src/views/imgs/default_notvisible.png",
-                                                    screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
-                                            null, null, null, null)));
-                } else {
-                    stackpane
-                            .setBackground(
-                                    new Background(new BackgroundImage(
-                                            new Image("file:src/views/imgs/default_visible.png",
-                                                    screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
-                                            null, null, null, null)));
-
-                    if (Game.map[i][j] instanceof CharacterCell
-                            && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
-                        if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
-                            String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
-                            switch (name) {
-                                case ("Joel Miller"):
-                                    stackpane.getChildren().add(0, Joel);
-                                    break;
-                                case ("Ellie Williams"):
-                                    stackpane.getChildren().add(0, Ellie);
-                                    break;
-                                // add rest of characters
-                            }
-                        } else {
-                            Label Zombie = new Label();
-                            Zombie.setGraphic(new ImageView(
-                                    new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
-                            stackpane.getChildren().add(0, Zombie);
-                        }
-                    }
-                    if (Game.map[i][j] instanceof CollectibleCell) {
-                        if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
-                            Label Vaccine = new Label();
-                            Vaccine.setGraphic(
-                                    new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
-                            stackpane.getChildren().add(0, Vaccine);
-                        } else {
-                            Label Supply = new Label();
-                            Supply.setGraphic(
-                                    new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
-                            stackpane.getChildren().add(0, Supply);
-                        }
-                    }
-                }
-                button.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
-                button.addEventHandler(MouseEvent.MOUSE_EXITED, eventHandler);
-                button.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-                stackpane.getChildren().add(button);
-                game.add(stackpane, j, 14 - i);
-            }
-        }
+        loadGrid(game, eventHandler);
 
         EventHandler<KeyEvent> keyboardHandler = new EventHandler<KeyEvent>() {
             @Override
@@ -611,14 +549,69 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
-    private void updateMoveUI(int x, int y, int oldx, int oldy, GridPane gridPane) {
-        Label Ellie = new Label();
-        Ellie.setGraphic(new ImageView(new Image("file:src/views/imgs/Ellie2.png", screenHeight * 0.75 * 0.8 / 15,
-                screenHeight * 0.75 * 0.8 / 15, false, false)));
+    private void loadGrid(GridPane game, EventHandler<MouseEvent> eventHandler) {
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                StackPane stackpane = new StackPane();
+                Button button = new Button();
+                button.setMaxSize(64, 64);
+                button.setMinSize(32, 32);
+                button.setPrefSize(64, 64);
+                if (!(Game.map[i][j].isVisible())) {
+                    stackpane
+                            .setBackground(
+                                    new Background(new BackgroundImage(
+                                            new Image("file:src/views/imgs/default_notvisible.png",
+                                                    screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                            null, null, null, null)));
+                } else {
+                    stackpane
+                            .setBackground(
+                                    new Background(new BackgroundImage(
+                                            new Image("file:src/views/imgs/default_visible.png",
+                                                    screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                            null, null, null, null)));
 
-        Label Joel = new Label();
-        Joel.setGraphic(new ImageView(new Image("file:src/views/imgs/Joel2.png", screenHeight * 0.75 * 0.8 / 15,
-                screenHeight * 0.75 * 0.8 / 15, false, false)));
+                    if (Game.map[i][j] instanceof CharacterCell
+                            && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
+                        if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
+                            String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
+                            Label Hero = new Label();
+                            Hero.setGraphic(new ImageView(
+                                    new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
+                                            screenHeight * 0.75 * 0.8 / 15, false, false)));
+                            stackpane.getChildren().add(0, Hero);
+                        }
+                    } else {
+                        Label Zombie = new Label();
+                        Zombie.setGraphic(new ImageView(
+                                new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
+                        stackpane.getChildren().add(0, Zombie);
+                    }
+                }
+                if (Game.map[i][j] instanceof CollectibleCell) {
+                    if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                        Label Vaccine = new Label();
+                        Vaccine.setGraphic(
+                                new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
+                        stackpane.getChildren().add(0, Vaccine);
+                    } else {
+                        Label Supply = new Label();
+                        Supply.setGraphic(
+                                new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
+                        stackpane.getChildren().add(0, Supply);
+                    }
+                }
+                button.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
+                button.addEventHandler(MouseEvent.MOUSE_EXITED, eventHandler);
+                button.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+                stackpane.getChildren().add(button);
+                game.add(stackpane, j, 14 - i);
+            }
+        }
+    }
+
+    private void updateMoveUI(int x, int y, int oldx, int oldy, GridPane gridPane) {
         StackPane prev = (StackPane) gridPane.getChildren().get((oldx) * 15 + oldy);
         prev.getChildren().remove(0);
         for (int i = Math.max(0, x - 1); i <= Math.min(14, x + 1); i++) {
@@ -639,14 +632,11 @@ public class Controller extends Application {
                         && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
                     if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
                         String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
-                        switch (name) {
-                            case ("Joel Miller"):
-                                stackpane.getChildren().add(0, Joel);
-                                break;
-                            case ("Ellie Williams"):
-                                stackpane.getChildren().add(0, Ellie);
-                                break;
-                        }
+                        Label Hero = new Label();
+                        Hero.setGraphic(new ImageView(
+                                new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
+                                        screenHeight * 0.75 * 0.8 / 15, false, false)));
+                        stackpane.getChildren().add(0, Hero);
                     } else {
                         Label Zombie = new Label();
                         Zombie.setGraphic(
