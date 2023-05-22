@@ -38,6 +38,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Controller extends Application {
+    static boolean currentSelected;
+    static boolean targetSelected;
     static Hero currentHero = null;
     static Character currentTarget = null;
     static int index = 1;
@@ -375,21 +377,23 @@ public class Controller extends Application {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         if (Game.map[row][col] instanceof CharacterCell && ((CharacterCell) Game.map[row][col])
                                 .getCharacter() != currentHero) {
-                            if (stackpane.getChildren().contains(selected1)) {
+                            if (targetSelected) {
                                 // stackpane.getChildren().remove(selected1);
                                 System.out.println("Target removed " + currentTarget.getName());
                                 currentTarget = null;
+                                targetSelected = false;
                             } else {
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected1);
                                 currentTarget = ((CharacterCell) Game.map[row][col])
                                         .getCharacter();
+                                targetSelected = true;
                                 // System.out.println("Target selected " + currentTarget.getName());
                             }
                         }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
-                            if (stackpane.getChildren().contains(selected)) {
+                            if (currentSelected) {
                                 // stackpane.getChildren().remove(selected);
                                 Name.setText("");
                                 Class.setText("");
@@ -399,6 +403,7 @@ public class Controller extends Application {
                                 VaccinesLeft.setText("");
                                 Special.setText("");
                                 currentHero = null;
+                                currentSelected = false;
                             } else {
                                 Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
                                 Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass()
@@ -422,6 +427,7 @@ public class Controller extends Application {
                                                 .isSpecialAction());
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
                                 currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
+                                currentSelected = true;
                             }
                         }
                     }
@@ -506,6 +512,7 @@ public class Controller extends Application {
                                 System.out.println("Not enough Supplies");
                             }
                         }
+                        Special.setText("Special: True");
                         break;
                     case E:
                         try {
