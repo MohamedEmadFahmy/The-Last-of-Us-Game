@@ -341,8 +341,7 @@ public class Controller extends Application {
         Label VaccinesLeft = new Label();
         Label Special = new Label();
 
-
-        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft);
+        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft, Special);
 
         Name.setTranslateX(screenWidth / 2.5);
         Class.setTranslateX(screenWidth / 2.5);
@@ -357,7 +356,7 @@ public class Controller extends Application {
         ActionPoints.setTranslateY(screenHeight * 0.05);
         Damage.setTranslateY(screenHeight * 0.1);
         VaccinesLeft.setTranslateY(screenHeight * 0.15);
-        Special.setTranslateY(screenHeight * 0.15);
+        Special.setTranslateY(screenHeight * 0.2);
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
@@ -418,7 +417,9 @@ public class Controller extends Application {
                                         + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
                                                 .getVaccineInventory().size()
                                         + " / 5");
-                                Special.setText(("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).isSpecialAction());
+                                Special.setText(
+                                        ("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                                .isSpecialAction());
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
                                 currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
                             }
@@ -682,52 +683,53 @@ public class Controller extends Application {
             }
         }
     }
+
     private void updateUI(GridPane gridPane) {
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 StackPane stackpane = (StackPane) gridPane.getChildren().get((i) * 15 + j);
-                    if (stackpane.getChildren().size() > 1) {
-                        // System.out.println(stackpane.getChildren().size());
-                        stackpane.getChildren().remove(0);
+                if (stackpane.getChildren().size() > 1) {
+                    // System.out.println(stackpane.getChildren().size());
+                    stackpane.getChildren().remove(0);
+                }
+                stackpane
+                        .setBackground(
+                                new Background(
+                                        new BackgroundImage(
+                                                new Image("file:src/views/imgs/default_visible2.png",
+                                                        screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                null, null, null, null)));
+                if (Game.map[i][j] instanceof CharacterCell
+                        && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
+                    if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
+                        String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
+                        Label Hero = new Label();
+                        Hero.setGraphic(new ImageView(
+                                new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
+                                        screenHeight * 0.75 * 0.8 / 15, false, false)));
+                        stackpane.getChildren().add(0, Hero);
+                    } else {
+                        Label Zombie = new Label();
+                        Zombie.setGraphic(
+                                new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
+                        stackpane.getChildren().add(0, Zombie);
                     }
-                    stackpane
-                            .setBackground(
-                                    new Background(
-                                            new BackgroundImage(
-                                                    new Image("file:src/views/imgs/default_visible2.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
-                                                    null, null, null, null)));
-                    if (Game.map[i][j] instanceof CharacterCell
-                            && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
-                        if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
-                            String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
-                            Label Hero = new Label();
-                            Hero.setGraphic(new ImageView(
-                                    new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
-                                            screenHeight * 0.75 * 0.8 / 15, false, false)));
-                            stackpane.getChildren().add(0, Hero);
-                        } else {
-                            Label Zombie = new Label();
-                            Zombie.setGraphic(
-                                    new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
-                            stackpane.getChildren().add(0, Zombie);
-                        }
-                    }
-                    if (Game.map[i][j] instanceof CollectibleCell) {
-                        if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
-                            Label Vaccine = new Label();
-                            Vaccine.setGraphic(
-                                    new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
-                            stackpane.getChildren().add(0, Vaccine);
-                        } else {
-                            Label Supply = new Label();
-                            Supply.setGraphic(
-                                    new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
-                            stackpane.getChildren().add(0, Supply);
-                        }
+                }
+                if (Game.map[i][j] instanceof CollectibleCell) {
+                    if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                        Label Vaccine = new Label();
+                        Vaccine.setGraphic(
+                                new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
+                        stackpane.getChildren().add(0, Vaccine);
+                    } else {
+                        Label Supply = new Label();
+                        Supply.setGraphic(
+                                new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
+                        stackpane.getChildren().add(0, Supply);
                     }
                 }
             }
+        }
     }
 
     public static void main(String[] args) {
