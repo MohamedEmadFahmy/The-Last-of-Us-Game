@@ -502,8 +502,11 @@ public class Controller extends Application {
                             try {
                                 currentHero.setTarget((currentTarget));
                                 currentHero.useSpecial();
+                                Hp.setText(
+                                        "Health: " + currentHero.getCurrentHp()
+                                                + "/" + currentHero.getMaxHp());
                                 SuppliesLeft.setText("Supplies Left: "
-                                        + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
+                                        + currentHero.getSupplyInventory().size() + " / 5");
                                 Special.setText("Special: True");
                                 // animation
                                 Special.setText("Special: False");
@@ -517,7 +520,7 @@ public class Controller extends Application {
                         } else {
                             try {
                                 currentHero.useSpecial();
-                                Special.setText("True");
+                                Special.setText("Special: True");
                                 if (currentHero instanceof Explorer) {
                                     updateUI(game);
                                 }
@@ -539,17 +542,10 @@ public class Controller extends Application {
                                     currentHero.getLocation().y, game);
                             if (currentTarget.getCurrentHp() == 0) {
                                 currentTarget = null;
-                                Zombie spawnedZombie = Game.zombies.get(-1);
+                                Zombie spawnedZombie = Game.zombies.get(Game.zombies.size() - 1);
                                 int x = spawnedZombie.getLocation().x;
                                 int y = spawnedZombie.getLocation().y;
-                                if (((Cell) Game.map[x][y]).isVisible()) {
-                                    StackPane stackPane = (StackPane) game.getChildren().get((x) * 15 + y);
-                                    Label Zombie = new Label();
-                                    Zombie.setGraphic(
-                                            new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48,
-                                                    false, false)));
-                                    stackPane.getChildren().add(0, Zombie);
-                                }
+                                updateMoveUI(x, y, x, y, game);
                             }
                             if (currentHero.getCurrentHp() == 0) {
                                 Name.setText("");
@@ -573,7 +569,8 @@ public class Controller extends Application {
                                         + ((Hero) currentHero).getMaxActions());
                             }
                         } catch (InvalidTargetException ex) {
-                            System.out.println("Target Out of range");
+                            System.out.println("Target Out of range ");
+                            System.out.print(ex.getMessage());
                         } catch (NotEnoughActionsException ex) {
                             System.out.println("Not enough Actions");
                         } catch (NullPointerException ex) {
@@ -605,10 +602,15 @@ public class Controller extends Application {
                                     "Health: " + currentHero.getCurrentHp()
                                             + "/" + currentHero.getMaxHp());
                             ActionPoints.setText("Actions Available: "
-                                    + ((Hero) currentHero)
-                                            .getActionsAvailable()
+                                    + currentHero.getActionsAvailable()
                                     + "/"
-                                    + ((Hero) currentHero).getMaxActions());
+                                    + currentHero.getMaxActions());
+                            VaccinesLeft.setText("Vaccines Left: "
+                                    + currentHero.getVaccineInventory().size()
+                                    + " / 5");
+                            SuppliesLeft.setText("Supplies Left: "
+                                    + currentHero.getSupplyInventory().size()
+                                    + " / 5");
                         }
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
                     } catch (MovementException movementException) {
