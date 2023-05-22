@@ -33,6 +33,7 @@ import model.characters.Character;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
+import model.world.Cell;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -92,11 +93,11 @@ public class Controller extends Application {
         leftChar.setGraphic(new ImageView(imageArray.get(i - 1)));
     }
 
-    public void updateLabels(Label Name, Label Class, Label MaxHp, Label ActionPoints, Label Damage,
+    public void updateLabels(Label Name, Label Class, Label Hp, Label ActionPoints, Label Damage,
             ArrayList<Hero> current, int index) {
         Name.setText("Name: " + current.get(index).getName());
         Class.setText("Class: " + current.get(index).getClass().getSimpleName());
-        MaxHp.setText("Max Health: " + current.get(index).getMaxHp());
+        Hp.setText("Max Health: " + current.get(index).getMaxHp());
         ActionPoints.setText("Max Actions: " + current.get(index).getMaxActions());
         Damage.setText("Damage: " + current.get(index).getAttackDmg());
     }
@@ -235,19 +236,19 @@ public class Controller extends Application {
 
         Label Name = new Label("Name: Ellie Williams ");
         Label Class = new Label("Class: Medic ");
-        Label MaxHp = new Label("Max Health: 110");
+        Label Hp = new Label("Max Health: 110");
         Label ActionPoints = new Label("Action Points: 6");
         Label Damage = new Label("Attack Damage: 15");
         Label CharSelect = new Label("SELECT YOUR CHARACTER");
 
         Name.setTranslateY(screenHeight - (screenHeight * 0.8));
         Class.setTranslateY(screenHeight - (screenHeight * 0.75));
-        MaxHp.setTranslateY(screenHeight - (screenHeight * 0.70));
+        Hp.setTranslateY(screenHeight - (screenHeight * 0.70));
         ActionPoints.setTranslateY(screenHeight - (screenHeight * 0.65));
         Damage.setTranslateY(screenHeight - (screenHeight * 0.60));
         CharSelect.setTranslateY(-screenHeight * 0.30);
 
-        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, CharSelect);
+        root.getChildren().addAll(Name, Class, Hp, ActionPoints, Damage, CharSelect);
 
         ScaleTransition st3 = new ScaleTransition(Duration.millis(30), middleChar);
         st3.setToX(1.25);
@@ -258,17 +259,17 @@ public class Controller extends Application {
             @Override
             public void handle(ActionEvent t) {
                 if (index > 1) {
-                    updateLabels(Name, Class, MaxHp, ActionPoints, Damage, current, --index);
+                    updateLabels(Name, Class, Hp, ActionPoints, Damage, current, --index);
                     updateImages(index, rightChar, middleChar, leftChar, imageArray);
                 } else if (index == 1) {
-                    updateLabels(Name, Class, MaxHp, ActionPoints, Damage, current, 0);
+                    updateLabels(Name, Class, Hp, ActionPoints, Damage, current, 0);
                     rightChar.setGraphic(new ImageView(imageArray.get(1)));
                     middleChar.setGraphic(new ImageView(imageArray.get(0)));
                     leftChar.setGraphic(new ImageView(imageArray.get(current.size() - 1)));
                     index--;
                 } else if (index == 0) {
                     index = 7;
-                    updateLabels(Name, Class, MaxHp, ActionPoints, Damage, current, 7);
+                    updateLabels(Name, Class, Hp, ActionPoints, Damage, current, 7);
                     rightChar.setGraphic(new ImageView(imageArray.get(0)));
                     middleChar.setGraphic(new ImageView(imageArray.get(index)));
                     leftChar.setGraphic(new ImageView(imageArray.get(index - 1)));
@@ -280,16 +281,16 @@ public class Controller extends Application {
             public void handle(ActionEvent t) {
                 if (index < 6) {
                     updateImages(++index, rightChar, middleChar, leftChar, imageArray);
-                    updateLabels(Name, Class, MaxHp, ActionPoints, Damage, current, index);
+                    updateLabels(Name, Class, Hp, ActionPoints, Damage, current, index);
                 } else if (index == 6) {
-                    updateLabels(Name, Class, MaxHp, ActionPoints, Damage, current, 7);
+                    updateLabels(Name, Class, Hp, ActionPoints, Damage, current, 7);
                     rightChar.setGraphic(new ImageView(imageArray.get(0)));
                     middleChar.setGraphic(new ImageView(imageArray.get(7)));
                     leftChar.setGraphic(new ImageView(imageArray.get(6)));
                     index++;
                 } else {
                     index = 0;
-                    updateLabels(Name, Class, MaxHp, ActionPoints, Damage, current, 0);
+                    updateLabels(Name, Class, Hp, ActionPoints, Damage, current, 0);
                     rightChar.setGraphic(new ImageView(imageArray.get(index + 1)));
                     middleChar.setGraphic(new ImageView(imageArray.get(index)));
                     leftChar.setGraphic(new ImageView(imageArray.get(current.size() - 1)));
@@ -337,18 +338,18 @@ public class Controller extends Application {
 
         Label Name = new Label();
         Label Class = new Label();
-        Label MaxHp = new Label();
+        Label Hp = new Label();
         Label ActionPoints = new Label();
         Label Damage = new Label();
         Label VaccinesLeft = new Label();
         Label Special = new Label();
         Label SuppliesLeft = new Label();
 
-        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft);
+        root.getChildren().addAll(Name, Class, Hp, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft);
 
         Name.setTranslateX(screenWidth / 2.5);
         Class.setTranslateX(screenWidth / 2.5);
-        MaxHp.setTranslateX(screenWidth / 2.5);
+        Hp.setTranslateX(screenWidth / 2.5);
         ActionPoints.setTranslateX(screenWidth / 2.5);
         Damage.setTranslateX(screenWidth / 2.5);
         VaccinesLeft.setTranslateX(screenWidth / 2.5);
@@ -400,7 +401,7 @@ public class Controller extends Application {
                                 // stackpane.getChildren().remove(selected);
                                 Name.setText("");
                                 Class.setText("");
-                                MaxHp.setText("");
+                                Hp.setText("");
                                 ActionPoints.setText("");
                                 Damage.setText("");
                                 VaccinesLeft.setText("");
@@ -412,7 +413,7 @@ public class Controller extends Application {
                                 Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
                                 Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass()
                                         .getSimpleName());
-                                MaxHp.setText(
+                                Hp.setText(
                                         "Health: " + ((CharacterCell) Game.map[row][col]).getCharacter().getCurrentHp()
                                                 + "/" + ((CharacterCell) Game.map[row][col]).getCharacter().getMaxHp());
                                 ActionPoints.setText("Actions Available: "
@@ -449,6 +450,10 @@ public class Controller extends Application {
         EventHandler<KeyEvent> keyboardHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
+                if (currentHero == null) {
+                    System.out.println("You have to select a hero to do an action");
+                    return;
+                }
                 Direction direction = null;
                 switch (e.getCode()) {
                     case W:
@@ -464,35 +469,32 @@ public class Controller extends Application {
                         direction = Direction.RIGHT;
                         break;
                     case V:
-                        if (currentHero != null) {
-                            Game.printBoard();
-                            try {
-                                currentHero.setTarget(currentTarget);
-                                currentHero.cure();
-                                StackPane prev = (StackPane) game.getChildren()
-                                        .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
-                                prev.getChildren().remove(0);
-                                // Game.printBoard();
-                                updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
-                                        currentHero.getLocation().x, currentHero.getLocation().y, game);
-                                System.out.println(
-                                        "Cure @ " + currentHero.getLocation() + " & " + currentTarget.getLocation());
-                                VaccinesLeft.setText("Vaccines Left: "
-                                        + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
-                                currentTarget = null;
-                            } catch (InvalidTargetException ex) {
-                                System.out.println("You have to select a valid zombie");
-                                System.out.println(currentHero.getLocation());
-                                if (currentTarget != null) {
-                                    System.out.println(currentTarget.getLocation());
-                                }
-                            } catch (NotEnoughActionsException ex) {
-                                System.out.println("Not enough actions");
-                            } catch (NoAvailableResourcesException ex) {
-                                System.out.println("Not enough vaccines");
+
+                        Game.printBoard();
+                        try {
+                            currentHero.setTarget(currentTarget);
+                            currentHero.cure();
+                            StackPane prev = (StackPane) game.getChildren()
+                                    .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
+                            prev.getChildren().remove(0);
+                            // Game.printBoard();
+                            updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
+                                    currentHero.getLocation().x, currentHero.getLocation().y, game);
+                            System.out.println(
+                                    "Cure @ " + currentHero.getLocation() + " & " + currentTarget.getLocation());
+                            VaccinesLeft.setText("Vaccines Left: "
+                                    + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                            currentTarget = null;
+                        } catch (InvalidTargetException ex) {
+                            System.out.println("You have to select a valid zombie");
+                            System.out.println(currentHero.getLocation());
+                            if (currentTarget != null) {
+                                System.out.println(currentTarget.getLocation());
                             }
-                        } else {
-                            System.out.println("Current Hero is null");
+                        } catch (NotEnoughActionsException ex) {
+                            System.out.println("Not enough actions");
+                        } catch (NoAvailableResourcesException ex) {
+                            System.out.println("Not enough vaccines");
                         }
                         break;
                     case Q:
@@ -500,6 +502,11 @@ public class Controller extends Application {
                             try {
                                 currentHero.setTarget((currentTarget));
                                 currentHero.useSpecial();
+                                SuppliesLeft.setText("Supplies Left: "
+                                        + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
+                                Special.setText("Special: True");
+                                // animation
+                                Special.setText("Special: False");
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                             } catch (NoAvailableResourcesException ex) {
@@ -514,7 +521,6 @@ public class Controller extends Application {
                                 if (currentHero instanceof Explorer) {
                                     updateUI(game);
                                 }
-                                Special.setText("Special: False");
                                 SuppliesLeft.setText("Supplies Left: "
                                         + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
                             } catch (InvalidTargetException ex) {
@@ -525,15 +531,51 @@ public class Controller extends Application {
                         }
                         break;
                     case E:
+                        currentHero.setTarget(currentTarget);
                         try {
-                            currentHero.setTarget(currentTarget);
-                            try {
-                                currentHero.attack();
-                            } catch (InvalidTargetException ex) {
-                                System.out.println("Target Out of range");
-                            } catch (NotEnoughActionsException ex) {
-                                System.out.println("Not enough Actions");
+                            currentHero.attack();
+                            updateMoveUI(currentHero.getLocation().x,
+                                    currentHero.getLocation().y, currentHero.getLocation().x,
+                                    currentHero.getLocation().y, game);
+                            if (currentTarget.getCurrentHp() == 0) {
+                                currentTarget = null;
+                                Zombie spawnedZombie = Game.zombies.get(-1);
+                                int x = spawnedZombie.getLocation().x;
+                                int y = spawnedZombie.getLocation().y;
+                                if (((Cell) Game.map[x][y]).isVisible()) {
+                                    StackPane stackPane = (StackPane) game.getChildren().get((x) * 15 + y);
+                                    Label Zombie = new Label();
+                                    Zombie.setGraphic(
+                                            new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48,
+                                                    false, false)));
+                                    stackPane.getChildren().add(0, Zombie);
+                                }
                             }
+                            if (currentHero.getCurrentHp() == 0) {
+                                Name.setText("");
+                                Class.setText("");
+                                Hp.setText("");
+                                ActionPoints.setText("");
+                                Damage.setText("");
+                                VaccinesLeft.setText("");
+                                Special.setText("");
+                                SuppliesLeft.setText("");
+                                currentHero = null;
+                                currentSelected = false;
+                            } else {
+                                Hp.setText(
+                                        "Health: " + currentHero.getCurrentHp()
+                                                + "/" + currentHero.getMaxHp());
+                                ActionPoints.setText("Actions Available: "
+                                        + ((Hero) currentHero)
+                                                .getActionsAvailable()
+                                        + "/"
+                                        + ((Hero) currentHero).getMaxActions());
+                            }
+                        } catch (InvalidTargetException ex) {
+                            System.out.println("Target Out of range");
+                        } catch (NotEnoughActionsException ex) {
+                            System.out.println("Not enough Actions");
                         } catch (NullPointerException ex) {
                             System.out.println("No target is currently selected");
                         }
@@ -547,24 +589,27 @@ public class Controller extends Application {
                         int x = currentHero.getLocation().x;
                         int y = currentHero.getLocation().y;
                         currentHero.move(direction);
-                        Name.setText("Name: " + currentHero.getName());
-                        Class.setText("Class: " + currentHero.getClass()
-                                .getSimpleName());
-                        MaxHp.setText(
-                                "Health: " + currentHero.getCurrentHp()
-                                        + "/" + currentHero.getMaxHp());
-                        ActionPoints.setText("Actions Available: "
-                                + ((Hero) currentHero)
-                                        .getActionsAvailable()
-                                + "/"
-                                + ((Hero) currentHero).getMaxActions());
-                        Damage.setText("Attack Damage: "
-                                + ((Hero) currentHero).getAttackDmg());
-                        VaccinesLeft.setText("Vaccines Left: "
-                                + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
-                        SuppliesLeft.setText("Supplies Left: "
-                                + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
-                        Special.setText("Special: " + ((Hero) currentHero).isSpecialAction());
+                        if (currentHero.getCurrentHp() == 0) {
+                            Name.setText("");
+                            Class.setText("");
+                            Hp.setText("");
+                            ActionPoints.setText("");
+                            Damage.setText("");
+                            VaccinesLeft.setText("");
+                            Special.setText("");
+                            SuppliesLeft.setText("");
+                            currentHero = null;
+                            currentSelected = false;
+                        } else {
+                            Hp.setText(
+                                    "Health: " + currentHero.getCurrentHp()
+                                            + "/" + currentHero.getMaxHp());
+                            ActionPoints.setText("Actions Available: "
+                                    + ((Hero) currentHero)
+                                            .getActionsAvailable()
+                                    + "/"
+                                    + ((Hero) currentHero).getMaxActions());
+                        }
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
                     } catch (MovementException movementException) {
                         // TODO Auto-generated catch block
