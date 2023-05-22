@@ -342,8 +342,9 @@ public class Controller extends Application {
         Label Damage = new Label();
         Label VaccinesLeft = new Label();
         Label Special = new Label();
+        Label SuppliesLeft = new Label();
 
-        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft, Special);
+        root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft);
 
         Name.setTranslateX(screenWidth / 2.5);
         Class.setTranslateX(screenWidth / 2.5);
@@ -352,6 +353,7 @@ public class Controller extends Application {
         Damage.setTranslateX(screenWidth / 2.5);
         VaccinesLeft.setTranslateX(screenWidth / 2.5);
         Special.setTranslateX(screenWidth / 2.5);
+        SuppliesLeft.setTranslateX(screenWidth / 2.5);
 
         Name.setTranslateY(-screenHeight * 0.1);
         Class.setTranslateY(-screenHeight * 0.05);
@@ -359,6 +361,7 @@ public class Controller extends Application {
         Damage.setTranslateY(screenHeight * 0.1);
         VaccinesLeft.setTranslateY(screenHeight * 0.15);
         Special.setTranslateY(screenHeight * 0.2);
+        SuppliesLeft.setTranslateY(screenHeight * 0.25);
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
@@ -379,7 +382,7 @@ public class Controller extends Application {
                                 .getCharacter() != currentHero) {
                             if (targetSelected) {
                                 // stackpane.getChildren().remove(selected1);
-                                System.out.println("Target removed " + currentTarget.getName());
+                                // System.out.println("Target removed " + currentTarget.getName());
                                 currentTarget = null;
                                 targetSelected = false;
                             } else {
@@ -402,6 +405,7 @@ public class Controller extends Application {
                                 Damage.setText("");
                                 VaccinesLeft.setText("");
                                 Special.setText("");
+                                SuppliesLeft.setText("");
                                 currentHero = null;
                                 currentSelected = false;
                             } else {
@@ -421,6 +425,10 @@ public class Controller extends Application {
                                 VaccinesLeft.setText("Vaccines Left: "
                                         + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
                                                 .getVaccineInventory().size()
+                                        + " / 5");
+                                SuppliesLeft.setText("Supplies Left: "
+                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                                .getSupplyInventory().size()
                                         + " / 5");
                                 Special.setText(
                                         ("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
@@ -506,13 +514,15 @@ public class Controller extends Application {
                                 if (currentHero instanceof Explorer) {
                                     updateUI(game);
                                 }
+                                Special.setText("Special: False");
+                                SuppliesLeft.setText("Supplies Left: "
+                                        + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                             } catch (NoAvailableResourcesException ex) {
                                 System.out.println("Not enough Supplies");
                             }
                         }
-                        Special.setText("Special: True");
                         break;
                     case E:
                         try {
@@ -552,6 +562,8 @@ public class Controller extends Application {
                                 + ((Hero) currentHero).getAttackDmg());
                         VaccinesLeft.setText("Vaccines Left: "
                                 + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                        SuppliesLeft.setText("Supplies Left: "
+                                + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
                         Special.setText("Special: " + ((Hero) currentHero).isSpecialAction());
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
                     } catch (MovementException movementException) {
