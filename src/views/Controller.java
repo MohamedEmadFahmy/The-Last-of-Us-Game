@@ -496,6 +496,7 @@ public class Controller extends Application {
                         } else {
                             try {
                                 currentHero.useSpecial();
+                                Special.setText("True");
                                 if (currentHero instanceof Explorer) {
                                     updateUI(game);
                                 }
