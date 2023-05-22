@@ -36,10 +36,8 @@ import model.characters.Hero;
 import model.characters.Character;
 import model.characters.Direction;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Controller extends Application {
     static Hero currentHero = null;
@@ -384,7 +382,7 @@ public class Controller extends Application {
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected1);
                                 currentTarget = ((CharacterCell) Game.map[row][col])
                                         .getCharacter();
-                                System.out.println("Target selected " + currentTarget.getName());
+                                // System.out.println("Target selected " + currentTarget.getName());
                             }
                         }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
@@ -448,6 +446,7 @@ public class Controller extends Application {
                         break;
                     case V:
                         if (currentHero != null) {
+                            Game.printBoard();
                             try {
                                 currentHero.setTarget(currentTarget);
                                 currentHero.cure();
@@ -455,19 +454,24 @@ public class Controller extends Application {
                                         .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
                                 prev.getChildren().remove(0);
                                 // Game.printBoard();
+                                updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
+                                        currentHero.getLocation().x, currentHero.getLocation().y, game);
+                                System.out.println(
+                                        "Cure @ " + currentHero.getLocation() + " & " + currentTarget.getLocation());
+                                VaccinesLeft.setText("Vaccines Left: "
+                                        + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                                currentTarget = null;
                             } catch (InvalidTargetException ex) {
                                 System.out.println("You have to select a valid zombie");
-                                // System.out.println(currentHero.getLocation());
-                                // System.out.println(currentTarget.getLocation());
+                                System.out.println(currentHero.getLocation());
+                                if (currentTarget != null) {
+                                    System.out.println(currentTarget.getLocation());
+                                }
                             } catch (NotEnoughActionsException ex) {
                                 System.out.println("Not enough actions");
                             } catch (NoAvailableResourcesException ex) {
                                 System.out.println("Not enough vaccines");
                             }
-                            updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
-                                    currentHero.getLocation().x, currentHero.getLocation().y, game);
-                            VaccinesLeft.setText("Vaccines Left: "
-                                    + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
                         } else {
                             System.out.println("Current Hero is null");
                         }
@@ -575,7 +579,7 @@ public class Controller extends Application {
                     stackpane
                             .setBackground(
                                     new Background(new BackgroundImage(
-                                            new Image("file:src/views/imgs/default_visible.png",
+                                            new Image("file:src/views/imgs/default_visible2.png",
                                                     screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
                                             null, null, null, null)));
 
@@ -633,7 +637,7 @@ public class Controller extends Application {
                         .setBackground(
                                 new Background(
                                         new BackgroundImage(
-                                                new Image("file:src/views/imgs/default_visible.png",
+                                                new Image("file:src/views/imgs/default_visible2.png",
                                                         screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
                                                 null, null, null, null)));
                 if (Game.map[i][j] instanceof CharacterCell
