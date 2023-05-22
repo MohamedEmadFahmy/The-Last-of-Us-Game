@@ -339,7 +339,7 @@ public class Controller extends Application {
         Label ActionPoints = new Label();
         Label Damage = new Label();
         Label VaccinesLeft = new Label();
-        Label Special = new Label()
+        Label Special = new Label();
 
 
         root.getChildren().addAll(Name, Class, MaxHp, ActionPoints, Damage, VaccinesLeft);
@@ -398,7 +398,7 @@ public class Controller extends Application {
                                 ActionPoints.setText("");
                                 Damage.setText("");
                                 VaccinesLeft.setText("");
-                                Special.setText("")
+                                Special.setText("");
                                 currentHero = null;
                             } else {
                                 Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
