@@ -285,7 +285,6 @@ public class Controller extends Application {
         leftSel.setGraphic(new ImageView(new Image("/views/imgs/arrowleft.png", 100, 100, false, false)));
         rightSel.setGraphic(new ImageView(new Image("/views/imgs/arrowright.png", 100, 100, false, false)));
 
-        // button animations for arrows
 
         ScaleTransition stRight = new ScaleTransition(Duration.millis(30), rightSel);
         rightSel.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -483,35 +482,11 @@ public class Controller extends Application {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         if (Game.map[row][col] instanceof CharacterCell && ((CharacterCell) Game.map[row][col])
                                 .getCharacter() != currentHero) {
-                            if (targetSelected) {
-                                // stackpane.getChildren().remove(selected1);
-                                // System.out.println("Target removed " + currentTarget.getName());
-                                currentTarget = null;
-                                targetSelected = false;
-                            } else {
-                                // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected1);
-                                currentTarget = ((CharacterCell) Game.map[row][col])
-                                        .getCharacter();
-                                targetSelected = true;
-                                // System.out.println("Target selected " + currentTarget.getName());
-                            }
+                            currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
                         }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
-                            if (currentSelected) {
-                                // stackpane.getChildren().remove(selected);
-                                Name.setText("");
-                                Class.setText("");
-                                Hp.setText("");
-                                ActionPoints.setText("");
-                                Damage.setText("");
-                                VaccinesLeft.setText("");
-                                Special.setText("");
-                                SuppliesLeft.setText("");
-                                currentHero = null;
-                                currentSelected = false;
-                            } else {
                                 Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
                                 Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass()
                                         .getSimpleName());
@@ -538,8 +513,6 @@ public class Controller extends Application {
                                                 .isSpecialAction());
                                 // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
                                 currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
-                                currentSelected = true;
-                            }
                         }
                     }
 
@@ -572,14 +545,12 @@ public class Controller extends Application {
                         break;
                     case V:
 
-                        Game.printBoard();
                         try {
                             currentHero.setTarget(currentTarget);
                             currentHero.cure();
                             StackPane prev = (StackPane) game.getChildren()
                                     .get((currentTarget.getLocation().x) * 15 + currentTarget.getLocation().y);
                             prev.getChildren().remove(0);
-                            // Game.printBoard();
                             updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y,
                                     currentHero.getLocation().x, currentHero.getLocation().y, game);
                             System.out.println(
@@ -648,27 +619,19 @@ public class Controller extends Application {
                                     currentHero.getLocation().y, currentHero.getLocation().x,
                                     currentHero.getLocation().y, game);
                             if (currentTarget.getCurrentHp() == 0) {
-                                Game.printBoard();
                                 currentTarget = null;
                                 Zombie spawnedZombie = Game.zombies.get(Game.zombies.size() - 1);
                                 int x = spawnedZombie.getLocation().x;
                                 int y = spawnedZombie.getLocation().y;
-                                // updateMoveUI(x, y, x, y, game);
+                                System.out.println(x + " " + y);
                                 StackPane stackpane = (StackPane) game.getChildren().get((x) * 15 + y);
-                                System.out.println(stackpane.getChildren());
-                                System.out.println(((Cell) Game.map[x][y]).isVisible());
-                                // if (((Cell) Game.map[x][y]).isVisible()) {
-                                // if (stackpane.getChildren().size() > 1) {
-                                // // System.out.println(stackpane.getChildren().size());
-                                // stackpane.getChildren().remove(0);
-                                // }
-                                Label Zombie = new Label();
-                                Zombie.setGraphic(
-                                        new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48,
-                                                false, false)));
-                                stackpane.getChildren().add(stackpane.getChildren().size(), Zombie);
-                                // }
-                                System.out.println(stackpane.getChildren());
+                                if (((Cell) Game.map[x][y]).isVisible()) {
+                                    Label Zombie = new Label();
+                                    Zombie.setGraphic(
+                                            new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48,
+                                                    false, false)));
+                                    stackpane.getChildren().add(0, Zombie);
+                                }
                             }
                             if (currentHero.getCurrentHp() == 0) {
                                 play(deathSound);
@@ -748,11 +711,11 @@ public class Controller extends Application {
                         System.out.println("You have to select a character");
                     }
                 }
-                // Game.printBoard();
+                Game.printBoard();
             }
         };
 
-        Game.printBoard();
+
 
         Scene scene = primaryStage
                 .getScene();
