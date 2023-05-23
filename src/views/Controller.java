@@ -285,7 +285,6 @@ public class Controller extends Application {
         leftSel.setGraphic(new ImageView(new Image("/views/imgs/arrowleft.png", 100, 100, false, false)));
         rightSel.setGraphic(new ImageView(new Image("/views/imgs/arrowright.png", 100, 100, false, false)));
 
-
         ScaleTransition stRight = new ScaleTransition(Duration.millis(30), rightSel);
         rightSel.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -480,39 +479,36 @@ public class Controller extends Application {
                     // stackpane.getChildren().remove(selectOverlay);
                 } else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
                     if (e.getButton() == MouseButton.PRIMARY) {
-                        if (Game.map[row][col] instanceof CharacterCell && ((CharacterCell) Game.map[row][col])
-                                .getCharacter() != currentHero) {
-                            currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
-                        }
+                        currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
-                                Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
-                                Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass()
-                                        .getSimpleName());
-                                Hp.setText(
-                                        "Health: " + ((CharacterCell) Game.map[row][col]).getCharacter().getCurrentHp()
-                                                + "/" + ((CharacterCell) Game.map[row][col]).getCharacter().getMaxHp());
-                                ActionPoints.setText("Actions Available: "
-                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                                .getActionsAvailable()
-                                        + "/"
-                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getMaxActions());
-                                Damage.setText("Attack Damage: "
-                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getAttackDmg());
-                                VaccinesLeft.setText("Vaccines Left: "
-                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                                .getVaccineInventory().size()
-                                        + " / 5");
-                                SuppliesLeft.setText("Supplies Left: "
-                                        + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                                .getSupplyInventory().size()
-                                        + " / 5");
-                                Special.setText(
-                                        ("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                                .isSpecialAction());
-                                // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
-                                currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
+                            Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
+                            Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass()
+                                    .getSimpleName());
+                            Hp.setText(
+                                    "Health: " + ((CharacterCell) Game.map[row][col]).getCharacter().getCurrentHp()
+                                            + "/" + ((CharacterCell) Game.map[row][col]).getCharacter().getMaxHp());
+                            ActionPoints.setText("Actions Available: "
+                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                            .getActionsAvailable()
+                                    + "/"
+                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getMaxActions());
+                            Damage.setText("Attack Damage: "
+                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getAttackDmg());
+                            VaccinesLeft.setText("Vaccines Left: "
+                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                            .getVaccineInventory().size()
+                                    + " / 5");
+                            SuppliesLeft.setText("Supplies Left: "
+                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                            .getSupplyInventory().size()
+                                    + " / 5");
+                            Special.setText(
+                                    ("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
+                                            .isSpecialAction());
+                            // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
+                            currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
                         }
                     }
 
@@ -711,11 +707,9 @@ public class Controller extends Application {
                         System.out.println("You have to select a character");
                     }
                 }
-                Game.printBoard();
+                // Game.printBoard();
             }
         };
-
-
 
         Scene scene = primaryStage
                 .getScene();

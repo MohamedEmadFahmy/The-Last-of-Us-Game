@@ -59,9 +59,6 @@ public abstract class Hero extends Character {
         int targetY = this.getTarget().getLocation().y;
         int X = this.getLocation().x;
         int Y = this.getLocation().y;
-        if (this instanceof Medic && targetX == X && targetY == Y) {
-            return true;
-        }
         return (!(targetX > X + 1 || targetX < X - 1 || targetY > Y + 1 || targetY < Y - 1));
     }
 
