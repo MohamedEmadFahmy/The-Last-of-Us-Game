@@ -203,6 +203,8 @@ public class Controller extends Application {
         StackPane root = new StackPane();
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
+        ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/characterSelect.jpg"));
+        scene.setFill(pattern2);
         Button leftSel = new Button();
         leftSel.setMaxSize(200, 200);
         Label rightChar = new Label();
