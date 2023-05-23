@@ -51,6 +51,7 @@ public class Controller extends Application {
     static Media healSound = new Media(new File("src/views/sounds/healSound.mp3").toURI().toString());
     static Media explorerSound = new Media(new File("src/views/sounds/explorerSound.mp3").toURI().toString());
     static Media fighterSound = new Media(new File("src/views/sounds/fighterSound.mp3").toURI().toString());
+    static Media deathSound = new Media(new File("src/views/sounds/deathSound.mp3").toURI().toString());
     static boolean playing = false;
     static ArrayList<Hero> current = new ArrayList<Hero>();
     static double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
@@ -668,6 +669,7 @@ public class Controller extends Application {
                                 System.out.println(stackpane.getChildren());
                             }
                             if (currentHero.getCurrentHp() == 0) {
+                                play(deathSound);
                                 Name.setText("");
                                 Class.setText("");
                                 Hp.setText("");
