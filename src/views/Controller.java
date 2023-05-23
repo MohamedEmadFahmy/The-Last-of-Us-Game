@@ -204,7 +204,51 @@ public class Controller extends Application {
         Label middleChar = new Label();
         Button rightSel = new Button();
         Button Continue = new Button("Continue");
+        ScaleTransition stC = new ScaleTransition(Duration.millis(30), Continue);
+        Continue.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Continue.getStyleClass().add("hover");
+                stC.setToX(1.05);
+                stC.setToY(1.05);
+                stC.playFromStart();
+                play(hover);
+            }
+        });
+
+        Continue.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Continue.getStyleClass().remove("hover");
+                stC.setToX(1);
+                stC.setToY(1);
+                stC.playFromStart();
+            }
+        });
+
         Button backToMenu = new Button("Back");
+        ScaleTransition stB = new ScaleTransition(Duration.millis(30), backToMenu);
+        backToMenu.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                backToMenu.getStyleClass().add("hover");
+                stB.setToX(1.05);
+                stB.setToY(1.05);
+                stB.playFromStart();
+                play(hover);
+            }
+        });
+
+        backToMenu.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                backToMenu.getStyleClass().remove("hover");
+                stB.setToX(1);
+                stB.setToY(1);
+                stB.playFromStart();
+            }
+        });
+
         rightSel.setMaxSize(200, 200);
         HBox Characters = new HBox(100);
         Characters.getChildren().addAll(leftSel, leftChar, middleChar, rightChar, rightSel);
@@ -232,6 +276,57 @@ public class Controller extends Application {
         leftChar.setGraphic(new ImageView(imageArray.get(0)));
         leftSel.setGraphic(new ImageView(new Image("/views/imgs/arrowleft.png", 100, 100, false, false)));
         rightSel.setGraphic(new ImageView(new Image("/views/imgs/arrowright.png", 100, 100, false, false)));
+
+        // button animations for arrows
+
+        ScaleTransition stRight = new ScaleTransition(Duration.millis(30), rightSel);
+        rightSel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                rightSel.setGraphic(
+                        new ImageView(new Image("/views/imgs/arrowright_hover.png", 100, 100, false, false)));
+                ;
+                stRight.setToX(1.05);
+                stRight.setToY(1.05);
+                stRight.playFromStart();
+                play(hover);
+            }
+        });
+
+        rightSel.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                rightSel.setGraphic(new ImageView(new Image("/views/imgs/arrowright.png", 100, 100, false, false)));
+
+                stRight.setToX(1);
+                stRight.setToY(1);
+                stRight.playFromStart();
+            }
+        });
+
+        ScaleTransition stLeft = new ScaleTransition(Duration.millis(30), leftSel);
+        leftSel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                leftSel.setGraphic(
+                        new ImageView(new Image("/views/imgs/arrowleft_hover.png", 100, 100, false, false)));
+                ;
+                stLeft.setToX(1.05);
+                stLeft.setToY(1.05);
+                stLeft.playFromStart();
+                play(hover);
+            }
+        });
+
+        leftSel.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                leftSel.setGraphic(new ImageView(new Image("/views/imgs/arrowleft.png", 100, 100, false, false)));
+                stLeft.setToX(1);
+                stLeft.setToY(1);
+                stLeft.playFromStart();
+            }
+        });
 
         Label Name = new Label("Name: Ellie Williams ");
         Label Class = new Label("Class: Medic ");
