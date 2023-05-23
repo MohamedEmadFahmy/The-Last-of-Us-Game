@@ -47,6 +47,10 @@ public class Controller extends Application {
     static Media hover = new Media(new File("src/views/sounds/click.wav").toURI().toString());
     static Media click = new Media(new File("src/views/sounds/mouse_click.wav").toURI().toString());
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
+    static Media attackSound = new Media(new File("src/views/sounds/attackSound.mp3").toURI().toString());
+    static Media healSound = new Media(new File("src/views/sounds/healSound.mp3").toURI().toString());
+    static Media explorerSound = new Media(new File("src/views/sounds/explorerSound.mp3").toURI().toString());
+    static Media fighterSound = new Media(new File("src/views/sounds/fighterSound.mp3").toURI().toString());
     static boolean playing = false;
     static ArrayList<Hero> current = new ArrayList<Hero>();
     static double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
@@ -597,6 +601,7 @@ public class Controller extends Application {
                             try {
                                 currentHero.setTarget((currentTarget));
                                 currentHero.useSpecial();
+                                play(healSound);
                                 Hp.setText(
                                         "Health: " + currentHero.getCurrentHp()
                                                 + "/" + currentHero.getMaxHp());
@@ -618,6 +623,9 @@ public class Controller extends Application {
                                 Special.setText("Special: True");
                                 if (currentHero instanceof Explorer) {
                                     updateUI(game);
+                                    play(explorerSound);
+                                } else {
+                                    play(fighterSound);
                                 }
                                 SuppliesLeft.setText("Supplies Left: "
                                         + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
@@ -632,6 +640,7 @@ public class Controller extends Application {
                         currentHero.setTarget(currentTarget);
                         try {
                             currentHero.attack();
+                            play(attackSound);
                             updateMoveUI(currentHero.getLocation().x,
                                     currentHero.getLocation().y, currentHero.getLocation().x,
                                     currentHero.getLocation().y, game);
