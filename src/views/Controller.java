@@ -541,11 +541,27 @@ public class Controller extends Application {
                                     currentHero.getLocation().y, currentHero.getLocation().x,
                                     currentHero.getLocation().y, game);
                             if (currentTarget.getCurrentHp() == 0) {
+                                Game.printBoard();
                                 currentTarget = null;
                                 Zombie spawnedZombie = Game.zombies.get(Game.zombies.size() - 1);
                                 int x = spawnedZombie.getLocation().x;
                                 int y = spawnedZombie.getLocation().y;
-                                updateMoveUI(x, y, x, y, game);
+                                // updateMoveUI(x, y, x, y, game);
+                                StackPane stackpane = (StackPane) game.getChildren().get((x) * 15 + y);
+                                System.out.println(stackpane.getChildren());
+                                System.out.println(((Cell) Game.map[x][y]).isVisible());
+                                // if (((Cell) Game.map[x][y]).isVisible()) {
+                                // if (stackpane.getChildren().size() > 1) {
+                                // // System.out.println(stackpane.getChildren().size());
+                                // stackpane.getChildren().remove(0);
+                                // }
+                                Label Zombie = new Label();
+                                Zombie.setGraphic(
+                                        new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48,
+                                                false, false)));
+                                stackpane.getChildren().add(stackpane.getChildren().size(), Zombie);
+                                // }
+                                System.out.println(stackpane.getChildren());
                             }
                             if (currentHero.getCurrentHp() == 0) {
                                 Name.setText("");
@@ -569,8 +585,8 @@ public class Controller extends Application {
                                         + ((Hero) currentHero).getMaxActions());
                             }
                         } catch (InvalidTargetException ex) {
-                            System.out.println("Target Out of range ");
-                            System.out.print(ex.getMessage());
+                            System.out.println("Target out of range ");
+                            System.out.println(ex.getMessage());
                         } catch (NotEnoughActionsException ex) {
                             System.out.println("Not enough Actions");
                         } catch (NullPointerException ex) {
