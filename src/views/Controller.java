@@ -444,7 +444,6 @@ public class Controller extends Application {
     }
 
     public void switchToGame(Stage primaryStage, Hero h) {
-        currentHero = h;
         StackPane root = new StackPane();
         GridPane game = new GridPane();
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
@@ -585,13 +584,22 @@ public class Controller extends Application {
                 } else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
-                        ZombieImg.setGraphic(new ImageView(
-                                new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
+                        if (currentTarget instanceof  Zombie) {
+                            ZombieImg.setGraphic(new ImageView(
+                                    new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
 
-                        zombieHpRed.setWidth(screenHeight*0.2);
-                        zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
-                        ZombieHp.setText(" +" + currentTarget.getCurrentHp());
+                            zombieHpRed.setWidth(screenHeight*0.2);
+                            zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                            ZombieHp.setText(" +" + currentTarget.getCurrentHp());
+                        }
+                        else {
+                            ZombieImg.setGraphic(null);
 
+                            zombieHpRed.setWidth(0);
+                            zombieHpGreen.setWidth(0);
+                            ZombieHp.setText("");
+                        }
+                        updateRemainingHeroes(Heroes);
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
@@ -610,11 +618,11 @@ public class Controller extends Application {
                                     new Image("file:src/views/imgs/" + currentHero.getName() + ".png", screenHeight*0.2 ,
                                             screenHeight* 0.2 , false, false)));
 
+                            updateRemainingHeroes(Heroes);
                         }
                     }
 
                 }
-                updateRemainingHeroes(Heroes);
             }
         };
         // initializeGame
@@ -656,6 +664,10 @@ public class Controller extends Application {
                             VaccinesLeft.setText("Vaccines Left: "
                                     + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
                             currentTarget = null;
+                            ZombieImg.setGraphic(null);
+                            zombieHpRed.setWidth(0);
+                            zombieHpGreen.setWidth(0);
+                            ZombieHp.setText("");
                         } catch (InvalidTargetException ex) {
                             System.out.println("You have to select a valid zombie");
                             System.out.println(currentHero.getLocation());
@@ -1088,8 +1100,9 @@ public class Controller extends Application {
             if (i < curr.size()) {
                 VBox currentVBox = (VBox) Heroes.getChildren().get(i);
                 ((Label) currentVBox.getChildren().get(0)).setGraphic(new ImageView(
-                        new Image("file:src/views/imgs/" + curr.get(i).getName() + ".png", screenHeight * 0.1,
-                                screenHeight * 0.1, false, false)));
+                        new Image("file:src/views/imgs/" + curr.get(i).getName() + ".png", screenHeight * 0.05,
+                                screenHeight * 0.05, false, false)));
+
                 ((Label) currentVBox.getChildren().get(1)).setText("Name: " + curr.get(i).getName());
                 ((Label) currentVBox.getChildren().get(2)).setText("Health: " + curr.get(i).getCurrentHp() + "/" + curr.get(i).getMaxHp());
                 ((Label) currentVBox.getChildren().get(3)).setText("Damage: " + curr.get(i).getAttackDmg());
