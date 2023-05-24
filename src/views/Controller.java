@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Group;
+import javafx.scene.shape.Rectangle;
 import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.MovementException;
@@ -36,7 +38,8 @@ import model.collectibles.Vaccine;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.Cell;
-
+import javafx.scene.paint.Color;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -463,26 +466,41 @@ public class Controller extends Application {
 
         Label Name = new Label();
         Label Class = new Label();
-        Label Hp = new Label();
         Label ActionPoints = new Label();
         Label Damage = new Label();
         Label VaccinesLeft = new Label();
         Label Special = new Label();
         Label SuppliesLeft = new Label();
         Label HeroImg = new Label();
+        Label ZombieImg = new Label();
 
-        root.getChildren().addAll(Name, Class, Hp, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft, HeroImg);
+        Rectangle PlayerHpRed = new Rectangle();
+        PlayerHpRed.setHeight(25);
+        PlayerHpRed.setFill(Color.RED);
+
+        Rectangle PlayerHpGreen =  new Rectangle();
+        PlayerHpGreen.setFill(Color.GREEN);
+        PlayerHpGreen.setHeight(25);
+
+        Group healthBar = new Group();
+        healthBar.getChildren().addAll(PlayerHpRed,PlayerHpGreen);
+
+        Label ZombieHp = new Label();
+
+        root.getChildren().addAll(Name, Class, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft, HeroImg,ZombieImg,ZombieHp,healthBar);
 
 
         Name.setTranslateX(screenWidth / 3);
         Class.setTranslateX(screenWidth / 3);
-        Hp.setTranslateX(screenWidth / 6);
+        healthBar.setTranslateX(screenWidth / 6);
         ActionPoints.setTranslateX(screenWidth / 3);
         Damage.setTranslateX(screenWidth / 3);
         VaccinesLeft.setTranslateX(screenWidth / 3);
         Special.setTranslateX(screenWidth / 3);
         SuppliesLeft.setTranslateX(screenWidth / 3);
         HeroImg.setTranslateX(screenWidth/6);
+        ZombieImg.setTranslateX(screenWidth/6);
+        ZombieHp.setTranslateX(screenWidth/6);
 
         Name.setTranslateY(-screenHeight * 0.44);
         Class.setTranslateY(-screenHeight * 0.41);
@@ -492,7 +510,11 @@ public class Controller extends Application {
         Special.setTranslateY(-screenHeight * 0.29);
         SuppliesLeft.setTranslateY(-screenHeight * 0.26);
         HeroImg.setTranslateY(-screenHeight * 0.35);
-        Hp.setTranslateY(-screenHeight*0.23);
+        ZombieImg.setTranslateY(screenHeight*0.35);
+        healthBar.setTranslateY(-screenHeight*0.23);
+        ZombieHp.setTranslateY(screenHeight*0.44);
+
+
 
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
@@ -511,13 +533,19 @@ public class Controller extends Application {
                 } else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
+                        ZombieImg.setGraphic(new ImageView(
+                                new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
+
+                        ZombieHp.setText("Health: " + currentTarget.getCurrentHp() + "/" + currentTarget.getMaxHp());
+
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
                             currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
                             Name.setText("Name: " + currentHero.getName());
                             Class.setText("Class: " + currentHero.getClass().getSimpleName());
-                            Hp.setText("Health: " + currentHero.getCurrentHp() + "/" + currentHero.getMaxHp());
+                            PlayerHpRed.setWidth(screenHeight*0.2);
+                            PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
                             ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/" + currentHero.getMaxActions());
                             Damage.setText("Attack Damage: " + currentHero.getAttackDmg());
                             VaccinesLeft.setText("Vaccines Left: " + currentHero.getVaccineInventory().size() + " / 5");
@@ -590,9 +618,8 @@ public class Controller extends Application {
                                 currentHero.setTarget((currentTarget));
                                 currentHero.useSpecial();
                                 play(healSound);
-                                Hp.setText(
-                                        "Health: " + currentHero.getCurrentHp()
-                                                + "/" + currentHero.getMaxHp());
+                                PlayerHpRed.setWidth(screenHeight*0.2);
+                                PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
                                 SuppliesLeft.setText("Supplies Left: "
                                         + currentHero.getSupplyInventory().size() + " / 5");
                                 Special.setText("Special: True");
@@ -646,23 +673,26 @@ public class Controller extends Application {
                                                     false, false)));
                                     stackpane.getChildren().add(0, Zombie);
                                 }
+                                ZombieImg.setGraphic(null);
+                                ZombieHp.setText("");
                             }
                             if (currentHero.getCurrentHp() == 0) {
                                 play(deathSound);
                                 Name.setText("");
                                 Class.setText("");
-                                Hp.setText("");
+                                PlayerHpRed.setWidth(0);
+                                PlayerHpGreen.setWidth(0);
                                 ActionPoints.setText("");
                                 Damage.setText("");
                                 VaccinesLeft.setText("");
                                 Special.setText("");
                                 SuppliesLeft.setText("");
+                                HeroImg.setGraphic(null);
                                 currentHero = null;
                                 currentTarget = null;
                             } else {
-                                Hp.setText(
-                                        "Health: " + currentHero.getCurrentHp()
-                                                + "/" + currentHero.getMaxHp());
+                                PlayerHpRed.setWidth(screenHeight*0.2);
+                                PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
                                 ActionPoints.setText("Actions Available: "
                                         + ((Hero) currentHero)
                                                 .getActionsAvailable()
@@ -690,7 +720,8 @@ public class Controller extends Application {
                         if (currentHero.getCurrentHp() == 0) {
                             Name.setText("");
                             Class.setText("");
-                            Hp.setText("");
+                            PlayerHpRed.setWidth(0);
+                            PlayerHpGreen.setWidth(0);
                             ActionPoints.setText("");
                             Damage.setText("");
                             VaccinesLeft.setText("");
@@ -701,9 +732,8 @@ public class Controller extends Application {
                             StackPane stackpane = (StackPane) game.getChildren().get((x) * 15 + y);
                             stackpane.getChildren().remove(0);
                         } else {
-                            Hp.setText(
-                                    "Health: " + currentHero.getCurrentHp()
-                                            + "/" + currentHero.getMaxHp());
+                            PlayerHpRed.setWidth(screenHeight*0.2);
+                            PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
                             ActionPoints.setText("Actions Available: "
                                     + currentHero.getActionsAvailable()
                                     + "/"
@@ -748,12 +778,16 @@ public class Controller extends Application {
                     currentTarget = null;
                     Name.setText("");
                     Class.setText("");
-                    Hp.setText("");
+                    PlayerHpRed.setWidth(0);
+                    PlayerHpGreen.setWidth(0);
                     ActionPoints.setText("");
                     Damage.setText("");
                     VaccinesLeft.setText("");
                     Special.setText("");
                     SuppliesLeft.setText("");
+                    ZombieHp.setText("");
+                    ZombieImg.setGraphic(null);
+                    HeroImg.setGraphic(null);
                 } catch (InvalidTargetException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
