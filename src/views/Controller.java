@@ -486,10 +486,22 @@ public class Controller extends Application {
             VBox Hero = new VBox();
             Label subImg = new Label();
             subImg.setId("remChars");
-            Label subName = new Label();
-            subName.setId("remChars");
+
+            Rectangle heroHpRed = new Rectangle();
+            heroHpRed.setHeight(14);
+            heroHpRed.setFill(Color.RED);
+
+            Rectangle heroHpGreen =  new Rectangle();
+            heroHpGreen.setFill(Color.GREEN);
+            heroHpGreen.setHeight(14);
             Label subHp = new Label();
             subHp.setId("remChars");
+
+            Group healthBar = new Group();
+            healthBar.getChildren().addAll(heroHpRed,heroHpGreen,subHp);
+
+            Label subName = new Label();
+            subName.setId("remChars");
             Label subDamage = new Label();
             subDamage.setId("remChars");
             Label subActions = new Label();
@@ -497,7 +509,7 @@ public class Controller extends Application {
             Label subClass = new Label();
             subClass.setId("remChars");
 
-            Hero.getChildren().addAll(subImg,subName,subHp,subDamage,subActions,subClass);
+            Hero.getChildren().addAll(subImg,healthBar,subName,subDamage,subActions,subClass);
             Heroes.getChildren().add(Hero);
         }
 
@@ -1103,8 +1115,10 @@ public class Controller extends Application {
                         new Image("file:src/views/imgs/" + curr.get(i).getName() + ".png", screenHeight * 0.05,
                                 screenHeight * 0.05, false, false)));
 
-                ((Label) currentVBox.getChildren().get(1)).setText("Name: " + curr.get(i).getName());
-                ((Label) currentVBox.getChildren().get(2)).setText("Health: " + curr.get(i).getCurrentHp() + "/" + curr.get(i).getMaxHp());
+                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(0)).setWidth(screenHeight*0.05);
+                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(1)).setWidth((screenHeight*0.05) * ((double) curr.get(i).getCurrentHp() / (double) curr.get(i).getMaxHp()));
+                ((Label)((Group) currentVBox.getChildren().get(1)).getChildren().get(2)).setText(" + " + curr.get(i).getCurrentHp());
+                ((Label) currentVBox.getChildren().get(2)).setText("Name: " + curr.get(i).getName());
                 ((Label) currentVBox.getChildren().get(3)).setText("Damage: " + curr.get(i).getAttackDmg());
                 ((Label) currentVBox.getChildren().get(4)).setText("Actions: " + curr.get(i).getActionsAvailable() + "/" + curr.get(i).getMaxActions());
                 ((Label) currentVBox.getChildren().get(5)).setText("Class: " + curr.get(i).getClass().getSimpleName());
@@ -1112,7 +1126,9 @@ public class Controller extends Application {
             else {
                 VBox currentVBox = (VBox) Heroes.getChildren().get(i);
                 ((Label) currentVBox.getChildren().get(0)).setGraphic(null);
-                ((Label) currentVBox.getChildren().get(1)).setText(null);
+                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(0)).setWidth(0);
+                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(1)).setWidth(0);
+                ((Label)((Group) currentVBox.getChildren().get(1)).getChildren().get(2)).setText("");
                 ((Label) currentVBox.getChildren().get(2)).setText(null);
                 ((Label) currentVBox.getChildren().get(3)).setText(null);
                 ((Label) currentVBox.getChildren().get(4)).setText(null);
