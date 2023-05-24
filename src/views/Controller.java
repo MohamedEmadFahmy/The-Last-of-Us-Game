@@ -427,9 +427,9 @@ public class Controller extends Application {
                     case RIGHT, D:
                         rightSel.fire();
                         break;
-                    case ENTER:
-                        Continue.fire();
-                        break;
+                    // case ENTER:
+                    // Continue.fire();
+                    // break;
                     case ESCAPE, BACK_SPACE:
                         backToMenu.fire();
                         break;
