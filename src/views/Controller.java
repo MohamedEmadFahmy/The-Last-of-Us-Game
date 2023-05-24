@@ -610,7 +610,7 @@ public class Controller extends Application {
                                         + currentHero.getSupplyInventory().size() + " / 5");
                                 Special.setText("Special: True");
                                 // animation
-                                Special.setText("Special: False");
+                                // Special.setText("Special: False");
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                             } catch (NoAvailableResourcesException ex) {
@@ -744,6 +744,62 @@ public class Controller extends Application {
             }
         };
 
+        Button endGameButton = new Button("End Turn");
+        endGameButton.setTranslateX(screenWidth / 2.5);
+        endGameButton.setTranslateY(screenHeight * 0.4);
+        endGameButton.setId("endTurn");
+        endGameButton.addEventFilter(KeyEvent.ANY, Event::consume);
+        endGameButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                try {
+                    Game.endTurn();
+                    updateUI(game);
+                    currentHero = null;
+                    currentTarget = null;
+                    Name.setText("");
+                    Class.setText("");
+                    Hp.setText("");
+                    ActionPoints.setText("");
+                    Damage.setText("");
+                    VaccinesLeft.setText("");
+                    Special.setText("");
+                    SuppliesLeft.setText("");
+                } catch (InvalidTargetException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (NotEnoughActionsException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        ScaleTransition stEndGame = new ScaleTransition(Duration.millis(30), endGameButton);
+        endGameButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                endGameButton.getStyleClass().add("hover");
+                stEndGame.setToX(1.05);
+                stEndGame.setToY(1.05);
+                stEndGame.playFromStart();
+                play(hover);
+            }
+        });
+
+        endGameButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                endGameButton.getStyleClass().remove("hover");
+                stEndGame.setToX(1);
+                stEndGame.setToY(1);
+                stEndGame.playFromStart();
+            }
+        });
+        root.getChildren().add(endGameButton);
+
         Scene scene = primaryStage
                 .getScene();
         root.setOnKeyPressed(keyboardHandler);
@@ -870,43 +926,53 @@ public class Controller extends Application {
             for (int j = 0; j < 15; j++) {
                 StackPane stackpane = (StackPane) gridPane.getChildren().get((i) * 15 + j);
                 if (stackpane.getChildren().size() > 1) {
-                    // System.out.println(stackpane.getChildren().size());
                     stackpane.getChildren().remove(0);
                 }
-                stackpane
-                        .setBackground(
-                                new Background(
-                                        new BackgroundImage(
-                                                new Image("file:src/views/imgs/default_visible2.png",
-                                                        screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
-                                                null, null, null, null)));
-                if (Game.map[i][j] instanceof CharacterCell
-                        && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
-                    if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
-                        String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
-                        Label Hero = new Label();
-                        Hero.setGraphic(new ImageView(
-                                new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
-                                        screenHeight * 0.75 * 0.8 / 15, false, false)));
-                        stackpane.getChildren().add(0, Hero);
-                    } else {
-                        Label Zombie = new Label();
-                        Zombie.setGraphic(
-                                new ImageView(new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
-                        stackpane.getChildren().add(0, Zombie);
+                if (!(Game.map[i][j].isVisible())) {
+                    stackpane
+                            .setBackground(
+                                    new Background(new BackgroundImage(
+                                            new Image("file:src/views/imgs/default_notvisible.png",
+                                                    screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                            null, null, null, null)));
+                } else {
+                    stackpane
+                            .setBackground(
+                                    new Background(
+                                            new BackgroundImage(
+                                                    new Image("file:src/views/imgs/default_visible2.png",
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
+                                                    null, null, null, null)));
+                    if (Game.map[i][j] instanceof CharacterCell
+                            && ((CharacterCell) Game.map[i][j]).getCharacter() != null) {
+                        if (((CharacterCell) Game.map[i][j]).getCharacter() instanceof Hero) {
+                            String name = ((CharacterCell) Game.map[i][j]).getCharacter().getName();
+                            Label Hero = new Label();
+                            Hero.setGraphic(new ImageView(
+                                    new Image("file:src/views/imgs/" + name + ".png", screenHeight * 0.75 * 0.8 / 15,
+                                            screenHeight * 0.75 * 0.8 / 15, false, false)));
+                            stackpane.getChildren().add(0, Hero);
+                        } else {
+                            Label Zombie = new Label();
+                            Zombie.setGraphic(
+                                    new ImageView(
+                                            new Image("file:src/views/imgs/zombiephase1.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Zombie);
+                        }
                     }
-                }
-                if (Game.map[i][j] instanceof CollectibleCell) {
-                    if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
-                        Label Vaccine = new Label();
-                        Vaccine.setGraphic(
-                                new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
-                        stackpane.getChildren().add(0, Vaccine);
-                    } else {
-                        Label Supply = new Label();
-                        Supply.setGraphic(
-                                new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
-                        stackpane.getChildren().add(0, Supply);
+                    if (Game.map[i][j] instanceof CollectibleCell) {
+                        if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine) {
+                            Label Vaccine = new Label();
+                            Vaccine.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Vaccine);
+                        } else {
+                            Label Supply = new Label();
+                            Supply.setGraphic(
+                                    new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
+                            stackpane.getChildren().add(0, Supply);
+                        }
                     }
                 }
             }

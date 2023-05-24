@@ -36,8 +36,7 @@ public class Game {
         if (Game.map[X][Y].isVisible()) {
             Game.map[X][Y] = new CharacterCell(spawnedZombie);
             Game.map[X][Y].setVisible(true);
-        }
-        else {
+        } else {
             Game.map[X][Y] = new CharacterCell(spawnedZombie);
         }
     }
@@ -119,10 +118,10 @@ public class Game {
         for (int i = 14; i >= 0; i--) {
             for (int j = 0; j < 15; j++) {
                 Cell currentCell = map[i][j];
-                 if (currentCell.isVisible() == false) {
+                if (currentCell.isVisible() == false) {
                     System.out.print("X ");
                     continue;
-                 }
+                }
                 if (currentCell instanceof CharacterCell) {
                     if (((CharacterCell) currentCell).getCharacter() == null) {
                         System.out.print("_ ");
@@ -215,6 +214,13 @@ public class Game {
     }
 
     public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
+        // make zombies attack
+        for (int i = 0; i < zombies.size(); i++) {
+            Zombie curr = zombies.get(i);
+            curr.attack();
+            curr.setTarget(null);
+        }
+
         // update visibility
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -225,13 +231,6 @@ public class Game {
         for (int i = 0; i < heroes.size(); i++) {
             Hero hero = heroes.get(i);
             updateVisibility(hero.getLocation());
-        }
-
-        // make zombies attack
-        for (int i = 0; i < zombies.size(); i++) {
-            Zombie curr = zombies.get(i);
-            curr.attack();
-            curr.setTarget(null);
         }
 
         // reset actions available for every hero
@@ -259,7 +258,7 @@ public class Game {
         ((CharacterCell) Game.map[2][2]).setCharacter(exp);
         heroes.add(exp);
 
-        //printBoard();
+        // printBoard();
 
         Scanner sc = new Scanner(System.in);
         do {
@@ -267,7 +266,7 @@ public class Game {
             if (heroes.get(0).getActionsAvailable() <= 0) {
                 endTurn();
                 System.out.println("Turn Ended");
-                //printBoard();
+                // printBoard();
             }
             while (d == null) {
                 System.out.print("Direction: ");
@@ -308,7 +307,7 @@ public class Game {
             System.out.println();
             System.out.println("-------------------");
             System.out.println();
-            //printBoard();
+            // printBoard();
             // System.out.println(heroes);
             // System.out.println(heroes.get(0).getVaccineInventory());
             System.out.println(heroes.get(0).getAdjacentCharacters());
