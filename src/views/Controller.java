@@ -43,6 +43,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
+import static engine.Game.heroes;
+
 public class Controller extends Application {
     static boolean currentSelected;
     static boolean targetSelected;
@@ -442,13 +444,12 @@ public class Controller extends Application {
     }
 
     public void switchToGame(Stage primaryStage, Hero h) {
+        currentHero = h;
         StackPane root = new StackPane();
         GridPane game = new GridPane();
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
-        root.getChildren().add(game);
-        game.setAlignment(Pos.CENTER);
-        game.setTranslateX(-screenWidth/5);
+
 
         Game.startGame(h);
 
@@ -463,7 +464,7 @@ public class Controller extends Application {
 //        Label selected1 = new Label();
 //        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
 //                screenHeight * 0.9 / 15, false, false)));
-
+        //labels for Zombie + Hero
         Label Name = new Label();
         Label Class = new Label();
         Label ActionPoints = new Label();
@@ -475,6 +476,23 @@ public class Controller extends Application {
         Label ZombieImg = new Label();
         Label CurrentHp = new Label();
 
+        //initialize remaining heroes stuff
+        HBox Heroes = new HBox(20);
+
+        for (int i = 0; i < 5; i++) {
+            VBox Hero = new VBox();
+            Label subImg = new Label();
+            Label subName = new Label();
+            Label subHp = new Label();
+            Label subDamage = new Label();
+            Label subActions = new Label();
+            Label subClass = new Label();
+
+            Hero.getChildren().addAll(subImg,subName,subHp,subDamage,subActions,subClass);
+            Heroes.getChildren().add(Hero);
+        }
+
+        //Player Health Bar
         Rectangle PlayerHpRed = new Rectangle();
         PlayerHpRed.setHeight(35);
         PlayerHpRed.setFill(Color.RED);
@@ -483,23 +501,32 @@ public class Controller extends Application {
         PlayerHpGreen.setFill(Color.GREEN);
         PlayerHpGreen.setHeight(35);
 
+        //group for main player stats
         Group mainPlayerStats = new Group();
         mainPlayerStats.getChildren().addAll(Name,Class,ActionPoints,Damage,VaccinesLeft,Special,SuppliesLeft);
 
+        //group for health bar for main player
         Group healthBar = new Group();
         healthBar.getChildren().addAll(PlayerHpRed,PlayerHpGreen,CurrentHp);
 
         Label ZombieHp = new Label();
 
-        root.getChildren().addAll(mainPlayerStats, HeroImg,ZombieImg,ZombieHp,healthBar);
+        //adding all groups to the root stackpane
+        root.getChildren().addAll(mainPlayerStats, HeroImg,ZombieImg,ZombieHp,healthBar,Heroes);
+        root.getChildren().add(game);
+        game.setAlignment(Pos.CENTER);
+        game.setTranslateX(-screenWidth/5);
 
 
+        //alignment things
         mainPlayerStats.setTranslateX(screenWidth / 3);
         healthBar.setTranslateX(screenWidth / 6);
         HeroImg.setTranslateX(screenWidth/6);
         ZombieImg.setTranslateX(screenWidth/6);
         ZombieHp.setTranslateX(screenWidth/6);
+        Heroes.setTranslateX(screenWidth*0.61);
 
+        Heroes.setTranslateY(screenHeight*0.5);
         mainPlayerStats.setTranslateY(-screenHeight * 0.35);
         Name.setTranslateY(-screenHeight * 0.44);
         Class.setTranslateY(-screenHeight * 0.41);
@@ -559,6 +586,7 @@ public class Controller extends Application {
                     }
 
                 }
+                updateRemainingHeroes(Heroes);
             }
         };
         // initializeGame
@@ -770,7 +798,7 @@ public class Controller extends Application {
                         System.out.println("You have to select a character");
                     }
                 }
-                // Game.printBoard();
+                updateRemainingHeroes(Heroes);
             }
         };
 
@@ -1014,6 +1042,36 @@ public class Controller extends Application {
         }
     }
 
+    private void updateRemainingHeroes(HBox Heroes) {
+        ArrayList<Hero> curr = new ArrayList<>();
+        for (int i = 0; i < heroes.size(); i++) {
+            curr.add(heroes.get(i));
+        }
+        curr.remove(currentHero);
+        for (int i = 0; i < 5; i++) {
+            if (i < curr.size()) {
+                VBox currentVBox = (VBox) Heroes.getChildren().get(i);
+                ((Label) currentVBox.getChildren().get(0)).setGraphic(new ImageView(
+                        new Image("file:src/views/imgs/" + curr.get(i).getName() + ".png", screenHeight * 0.1,
+                                screenHeight * 0.1, false, false)));
+                ((Label) currentVBox.getChildren().get(1)).setText("Name: " + curr.get(i).getName());
+                ((Label) currentVBox.getChildren().get(2)).setText("Health: " + curr.get(i).getCurrentHp() + "/" + curr.get(i).getMaxHp());
+                ((Label) currentVBox.getChildren().get(3)).setText("Damage: " + curr.get(i).getAttackDmg());
+                ((Label) currentVBox.getChildren().get(4)).setText("Actions Available: " + curr.get(i).getActionsAvailable() + "/" + curr.get(i).getMaxActions());
+                ((Label) currentVBox.getChildren().get(5)).setText("Class: " + curr.get(i).getClass().getSimpleName());
+            }
+            else {
+                VBox currentVBox = (VBox) Heroes.getChildren().get(i);
+                ((Label) currentVBox.getChildren().get(0)).setGraphic(null);
+                ((Label) currentVBox.getChildren().get(1)).setText(null);
+                ((Label) currentVBox.getChildren().get(2)).setText(null);
+                ((Label) currentVBox.getChildren().get(3)).setText(null);
+                ((Label) currentVBox.getChildren().get(4)).setText(null);
+                ((Label) currentVBox.getChildren().get(5)).setText(null);
+
+            }
+        }
+    }
     public static void main(String[] args) {
         launch(args);
     }
