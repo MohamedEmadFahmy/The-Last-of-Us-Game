@@ -87,10 +87,6 @@ public class Controller extends Application {
         Scene scene = new Scene(temp, screenHeight, screenWidth);
         primaryStage.setScene(scene);
         switchToMainMenu(primaryStage);
-        Game.loadHeroes("src/CSV files/Heros.csv");
-        for (int i = 0; i < Game.availableHeroes.size(); i++) {
-            current.add(Game.availableHeroes.get(i));
-        }
     }
 
     private void play(Media media) {
@@ -208,6 +204,15 @@ public class Controller extends Application {
     }
 
     public void switchToCharacterSelect(Stage primaryStage) {
+        try {
+            Game.loadHeroes("src/CSV files/Heros.csv");
+        } catch (Exception e) {
+            System.out.println("Couldnt Load Heroes");
+            e.printStackTrace();
+        }
+        for (int i = 0; i < Game.availableHeroes.size(); i++) {
+            current.add(Game.availableHeroes.get(i));
+        }
         StackPane root = new StackPane();
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
@@ -449,21 +454,23 @@ public class Controller extends Application {
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
 
-
         Game.startGame(h);
 
-//        Label selectOverlay = new Label();
-//        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-//                screenHeight * 0.9 / 15, false, false)));
-//
-//        Label selected = new Label();
-//        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-//                screenHeight * 0.9 / 15, false, false)));
-//
-//        Label selected1 = new Label();
-//        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-//                screenHeight * 0.9 / 15, false, false)));
-        //labels for Zombie + Hero
+        // Label selectOverlay = new Label();
+        // selectOverlay.setGraphic(new ImageView(new
+        // Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
+        // screenHeight * 0.9 / 15, false, false)));
+        //
+        // Label selected = new Label();
+        // selected.setGraphic(new ImageView(new
+        // Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
+        // screenHeight * 0.9 / 15, false, false)));
+        //
+        // Label selected1 = new Label();
+        // selected1.setGraphic(new ImageView(new
+        // Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
+        // screenHeight * 0.9 / 15, false, false)));
+        // labels for Zombie + Hero
         Label Name = new Label();
         Label Class = new Label();
         Label ActionPoints = new Label();
@@ -479,7 +486,7 @@ public class Controller extends Application {
                 new Image("file:src/views/imgs/characterOverlay.png", 700,
                         320, false, false)));
 
-        //initialize remaining heroes stuff
+        // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
 
         for (int i = 0; i < 5; i++) {
@@ -491,14 +498,14 @@ public class Controller extends Application {
             heroHpRed.setHeight(14);
             heroHpRed.setFill(Color.RED);
 
-            Rectangle heroHpGreen =  new Rectangle();
+            Rectangle heroHpGreen = new Rectangle();
             heroHpGreen.setFill(Color.GREEN);
             heroHpGreen.setHeight(14);
             Label subHp = new Label();
             subHp.setId("remChars");
 
             Group healthBar = new Group();
-            healthBar.getChildren().addAll(heroHpRed,heroHpGreen,subHp);
+            healthBar.getChildren().addAll(heroHpRed, heroHpGreen, subHp);
 
             Label subName = new Label();
             subName.setId("remChars");
@@ -509,60 +516,59 @@ public class Controller extends Application {
             Label subClass = new Label();
             subClass.setId("remChars");
 
-            Hero.getChildren().addAll(subImg,healthBar,subName,subDamage,subActions,subClass);
+            Hero.getChildren().addAll(subImg, healthBar, subName, subDamage, subActions, subClass);
             Heroes.getChildren().add(Hero);
         }
 
-        //Player Health Bar
+        // Player Health Bar
         Rectangle PlayerHpRed = new Rectangle();
         PlayerHpRed.setHeight(35);
         PlayerHpRed.setFill(Color.RED);
 
-        Rectangle PlayerHpGreen =  new Rectangle();
+        Rectangle PlayerHpGreen = new Rectangle();
         PlayerHpGreen.setFill(Color.GREEN);
         PlayerHpGreen.setHeight(35);
 
-        //Zombie Health Bar
+        // Zombie Health Bar
         Rectangle zombieHpRed = new Rectangle();
         zombieHpRed.setHeight(35);
         zombieHpRed.setFill(Color.RED);
 
-        Rectangle zombieHpGreen =  new Rectangle();
+        Rectangle zombieHpGreen = new Rectangle();
         zombieHpGreen.setFill(Color.GREEN);
         zombieHpGreen.setHeight(35);
 
         Label ZombieHp = new Label();
 
-        //group for main player stats
+        // group for main player stats
         Group mainPlayerStats = new Group();
-        mainPlayerStats.getChildren().addAll(Name,Class,ActionPoints,Damage,VaccinesLeft,Special,SuppliesLeft);
+        mainPlayerStats.getChildren().addAll(Name, Class, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft);
 
-        //group for health bar for main player
+        // group for health bar for main player
         Group healthBar = new Group();
-        healthBar.getChildren().addAll(PlayerHpRed,PlayerHpGreen,CurrentHp);
+        healthBar.getChildren().addAll(PlayerHpRed, PlayerHpGreen, CurrentHp);
 
-        //group for health bar for Zombie
+        // group for health bar for Zombie
         Group zombieHealthBar = new Group();
-        zombieHealthBar.getChildren().addAll(zombieHpRed,zombieHpGreen,ZombieHp);
+        zombieHealthBar.getChildren().addAll(zombieHpRed, zombieHpGreen, ZombieHp);
 
-
-        //adding all groups to the root stackpane
-        root.getChildren().addAll(characterOverlay, mainPlayerStats, HeroImg,ZombieImg,zombieHealthBar,healthBar,Heroes);
+        // adding all groups to the root stackpane
+        root.getChildren().addAll(characterOverlay, mainPlayerStats, HeroImg, ZombieImg, zombieHealthBar, healthBar,
+                Heroes);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
-        game.setTranslateX(-screenWidth/5);
+        game.setTranslateX(-screenWidth / 5);
 
-
-        //alignment things
+        // alignment things
         mainPlayerStats.setTranslateX(screenWidth / 3);
         characterOverlay.setTranslateX(screenWidth / 3.6);
         healthBar.setTranslateX(screenWidth / 6);
-        HeroImg.setTranslateX(screenWidth/6);
-        ZombieImg.setTranslateX(screenWidth/6);
-        zombieHealthBar.setTranslateX(screenWidth/6);
-        Heroes.setTranslateX(screenWidth*0.61);
+        HeroImg.setTranslateX(screenWidth / 6);
+        ZombieImg.setTranslateX(screenWidth / 6);
+        zombieHealthBar.setTranslateX(screenWidth / 6);
+        Heroes.setTranslateX(screenWidth * 0.61);
 
-        Heroes.setTranslateY(screenHeight*0.5);
+        Heroes.setTranslateY(screenHeight * 0.5);
         characterOverlay.setTranslateY(-screenHeight * 0.33);
         mainPlayerStats.setTranslateY(-screenHeight * 0.35);
         Name.setTranslateY(-screenHeight * 0.44);
@@ -573,12 +579,9 @@ public class Controller extends Application {
         Special.setTranslateY(-screenHeight * 0.29);
         SuppliesLeft.setTranslateY(-screenHeight * 0.26);
         HeroImg.setTranslateY(-screenHeight * 0.35);
-        ZombieImg.setTranslateY(screenHeight*0.35);
-        healthBar.setTranslateY(-screenHeight*0.23);
-        zombieHealthBar.setTranslateY(screenHeight*0.44);
-
-
-
+        ZombieImg.setTranslateY(screenHeight * 0.35);
+        healthBar.setTranslateY(-screenHeight * 0.23);
+        zombieHealthBar.setTranslateY(screenHeight * 0.44);
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
@@ -600,18 +603,24 @@ public class Controller extends Application {
                             currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
                             if (currentTarget instanceof Zombie) {
                                 ZombieImg.setGraphic(new ImageView(
-                                        new Image("file:src/views/imgs/zombiephase1.png", screenHeight * 0.2, screenHeight * 0.2, false, false)));
-
-                                zombieHpRed.setWidth(screenHeight * 0.2);
-                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
-                                ZombieHp.setText(" +" + currentTarget.getCurrentHp());
-                            } else {
-                                ZombieImg.setGraphic(new ImageView(
-                                        new Image("file:src/views/imgs/" + currentTarget.getName() + ".png", screenHeight * 0.2,
+                                        new Image("file:src/views/imgs/zombiephase1.png", screenHeight * 0.2,
                                                 screenHeight * 0.2, false, false)));
 
                                 zombieHpRed.setWidth(screenHeight * 0.2);
-                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                zombieHpGreen.setWidth(
+                                        (((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp())
+                                                * screenHeight) * 0.2);
+                                ZombieHp.setText(" +" + currentTarget.getCurrentHp());
+                            } else {
+                                ZombieImg.setGraphic(new ImageView(
+                                        new Image("file:src/views/imgs/" + currentTarget.getName() + ".png",
+                                                screenHeight * 0.2,
+                                                screenHeight * 0.2, false, false)));
+
+                                zombieHpRed.setWidth(screenHeight * 0.2);
+                                zombieHpGreen.setWidth(
+                                        (((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp())
+                                                * screenHeight) * 0.2);
                                 ZombieHp.setText(" +" + currentTarget.getCurrentHp());
                             }
                             updateRemainingHeroes(Heroes);
@@ -622,17 +631,22 @@ public class Controller extends Application {
                             currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
                             Name.setText("Name: " + currentHero.getName());
                             Class.setText("Class: " + currentHero.getClass().getSimpleName());
-                            PlayerHpRed.setWidth(screenHeight*0.2);
-                            PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                            PlayerHpRed.setWidth(screenHeight * 0.2);
+                            PlayerHpGreen
+                                    .setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp())
+                                            * screenHeight) * 0.2);
                             CurrentHp.setText(" +" + currentHero.getCurrentHp());
-                            ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/" + currentHero.getMaxActions());
+                            ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/"
+                                    + currentHero.getMaxActions());
                             Damage.setText("Attack Damage: " + currentHero.getAttackDmg());
                             VaccinesLeft.setText("Vaccines Left: " + currentHero.getVaccineInventory().size() + " / 5");
                             SuppliesLeft.setText("Supplies Left: " + currentHero.getSupplyInventory().size() + " / 5");
-                            Special.setText(("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).isSpecialAction());
+                            Special.setText(("Special: ")
+                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).isSpecialAction());
                             HeroImg.setGraphic(new ImageView(
-                                    new Image("file:src/views/imgs/" + currentHero.getName() + ".png", screenHeight*0.2 ,
-                                            screenHeight* 0.2 , false, false)));
+                                    new Image("file:src/views/imgs/" + currentHero.getName() + ".png",
+                                            screenHeight * 0.2,
+                                            screenHeight * 0.2, false, false)));
 
                             updateRemainingHeroes(Heroes);
                         }
@@ -702,18 +716,23 @@ public class Controller extends Application {
                                 currentHero.setTarget((currentTarget));
                                 currentHero.useSpecial();
                                 play(healSound);
-                                PlayerHpRed.setWidth(screenHeight*0.2);
-                                PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                                PlayerHpRed.setWidth(screenHeight * 0.2);
+                                PlayerHpGreen.setWidth(
+                                        (((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp())
+                                                * screenHeight) * 0.2);
                                 CurrentHp.setText(" +" + currentHero.getCurrentHp());
                                 SuppliesLeft.setText("Supplies Left: "
                                         + currentHero.getSupplyInventory().size() + " / 5");
                                 Special.setText("Special: True");
                                 ZombieImg.setGraphic(new ImageView(
-                                        new Image("file:src/views/imgs/" + currentTarget.getName() + ".png", screenHeight * 0.2,
+                                        new Image("file:src/views/imgs/" + currentTarget.getName() + ".png",
+                                                screenHeight * 0.2,
                                                 screenHeight * 0.2, false, false)));
 
                                 zombieHpRed.setWidth(screenHeight * 0.2);
-                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                zombieHpGreen.setWidth(
+                                        (((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp())
+                                                * screenHeight) * 0.2);
                                 ZombieHp.setText(" +" + currentTarget.getCurrentHp());
                                 // animation
                                 // Special.setText("Special: False");
@@ -769,13 +788,15 @@ public class Controller extends Application {
                                 zombieHpRed.setWidth(0);
                                 zombieHpGreen.setWidth(0);
                                 ZombieHp.setText("");
-                            }
-                            else {
+                            } else {
                                 ZombieImg.setGraphic(new ImageView(
-                                        new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
+                                        new Image("file:src/views/imgs/zombiephase1.png", screenHeight * 0.2,
+                                                screenHeight * 0.2, false, false)));
 
-                                zombieHpRed.setWidth(screenHeight*0.2);
-                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                zombieHpRed.setWidth(screenHeight * 0.2);
+                                zombieHpGreen.setWidth(
+                                        (((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp())
+                                                * screenHeight) * 0.2);
                                 ZombieHp.setText(" +" + currentTarget.getCurrentHp());
                             }
                             if (currentHero.getCurrentHp() == 0) {
@@ -798,8 +819,10 @@ public class Controller extends Application {
                                 currentHero = null;
                                 currentTarget = null;
                             } else {
-                                PlayerHpRed.setWidth(screenHeight*0.2);
-                                PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                                PlayerHpRed.setWidth(screenHeight * 0.2);
+                                PlayerHpGreen.setWidth(
+                                        (((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp())
+                                                * screenHeight) * 0.2);
                                 CurrentHp.setText(" +" + currentHero.getCurrentHp());
                                 ActionPoints.setText("Actions Available: "
                                         + ((Hero) currentHero)
@@ -841,8 +864,10 @@ public class Controller extends Application {
                             StackPane stackpane = (StackPane) game.getChildren().get((x) * 15 + y);
                             stackpane.getChildren().remove(0);
                         } else {
-                            PlayerHpRed.setWidth(screenHeight*0.2);
-                            PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                            PlayerHpRed.setWidth(screenHeight * 0.2);
+                            PlayerHpGreen
+                                    .setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp())
+                                            * screenHeight) * 0.2);
                             CurrentHp.setText(" +" + currentHero.getCurrentHp());
                             ActionPoints.setText("Actions Available: "
                                     + currentHero.getActionsAvailable()
@@ -868,6 +893,13 @@ public class Controller extends Application {
                     }
                 }
                 updateRemainingHeroes(Heroes);
+                if (Game.checkGameOver()) {
+                    switchToGameEnd(primaryStage);
+                    Game.availableHeroes = new ArrayList<Hero>();
+                    Game.heroes = new ArrayList<Hero>();
+                    Game.zombies = new ArrayList<Zombie>();
+                    Game.map = new Cell[15][15];
+                }
             }
         };
 
@@ -907,6 +939,13 @@ public class Controller extends Application {
                 } catch (NotEnoughActionsException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                }
+                if (Game.checkGameOver()) {
+                    switchToGameEnd(primaryStage);
+                    Game.availableHeroes = new ArrayList<Hero>();
+                    Game.heroes = new ArrayList<Hero>();
+                    Game.zombies = new ArrayList<Zombie>();
+                    Game.map = new Cell[15][15];
                 }
             }
         });
@@ -1126,20 +1165,24 @@ public class Controller extends Application {
                         new Image("file:src/views/imgs/" + curr.get(i).getName() + ".png", screenHeight * 0.05,
                                 screenHeight * 0.05, false, false)));
 
-                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(0)).setWidth(screenHeight*0.05);
-                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(1)).setWidth((screenHeight*0.05) * ((double) curr.get(i).getCurrentHp() / (double) curr.get(i).getMaxHp()));
-                ((Label)((Group) currentVBox.getChildren().get(1)).getChildren().get(2)).setText(" + " + curr.get(i).getCurrentHp());
+                ((Rectangle) ((Group) currentVBox.getChildren().get(1)).getChildren().get(0))
+                        .setWidth(screenHeight * 0.05);
+                ((Rectangle) ((Group) currentVBox.getChildren().get(1)).getChildren().get(1))
+                        .setWidth((screenHeight * 0.05)
+                                * ((double) curr.get(i).getCurrentHp() / (double) curr.get(i).getMaxHp()));
+                ((Label) ((Group) currentVBox.getChildren().get(1)).getChildren().get(2))
+                        .setText(" + " + curr.get(i).getCurrentHp());
                 ((Label) currentVBox.getChildren().get(2)).setText("Name: " + curr.get(i).getName());
                 ((Label) currentVBox.getChildren().get(3)).setText("Damage: " + curr.get(i).getAttackDmg());
-                ((Label) currentVBox.getChildren().get(4)).setText("Actions: " + curr.get(i).getActionsAvailable() + "/" + curr.get(i).getMaxActions());
+                ((Label) currentVBox.getChildren().get(4))
+                        .setText("Actions: " + curr.get(i).getActionsAvailable() + "/" + curr.get(i).getMaxActions());
                 ((Label) currentVBox.getChildren().get(5)).setText("Class: " + curr.get(i).getClass().getSimpleName());
-            }
-            else {
+            } else {
                 VBox currentVBox = (VBox) Heroes.getChildren().get(i);
                 ((Label) currentVBox.getChildren().get(0)).setGraphic(null);
-                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(0)).setWidth(0);
-                ((Rectangle)((Group) currentVBox.getChildren().get(1)).getChildren().get(1)).setWidth(0);
-                ((Label)((Group) currentVBox.getChildren().get(1)).getChildren().get(2)).setText("");
+                ((Rectangle) ((Group) currentVBox.getChildren().get(1)).getChildren().get(0)).setWidth(0);
+                ((Rectangle) ((Group) currentVBox.getChildren().get(1)).getChildren().get(1)).setWidth(0);
+                ((Label) ((Group) currentVBox.getChildren().get(1)).getChildren().get(2)).setText("");
                 ((Label) currentVBox.getChildren().get(2)).setText(null);
                 ((Label) currentVBox.getChildren().get(3)).setText(null);
                 ((Label) currentVBox.getChildren().get(4)).setText(null);
@@ -1148,6 +1191,109 @@ public class Controller extends Application {
             }
         }
     }
+
+    public void switchToGameEnd(Stage primaryStage) {
+        // primaryStage.initStyle(StageStyle.TRANSPARENT);
+        BorderPane root = new BorderPane();
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(root);
+        String mainMenuCSS = this.getClass().getResource("/views/styles/mainMenu.css").toExternalForm();
+        scene.getStylesheets().add(mainMenuCSS);
+        if (Game.checkWin()) {
+            ImagePattern pattern = new ImagePattern(new Image("/views/imgs/victoryScreen.png"));
+            scene.setFill(pattern);
+        } else {
+            ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/defeatScreen.jpg"));
+            scene.setFill(pattern2);
+        }
+        Button newGameBtn = new Button("New Game");
+        root.addEventFilter(KeyEvent.ANY, Event::consume);
+        ScaleTransition st = new ScaleTransition(Duration.millis(30), newGameBtn);
+        st.setCycleCount(1);
+        st.setInterpolator(Interpolator.EASE_BOTH);
+        if (playing == false) {
+            play(main);
+            playing = true;
+        }
+
+        newGameBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                newGameBtn.getStyleClass().add("hover");
+                st.setToX(1.05);
+                st.setToY(1.05);
+                st.playFromStart();
+                play(hover);
+            }
+        });
+
+        newGameBtn.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                newGameBtn.getStyleClass().remove("hover");
+                st.setToX(1);
+                st.setToY(1);
+                st.playFromStart();
+            }
+        });
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                play(click);
+                try {
+                    switchToCharacterSelect(primaryStage);
+                } catch (Exception e) {
+                    System.out.print("something went wrong.");
+                }
+            }
+        });
+
+        newGameBtn.setTranslateY(-screenHeight / 3.5);
+        newGameBtn.setTranslateX(screenWidth / 25);
+        root.setBottom(newGameBtn);
+
+        Button quitToMenue = new Button("Quit Game");
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(30), quitToMenue);
+        quitToMenue.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                quitToMenue.getStyleClass().add("redhover");
+                st2.setToX(1.05);
+                st2.setToY(1.05);
+                st2.playFromStart();
+                play(hover);
+            }
+        });
+
+        quitToMenue.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                quitToMenue.getStyleClass().remove("redhover");
+                st2.setToX(1);
+                st2.setToY(1);
+                st2.playFromStart();
+            }
+        });
+        quitToMenue.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                try {
+                    primaryStage.close();
+                } catch (Exception e) {
+                    System.out.print("something went wrong.");
+                }
+            }
+        });
+
+        quitToMenue.setTranslateY(screenHeight - (screenHeight / 5));
+        quitToMenue.setTranslateX(screenWidth / 27);
+        root.setTop(quitToMenue);
+
+        root.setBackground(null);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
