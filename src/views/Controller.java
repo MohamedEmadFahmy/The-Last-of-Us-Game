@@ -595,23 +595,27 @@ public class Controller extends Application {
                     // stackpane.getChildren().remove(selectOverlay);
                 } else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
                     if (e.getButton() == MouseButton.PRIMARY) {
-                        currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
-                        if (currentTarget instanceof  Zombie) {
-                            ZombieImg.setGraphic(new ImageView(
-                                    new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
+                        if (Game.map[row][col] instanceof CharacterCell
+                                && ((CharacterCell) Game.map[row][col]).getCharacter() != null) {
+                            currentTarget = ((CharacterCell) Game.map[row][col]).getCharacter();
+                            if (currentTarget instanceof Zombie) {
+                                ZombieImg.setGraphic(new ImageView(
+                                        new Image("file:src/views/imgs/zombiephase1.png", screenHeight * 0.2, screenHeight * 0.2, false, false)));
 
-                            zombieHpRed.setWidth(screenHeight*0.2);
-                            zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
-                            ZombieHp.setText(" +" + currentTarget.getCurrentHp());
-                        }
-                        else {
-                            ZombieImg.setGraphic(null);
+                                zombieHpRed.setWidth(screenHeight * 0.2);
+                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                ZombieHp.setText(" +" + currentTarget.getCurrentHp());
+                            } else {
+                                ZombieImg.setGraphic(new ImageView(
+                                        new Image("file:src/views/imgs/" + currentTarget.getName() + ".png", screenHeight * 0.2,
+                                                screenHeight * 0.2, false, false)));
 
-                            zombieHpRed.setWidth(0);
-                            zombieHpGreen.setWidth(0);
-                            ZombieHp.setText("");
+                                zombieHpRed.setWidth(screenHeight * 0.2);
+                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                ZombieHp.setText(" +" + currentTarget.getCurrentHp());
+                            }
+                            updateRemainingHeroes(Heroes);
                         }
-                        updateRemainingHeroes(Heroes);
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
@@ -704,6 +708,13 @@ public class Controller extends Application {
                                 SuppliesLeft.setText("Supplies Left: "
                                         + currentHero.getSupplyInventory().size() + " / 5");
                                 Special.setText("Special: True");
+                                ZombieImg.setGraphic(new ImageView(
+                                        new Image("file:src/views/imgs/" + currentTarget.getName() + ".png", screenHeight * 0.2,
+                                                screenHeight * 0.2, false, false)));
+
+                                zombieHpRed.setWidth(screenHeight * 0.2);
+                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                ZombieHp.setText(" +" + currentTarget.getCurrentHp());
                                 // animation
                                 // Special.setText("Special: False");
                             } catch (InvalidTargetException ex) {
