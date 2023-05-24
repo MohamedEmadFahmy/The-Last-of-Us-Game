@@ -9,6 +9,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -117,6 +119,7 @@ public class Controller extends Application {
         ImagePattern pattern = new ImagePattern(new Image("/views/imgs/bgfinal.png"));
         scene.setFill(pattern);
         Button startGameBtn = new Button("START GAME");
+        root.addEventFilter(KeyEvent.ANY, Event::consume);
         ScaleTransition st = new ScaleTransition(Duration.millis(30), startGameBtn);
         st.setCycleCount(1);
         st.setInterpolator(Interpolator.EASE_BOTH);
@@ -410,6 +413,34 @@ public class Controller extends Application {
                 switchToMainMenu(primaryStage);
             }
         });
+
+        // root.addEventFilter(KeyEvent.KEY_PRESSED, Event::consume);
+        EventHandler<KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent key) {
+                KeyCode keyCode = key.getCode();
+                // System.out.println(key.getCode());
+                switch (keyCode) {
+                    case LEFT, A:
+                        leftSel.fire();
+                        break;
+                    case RIGHT, D:
+                        rightSel.fire();
+                        break;
+                    case ENTER:
+                        Continue.fire();
+                        break;
+                    case ESCAPE, BACK_SPACE:
+                        backToMenu.fire();
+                        break;
+                    default:
+                        System.out.println("No key");
+                        break;
+                }
+            }
+        };
+
+        root.setOnKeyPressed(eventHandler);
         root.setBackground(null);
         primaryStage.show();
     }
@@ -640,7 +671,7 @@ public class Controller extends Application {
                                 Special.setText("");
                                 SuppliesLeft.setText("");
                                 currentHero = null;
-                                currentSelected = false;
+                                currentTarget = null;
                             } else {
                                 Hp.setText(
                                         "Health: " + currentHero.getCurrentHp()
@@ -679,7 +710,9 @@ public class Controller extends Application {
                             Special.setText("");
                             SuppliesLeft.setText("");
                             currentHero = null;
-                            currentSelected = false;
+                            currentTarget = null;
+                            StackPane stackpane = (StackPane) game.getChildren().get((x) * 15 + y);
+                            stackpane.getChildren().remove(0);
                         } else {
                             Hp.setText(
                                     "Health: " + currentHero.getCurrentHp()
@@ -713,7 +746,7 @@ public class Controller extends Application {
 
         Scene scene = primaryStage
                 .getScene();
-        scene.setOnKeyPressed(keyboardHandler);
+        root.setOnKeyPressed(keyboardHandler);
         scene.setRoot(root);
         root.setBackground(null);
         primaryStage.show();
