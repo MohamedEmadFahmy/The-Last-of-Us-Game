@@ -39,18 +39,15 @@ import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.Cell;
 import javafx.scene.paint.Color;
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
 import static engine.Game.heroes;
 
 public class Controller extends Application {
-    static boolean currentSelected;
-    static boolean targetSelected;
-    static Hero currentHero = null;
-    static Character currentTarget = null;
-    static int index = 1;
+    static Hero currentHero;
+    static Character currentTarget;
+    static int index;
     static Media hover = new Media(new File("src/views/sounds/click.wav").toURI().toString());
     static Media click = new Media(new File("src/views/sounds/mouse_click.wav").toURI().toString());
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
@@ -60,7 +57,7 @@ public class Controller extends Application {
     static Media fighterSound = new Media(new File("src/views/sounds/fighterSound.mp3").toURI().toString());
     static Media deathSound = new Media(new File("src/views/sounds/deathSound.mp3").toURI().toString());
     static boolean playing = false;
-    static ArrayList<Hero> current = new ArrayList<Hero>();
+    static ArrayList<Hero> current;
     static double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
     static double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
     static Background notvisible = new Background(new BackgroundImage(
@@ -204,12 +201,14 @@ public class Controller extends Application {
     }
 
     public void switchToCharacterSelect(Stage primaryStage) {
+        index = 1;
         try {
             Game.loadHeroes("src/CSV files/Heros.csv");
         } catch (Exception e) {
             System.out.println("Couldnt Load Heroes");
             e.printStackTrace();
         }
+        current = new ArrayList<Hero>();
         for (int i = 0; i < Game.availableHeroes.size(); i++) {
             current.add(Game.availableHeroes.get(i));
         }
@@ -441,6 +440,8 @@ public class Controller extends Application {
                     case ESCAPE:
                         backToMenu.fire();
                         break;
+                    default:
+                        break;
                 }
             }
         });
@@ -449,6 +450,8 @@ public class Controller extends Application {
     }
 
     public void switchToGame(Stage primaryStage, Hero h) {
+        currentHero = null;
+        currentTarget = null;
         StackPane root = new StackPane();
         GridPane game = new GridPane();
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
@@ -456,20 +459,6 @@ public class Controller extends Application {
 
         Game.startGame(h);
 
-        // Label selectOverlay = new Label();
-        // selectOverlay.setGraphic(new ImageView(new
-        // Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-        // screenHeight * 0.9 / 15, false, false)));
-        //
-        // Label selected = new Label();
-        // selected.setGraphic(new ImageView(new
-        // Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-        // screenHeight * 0.9 / 15, false, false)));
-        //
-        // Label selected1 = new Label();
-        // selected1.setGraphic(new ImageView(new
-        // Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-        // screenHeight * 0.9 / 15, false, false)));
         // labels for Zombie + Hero
         Label Name = new Label();
         Label Class = new Label();
@@ -485,7 +474,6 @@ public class Controller extends Application {
         characterOverlay.setGraphic(new ImageView(
                 new Image("file:src/views/imgs/characterOverlay.png", 700,
                         320, false, false)));
-
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
 
