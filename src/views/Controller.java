@@ -414,12 +414,10 @@ public class Controller extends Application {
             }
         });
 
-        // root.addEventFilter(KeyEvent.KEY_PRESSED, Event::consume);
-        EventHandler<KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
+        root.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
-            public void handle(KeyEvent key) {
-                KeyCode keyCode = key.getCode();
-                // System.out.println(key.getCode());
+            public void handle(KeyEvent keyEvent) {
+                KeyCode keyCode = keyEvent.getCode();
                 switch (keyCode) {
                     case LEFT, A:
                         leftSel.fire();
@@ -427,20 +425,15 @@ public class Controller extends Application {
                     case RIGHT, D:
                         rightSel.fire();
                         break;
-                    // case ENTER:
-                    // Continue.fire();
-                    // break;
-                    case ESCAPE, BACK_SPACE:
-                        backToMenu.fire();
+                    case ENTER:
+                        Continue.fire();
                         break;
-                    default:
-                        System.out.println("No key");
+                    case ESCAPE:
+                        backToMenu.fire();
                         break;
                 }
             }
-        };
-
-        root.setOnKeyPressed(eventHandler);
+        });
         root.setBackground(null);
         primaryStage.show();
     }
@@ -452,20 +445,21 @@ public class Controller extends Application {
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
+        game.setTranslateX(-screenWidth/5);
 
         Game.startGame(h);
 
-        Label selectOverlay = new Label();
-        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-                screenHeight * 0.9 / 15, false, false)));
-
-        Label selected = new Label();
-        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-                screenHeight * 0.9 / 15, false, false)));
-
-        Label selected1 = new Label();
-        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
-                screenHeight * 0.9 / 15, false, false)));
+//        Label selectOverlay = new Label();
+//        selectOverlay.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
+//                screenHeight * 0.9 / 15, false, false)));
+//
+//        Label selected = new Label();
+//        selected.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
+//                screenHeight * 0.9 / 15, false, false)));
+//
+//        Label selected1 = new Label();
+//        selected1.setGraphic(new ImageView(new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
+//                screenHeight * 0.9 / 15, false, false)));
 
         Label Name = new Label();
         Label Class = new Label();
@@ -475,25 +469,31 @@ public class Controller extends Application {
         Label VaccinesLeft = new Label();
         Label Special = new Label();
         Label SuppliesLeft = new Label();
+        Label HeroImg = new Label();
 
-        root.getChildren().addAll(Name, Class, Hp, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft);
+        root.getChildren().addAll(Name, Class, Hp, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft, HeroImg);
 
-        Name.setTranslateX(screenWidth / 2.5);
-        Class.setTranslateX(screenWidth / 2.5);
-        Hp.setTranslateX(screenWidth / 2.5);
-        ActionPoints.setTranslateX(screenWidth / 2.5);
-        Damage.setTranslateX(screenWidth / 2.5);
-        VaccinesLeft.setTranslateX(screenWidth / 2.5);
-        Special.setTranslateX(screenWidth / 2.5);
-        SuppliesLeft.setTranslateX(screenWidth / 2.5);
 
-        Name.setTranslateY(-screenHeight * 0.1);
-        Class.setTranslateY(-screenHeight * 0.05);
-        ActionPoints.setTranslateY(screenHeight * 0.05);
-        Damage.setTranslateY(screenHeight * 0.1);
-        VaccinesLeft.setTranslateY(screenHeight * 0.15);
-        Special.setTranslateY(screenHeight * 0.2);
-        SuppliesLeft.setTranslateY(screenHeight * 0.25);
+        Name.setTranslateX(screenWidth / 3);
+        Class.setTranslateX(screenWidth / 3);
+        Hp.setTranslateX(screenWidth / 6);
+        ActionPoints.setTranslateX(screenWidth / 3);
+        Damage.setTranslateX(screenWidth / 3);
+        VaccinesLeft.setTranslateX(screenWidth / 3);
+        Special.setTranslateX(screenWidth / 3);
+        SuppliesLeft.setTranslateX(screenWidth / 3);
+        HeroImg.setTranslateX(screenWidth/6);
+
+        Name.setTranslateY(-screenHeight * 0.44);
+        Class.setTranslateY(-screenHeight * 0.41);
+        ActionPoints.setTranslateY(-screenHeight * 0.38);
+        Damage.setTranslateY(-screenHeight * 0.35);
+        VaccinesLeft.setTranslateY(-screenHeight * 0.32);
+        Special.setTranslateY(-screenHeight * 0.29);
+        SuppliesLeft.setTranslateY(-screenHeight * 0.26);
+        HeroImg.setTranslateY(-screenHeight * 0.35);
+        Hp.setTranslateY(-screenHeight*0.23);
+
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
@@ -514,32 +514,19 @@ public class Controller extends Application {
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
                                 && ((CharacterCell) Game.map[row][col]).getCharacter() instanceof Hero) {
-                            Name.setText("Name: " + ((CharacterCell) Game.map[row][col]).getCharacter().getName());
-                            Class.setText("Class: " + ((CharacterCell) Game.map[row][col]).getCharacter().getClass()
-                                    .getSimpleName());
-                            Hp.setText(
-                                    "Health: " + ((CharacterCell) Game.map[row][col]).getCharacter().getCurrentHp()
-                                            + "/" + ((CharacterCell) Game.map[row][col]).getCharacter().getMaxHp());
-                            ActionPoints.setText("Actions Available: "
-                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                            .getActionsAvailable()
-                                    + "/"
-                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getMaxActions());
-                            Damage.setText("Attack Damage: "
-                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).getAttackDmg());
-                            VaccinesLeft.setText("Vaccines Left: "
-                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                            .getVaccineInventory().size()
-                                    + " / 5");
-                            SuppliesLeft.setText("Supplies Left: "
-                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                            .getSupplyInventory().size()
-                                    + " / 5");
-                            Special.setText(
-                                    ("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter())
-                                            .isSpecialAction());
-                            // stackpane.getChildren().add(stackpane.getChildren().size()-2, selected);
                             currentHero = ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter());
+                            Name.setText("Name: " + currentHero.getName());
+                            Class.setText("Class: " + currentHero.getClass().getSimpleName());
+                            Hp.setText("Health: " + currentHero.getCurrentHp() + "/" + currentHero.getMaxHp());
+                            ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/" + currentHero.getMaxActions());
+                            Damage.setText("Attack Damage: " + currentHero.getAttackDmg());
+                            VaccinesLeft.setText("Vaccines Left: " + currentHero.getVaccineInventory().size() + " / 5");
+                            SuppliesLeft.setText("Supplies Left: " + currentHero.getSupplyInventory().size() + " / 5");
+                            Special.setText(("Special: ") + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).isSpecialAction());
+                            HeroImg.setGraphic(new ImageView(
+                                    new Image("file:src/views/imgs/" + currentHero.getName() + ".png", screenHeight*0.2 ,
+                                            screenHeight* 0.2 , false, false)));
+
                         }
                     }
 
