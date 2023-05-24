@@ -473,35 +473,34 @@ public class Controller extends Application {
         Label SuppliesLeft = new Label();
         Label HeroImg = new Label();
         Label ZombieImg = new Label();
+        Label CurrentHp = new Label();
 
         Rectangle PlayerHpRed = new Rectangle();
-        PlayerHpRed.setHeight(25);
+        PlayerHpRed.setHeight(35);
         PlayerHpRed.setFill(Color.RED);
 
         Rectangle PlayerHpGreen =  new Rectangle();
         PlayerHpGreen.setFill(Color.GREEN);
-        PlayerHpGreen.setHeight(25);
+        PlayerHpGreen.setHeight(35);
+
+        Group mainPlayerStats = new Group();
+        mainPlayerStats.getChildren().addAll(Name,Class,ActionPoints,Damage,VaccinesLeft,Special,SuppliesLeft);
 
         Group healthBar = new Group();
-        healthBar.getChildren().addAll(PlayerHpRed,PlayerHpGreen);
+        healthBar.getChildren().addAll(PlayerHpRed,PlayerHpGreen,CurrentHp);
 
         Label ZombieHp = new Label();
 
-        root.getChildren().addAll(Name, Class, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft, HeroImg,ZombieImg,ZombieHp,healthBar);
+        root.getChildren().addAll(mainPlayerStats, HeroImg,ZombieImg,ZombieHp,healthBar);
 
 
-        Name.setTranslateX(screenWidth / 3);
-        Class.setTranslateX(screenWidth / 3);
+        mainPlayerStats.setTranslateX(screenWidth / 3);
         healthBar.setTranslateX(screenWidth / 6);
-        ActionPoints.setTranslateX(screenWidth / 3);
-        Damage.setTranslateX(screenWidth / 3);
-        VaccinesLeft.setTranslateX(screenWidth / 3);
-        Special.setTranslateX(screenWidth / 3);
-        SuppliesLeft.setTranslateX(screenWidth / 3);
         HeroImg.setTranslateX(screenWidth/6);
         ZombieImg.setTranslateX(screenWidth/6);
         ZombieHp.setTranslateX(screenWidth/6);
 
+        mainPlayerStats.setTranslateY(-screenHeight * 0.35);
         Name.setTranslateY(-screenHeight * 0.44);
         Class.setTranslateY(-screenHeight * 0.41);
         ActionPoints.setTranslateY(-screenHeight * 0.38);
@@ -546,6 +545,7 @@ public class Controller extends Application {
                             Class.setText("Class: " + currentHero.getClass().getSimpleName());
                             PlayerHpRed.setWidth(screenHeight*0.2);
                             PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                            CurrentHp.setText(" +" + currentHero.getCurrentHp());
                             ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/" + currentHero.getMaxActions());
                             Damage.setText("Attack Damage: " + currentHero.getAttackDmg());
                             VaccinesLeft.setText("Vaccines Left: " + currentHero.getVaccineInventory().size() + " / 5");
@@ -620,6 +620,7 @@ public class Controller extends Application {
                                 play(healSound);
                                 PlayerHpRed.setWidth(screenHeight*0.2);
                                 PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                                CurrentHp.setText(" +" + currentHero.getCurrentHp());
                                 SuppliesLeft.setText("Supplies Left: "
                                         + currentHero.getSupplyInventory().size() + " / 5");
                                 Special.setText("Special: True");
@@ -676,23 +677,33 @@ public class Controller extends Application {
                                 ZombieImg.setGraphic(null);
                                 ZombieHp.setText("");
                             }
+                            else {
+                                ZombieImg.setGraphic(new ImageView(
+                                        new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
+
+                                ZombieHp.setText("Health: " + currentTarget.getCurrentHp() + "/" + currentTarget.getMaxHp());
+                            }
                             if (currentHero.getCurrentHp() == 0) {
                                 play(deathSound);
                                 Name.setText("");
                                 Class.setText("");
                                 PlayerHpRed.setWidth(0);
                                 PlayerHpGreen.setWidth(0);
+                                CurrentHp.setText("");
                                 ActionPoints.setText("");
                                 Damage.setText("");
                                 VaccinesLeft.setText("");
                                 Special.setText("");
                                 SuppliesLeft.setText("");
                                 HeroImg.setGraphic(null);
+                                ZombieImg.setGraphic(null);
+                                ZombieHp.setText("");
                                 currentHero = null;
                                 currentTarget = null;
                             } else {
                                 PlayerHpRed.setWidth(screenHeight*0.2);
                                 PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                                CurrentHp.setText(" +" + currentHero.getCurrentHp());
                                 ActionPoints.setText("Actions Available: "
                                         + ((Hero) currentHero)
                                                 .getActionsAvailable()
@@ -722,6 +733,7 @@ public class Controller extends Application {
                             Class.setText("");
                             PlayerHpRed.setWidth(0);
                             PlayerHpGreen.setWidth(0);
+                            CurrentHp.setText("");
                             ActionPoints.setText("");
                             Damage.setText("");
                             VaccinesLeft.setText("");
@@ -734,6 +746,7 @@ public class Controller extends Application {
                         } else {
                             PlayerHpRed.setWidth(screenHeight*0.2);
                             PlayerHpGreen.setWidth((((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp()) * screenHeight) * 0.2);
+                            CurrentHp.setText(" +" + currentHero.getCurrentHp());
                             ActionPoints.setText("Actions Available: "
                                     + currentHero.getActionsAvailable()
                                     + "/"
@@ -780,6 +793,7 @@ public class Controller extends Application {
                     Class.setText("");
                     PlayerHpRed.setWidth(0);
                     PlayerHpGreen.setWidth(0);
+                    CurrentHp.setText("");
                     ActionPoints.setText("");
                     Damage.setText("");
                     VaccinesLeft.setText("");
