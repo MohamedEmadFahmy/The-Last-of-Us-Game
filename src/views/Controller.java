@@ -475,6 +475,10 @@ public class Controller extends Application {
         Label HeroImg = new Label();
         Label ZombieImg = new Label();
         Label CurrentHp = new Label();
+        Label characterOverlay = new Label();
+        characterOverlay.setGraphic(new ImageView(
+                new Image("file:src/views/imgs/characterOverlay.png", 700,
+                        320, false, false)));
 
         //initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
@@ -482,11 +486,17 @@ public class Controller extends Application {
         for (int i = 0; i < 5; i++) {
             VBox Hero = new VBox();
             Label subImg = new Label();
+            subImg.setId("remChars");
             Label subName = new Label();
+            subName.setId("remChars");
             Label subHp = new Label();
+            subHp.setId("remChars");
             Label subDamage = new Label();
+            subDamage.setId("remChars");
             Label subActions = new Label();
+            subActions.setId("remChars");
             Label subClass = new Label();
+            subClass.setId("remChars");
 
             Hero.getChildren().addAll(subImg,subName,subHp,subDamage,subActions,subClass);
             Heroes.getChildren().add(Hero);
@@ -501,6 +511,17 @@ public class Controller extends Application {
         PlayerHpGreen.setFill(Color.GREEN);
         PlayerHpGreen.setHeight(35);
 
+        //Zombie Health Bar
+        Rectangle zombieHpRed = new Rectangle();
+        zombieHpRed.setHeight(35);
+        zombieHpRed.setFill(Color.RED);
+
+        Rectangle zombieHpGreen =  new Rectangle();
+        zombieHpGreen.setFill(Color.GREEN);
+        zombieHpGreen.setHeight(35);
+
+        Label ZombieHp = new Label();
+
         //group for main player stats
         Group mainPlayerStats = new Group();
         mainPlayerStats.getChildren().addAll(Name,Class,ActionPoints,Damage,VaccinesLeft,Special,SuppliesLeft);
@@ -509,10 +530,13 @@ public class Controller extends Application {
         Group healthBar = new Group();
         healthBar.getChildren().addAll(PlayerHpRed,PlayerHpGreen,CurrentHp);
 
-        Label ZombieHp = new Label();
+        //group for health bar for Zombie
+        Group zombieHealthBar = new Group();
+        zombieHealthBar.getChildren().addAll(zombieHpRed,zombieHpGreen,ZombieHp);
+
 
         //adding all groups to the root stackpane
-        root.getChildren().addAll(mainPlayerStats, HeroImg,ZombieImg,ZombieHp,healthBar,Heroes);
+        root.getChildren().addAll(characterOverlay, mainPlayerStats, HeroImg,ZombieImg,zombieHealthBar,healthBar,Heroes);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
         game.setTranslateX(-screenWidth/5);
@@ -520,13 +544,15 @@ public class Controller extends Application {
 
         //alignment things
         mainPlayerStats.setTranslateX(screenWidth / 3);
+        characterOverlay.setTranslateX(screenWidth / 3.6);
         healthBar.setTranslateX(screenWidth / 6);
         HeroImg.setTranslateX(screenWidth/6);
         ZombieImg.setTranslateX(screenWidth/6);
-        ZombieHp.setTranslateX(screenWidth/6);
+        zombieHealthBar.setTranslateX(screenWidth/6);
         Heroes.setTranslateX(screenWidth*0.61);
 
         Heroes.setTranslateY(screenHeight*0.5);
+        characterOverlay.setTranslateY(-screenHeight * 0.33);
         mainPlayerStats.setTranslateY(-screenHeight * 0.35);
         Name.setTranslateY(-screenHeight * 0.44);
         Class.setTranslateY(-screenHeight * 0.41);
@@ -538,7 +564,7 @@ public class Controller extends Application {
         HeroImg.setTranslateY(-screenHeight * 0.35);
         ZombieImg.setTranslateY(screenHeight*0.35);
         healthBar.setTranslateY(-screenHeight*0.23);
-        ZombieHp.setTranslateY(screenHeight*0.44);
+        zombieHealthBar.setTranslateY(screenHeight*0.44);
 
 
 
@@ -562,7 +588,9 @@ public class Controller extends Application {
                         ZombieImg.setGraphic(new ImageView(
                                 new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
 
-                        ZombieHp.setText("Health: " + currentTarget.getCurrentHp() + "/" + currentTarget.getMaxHp());
+                        zombieHpRed.setWidth(screenHeight*0.2);
+                        zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                        ZombieHp.setText(" +" + currentTarget.getCurrentHp());
 
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
@@ -703,13 +731,17 @@ public class Controller extends Application {
                                     stackpane.getChildren().add(0, Zombie);
                                 }
                                 ZombieImg.setGraphic(null);
+                                zombieHpRed.setWidth(0);
+                                zombieHpGreen.setWidth(0);
                                 ZombieHp.setText("");
                             }
                             else {
                                 ZombieImg.setGraphic(new ImageView(
                                         new Image("file:src/views/imgs/zombiephase1.png", screenHeight*0.2, screenHeight*0.2, false, false)));
 
-                                ZombieHp.setText("Health: " + currentTarget.getCurrentHp() + "/" + currentTarget.getMaxHp());
+                                zombieHpRed.setWidth(screenHeight*0.2);
+                                zombieHpGreen.setWidth((((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp()) * screenHeight) * 0.2);
+                                ZombieHp.setText(" +" + currentTarget.getCurrentHp());
                             }
                             if (currentHero.getCurrentHp() == 0) {
                                 play(deathSound);
@@ -726,6 +758,8 @@ public class Controller extends Application {
                                 HeroImg.setGraphic(null);
                                 ZombieImg.setGraphic(null);
                                 ZombieHp.setText("");
+                                zombieHpRed.setWidth(0);
+                                zombieHpGreen.setWidth(0);
                                 currentHero = null;
                                 currentTarget = null;
                             } else {
@@ -828,6 +862,8 @@ public class Controller extends Application {
                     Special.setText("");
                     SuppliesLeft.setText("");
                     ZombieHp.setText("");
+                    zombieHpRed.setWidth(0);
+                    zombieHpGreen.setWidth(0);
                     ZombieImg.setGraphic(null);
                     HeroImg.setGraphic(null);
                 } catch (InvalidTargetException e) {
@@ -1057,7 +1093,7 @@ public class Controller extends Application {
                 ((Label) currentVBox.getChildren().get(1)).setText("Name: " + curr.get(i).getName());
                 ((Label) currentVBox.getChildren().get(2)).setText("Health: " + curr.get(i).getCurrentHp() + "/" + curr.get(i).getMaxHp());
                 ((Label) currentVBox.getChildren().get(3)).setText("Damage: " + curr.get(i).getAttackDmg());
-                ((Label) currentVBox.getChildren().get(4)).setText("Actions Available: " + curr.get(i).getActionsAvailable() + "/" + curr.get(i).getMaxActions());
+                ((Label) currentVBox.getChildren().get(4)).setText("Actions: " + curr.get(i).getActionsAvailable() + "/" + curr.get(i).getMaxActions());
                 ((Label) currentVBox.getChildren().get(5)).setText("Class: " + curr.get(i).getClass().getSimpleName());
             }
             else {

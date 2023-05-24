@@ -29,3 +29,8 @@
 .button.hover {
     -fx-text-fill: gold;
 }
+#remChars {
+    -fx-font-size: 20px;
+    -fx-font-family: "The Bomb Sound";
+    -fx-text-fill: white;
+}
