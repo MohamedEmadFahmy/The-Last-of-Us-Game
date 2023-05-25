@@ -120,6 +120,7 @@ public class Controller extends Application {
         ImagePattern pattern = new ImagePattern(new Image("/views/imgs/bgfinal.png"));
         scene.setFill(pattern);
         Button startGameBtn = new Button("START GAME");
+        // to disable auto selecting buttons in menu
         root.addEventFilter(KeyEvent.ANY, Event::consume);
         ScaleTransition st = new ScaleTransition(Duration.millis(30), startGameBtn);
         st.setCycleCount(1);
@@ -206,7 +207,9 @@ public class Controller extends Application {
     public void switchToCharacterSelect(Stage primaryStage) {
         index = 1;
         try {
-            Game.loadHeroes("src/CSV files/Heros.csv");
+            if (Game.availableHeroes.isEmpty()) {
+                Game.loadHeroes("src/CSV files/Heros.csv");
+            }
         } catch (Exception e) {
             System.out.println("Couldnt Load Heroes");
             e.printStackTrace();
@@ -476,16 +479,16 @@ public class Controller extends Application {
         Label CurrentHp = new Label();
         Label characterOverlay = new Label();
         characterOverlay.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth)/1920)*700,
-                        ((screenWidth)/1920)*320, false, false)));
+                new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth) / 1920) * 750,
+                        ((screenWidth) / 1920) * 320, false, false)));
         Label remChars = new Label();
         remChars.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth)/1920)*700,
-                        ((screenWidth)/1920)*320, false, false)));
+                new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth) / 1920) * 750,
+                        ((screenWidth) / 1920) * 320, false, false)));
         Label target = new Label();
         target.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/target.png", ((screenWidth)/1920)*300,
-                        ((screenWidth)/1920)*300, false, false)));
+                new Image("file:src/views/imgs/target.png", ((screenWidth) / 1920) * 300,
+                        ((screenWidth) / 1920) * 300, false, false)));
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
 
@@ -553,7 +556,8 @@ public class Controller extends Application {
         zombieHealthBar.getChildren().addAll(zombieHpRed, zombieHpGreen, ZombieHp);
 
         // adding all groups to the root stackpane
-        root.getChildren().addAll(characterOverlay,remChars, target, mainPlayerStats, HeroImg, ZombieImg, zombieHealthBar, healthBar,
+        root.getChildren().addAll(characterOverlay, remChars, target, mainPlayerStats, HeroImg, ZombieImg,
+                zombieHealthBar, healthBar,
                 Heroes);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
@@ -566,7 +570,7 @@ public class Controller extends Application {
         HeroImg.setTranslateX(screenWidth / 6);
         ZombieImg.setTranslateX(screenWidth / 6);
         zombieHealthBar.setTranslateX(screenWidth / 6);
-        Heroes.setTranslateX(screenWidth * 0.62);
+        Heroes.setTranslateX(screenWidth * 0.594);
         remChars.setTranslateX(screenWidth / 3.6);
         target.setTranslateX(screenWidth / 5.75);
 
@@ -596,12 +600,12 @@ public class Controller extends Application {
                 int row = 14 - row1;
                 int col = GridPane.getColumnIndex(stackpane);
                 if (e.getEventType().equals(MouseEvent.MOUSE_ENTERED)) {
-                         ((Button) stackpane.getChildren().get(stackpane.getChildren().size()-1)).setGraphic(
+                    ((Button) stackpane.getChildren().get(stackpane.getChildren().size() - 1)).setGraphic(
                             new ImageView(
                                     new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
                                             screenHeight * 0.9 / 15, false, false)));
                 } else if (e.getEventType().equals(MouseEvent.MOUSE_EXITED)) {
-                    ((Button) stackpane.getChildren().get(stackpane.getChildren().size()-1)).setGraphic(null);
+                    ((Button) stackpane.getChildren().get(stackpane.getChildren().size() - 1)).setGraphic(null);
                 } else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         if (Game.map[row][col] instanceof CharacterCell
@@ -912,7 +916,8 @@ public class Controller extends Application {
                         if (isTrap) {
                             StackPane stackpane = (StackPane) game.getChildren().get((newX) * 15 + newY);
                             ImageView trap = new ImageView(
-                                    new Image("file:src/views/imgs/trap.png", (screenHeight * 0.9 / 15)*(0.6/0.64), (screenHeight * 0.9 / 15)*(0.6/0.64), false, false));
+                                    new Image("file:src/views/imgs/trap.png", (screenHeight * 0.9 / 15) * (0.6 / 0.64),
+                                            (screenHeight * 0.9 / 15) * (0.6 / 0.64), false, false));
 
                             stackpane.getChildren().add(trap);
                             PauseTransition wait = new PauseTransition(Duration.seconds(1));
@@ -934,11 +939,15 @@ public class Controller extends Application {
                 }
                 updateRemainingHeroes(Heroes);
                 if (Game.checkGameOver()) {
-                    switchToGameEnd(primaryStage);
-                    Game.availableHeroes = new ArrayList<Hero>();
-                    Game.heroes = new ArrayList<Hero>();
-                    Game.zombies = new ArrayList<Zombie>();
-                    Game.map = new Cell[15][15];
+                    PauseTransition wait = new PauseTransition(Duration.seconds(3));
+                    wait.setOnFinished((pauseEvent) -> {
+                        switchToGameEnd(primaryStage);
+                        Game.availableHeroes = new ArrayList<Hero>();
+                        Game.heroes = new ArrayList<Hero>();
+                        Game.zombies = new ArrayList<Zombie>();
+                        Game.map = new Cell[15][15];
+                    });
+                    wait.play();
                 }
             }
         };
@@ -981,11 +990,15 @@ public class Controller extends Application {
                     e.printStackTrace();
                 }
                 if (Game.checkGameOver()) {
-                    switchToGameEnd(primaryStage);
-                    Game.availableHeroes = new ArrayList<Hero>();
-                    Game.heroes = new ArrayList<Hero>();
-                    Game.zombies = new ArrayList<Zombie>();
-                    Game.map = new Cell[15][15];
+                    PauseTransition wait = new PauseTransition(Duration.seconds(3));
+                    wait.setOnFinished((pauseEvent) -> {
+                        switchToGameEnd(primaryStage);
+                        Game.availableHeroes = new ArrayList<Hero>();
+                        Game.heroes = new ArrayList<Hero>();
+                        Game.zombies = new ArrayList<Zombie>();
+                        Game.map = new Cell[15][15];
+                    });
+                    wait.play();
                 }
             }
         });
@@ -1030,14 +1043,15 @@ public class Controller extends Application {
                 button.setMinSize(32, 32);
                 button.setPrefSize(64, 64);
                 if (!(Game.map[i][j].isVisible())) {
-                    int random =((int) (Math.random()*15));
+                    int random = ((int) (Math.random() * 15));
                     switch (random) {
-                        case 1, 2, 3, 4, 5, 6, 7, 8, 9,14:
+                        case 1, 2, 3, 4, 5, 6, 7, 8, 9, 14:
                             stackpane
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible main.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 10:
@@ -1045,7 +1059,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var1.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 0:
@@ -1053,7 +1068,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var2.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 11:
@@ -1061,7 +1077,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var3.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 12:
@@ -1069,7 +1086,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var4.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 13:
@@ -1077,7 +1095,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var5.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                     }
@@ -1188,14 +1207,15 @@ public class Controller extends Application {
                     stackpane.getChildren().remove(0);
                 }
                 if (!(Game.map[i][j].isVisible())) {
-                    int random =((int) (Math.random()*15));
+                    int random = ((int) (Math.random() * 15));
                     switch (random) {
-                        case 1, 2, 3, 4, 5, 6, 7, 8, 9,14:
+                        case 1, 2, 3, 4, 5, 6, 7, 8, 9, 14:
                             stackpane
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible main.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 10:
@@ -1203,7 +1223,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var1.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 0:
@@ -1211,7 +1232,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var2.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 11:
@@ -1219,7 +1241,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var3.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 12:
@@ -1227,7 +1250,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var4.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                         case 13:
@@ -1235,7 +1259,8 @@ public class Controller extends Application {
                                     .setBackground(
                                             new Background(new BackgroundImage(
                                                     new Image("file:src/views/imgs/invisible var5.png",
-                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false, false),
+                                                            screenHeight * 0.9 / 15, screenHeight * 0.9 / 15, false,
+                                                            false),
                                                     null, null, null, null)));
                             break;
                     }
