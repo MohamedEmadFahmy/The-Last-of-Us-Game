@@ -478,6 +478,14 @@ public class Controller extends Application {
         characterOverlay.setGraphic(new ImageView(
                 new Image("file:src/views/imgs/characterOverlay.png", 700,
                         320, false, false)));
+        Label remChars = new Label();
+        remChars.setGraphic(new ImageView(
+                new Image("file:src/views/imgs/characterOverlay.png", 700,
+                        320, false, false)));
+        Label target = new Label();
+        target.setGraphic(new ImageView(
+                new Image("file:src/views/imgs/target.png", 300,
+                        300, false, false)));
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
 
@@ -545,7 +553,7 @@ public class Controller extends Application {
         zombieHealthBar.getChildren().addAll(zombieHpRed, zombieHpGreen, ZombieHp);
 
         // adding all groups to the root stackpane
-        root.getChildren().addAll(characterOverlay, mainPlayerStats, HeroImg, ZombieImg, zombieHealthBar, healthBar,
+        root.getChildren().addAll(characterOverlay,remChars, target, mainPlayerStats, HeroImg, ZombieImg, zombieHealthBar, healthBar,
                 Heroes);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
@@ -559,9 +567,12 @@ public class Controller extends Application {
         ZombieImg.setTranslateX(screenWidth / 6);
         zombieHealthBar.setTranslateX(screenWidth / 6);
         Heroes.setTranslateX(screenWidth * 0.61);
+        remChars.setTranslateX(screenWidth / 3.6);
+        target.setTranslateX(screenWidth / 5.75);
 
-        Heroes.setTranslateY(screenHeight * 0.5);
-        characterOverlay.setTranslateY(-screenHeight * 0.33);
+        target.setTranslateY(screenHeight * 0.34);
+        Heroes.setTranslateY(screenHeight * 0.43);
+        characterOverlay.setTranslateY(-screenHeight * 0.32);
         mainPlayerStats.setTranslateY(-screenHeight * 0.35);
         Name.setTranslateY(-screenHeight * 0.44);
         Class.setTranslateY(-screenHeight * 0.41);
@@ -571,7 +582,7 @@ public class Controller extends Application {
         Special.setTranslateY(-screenHeight * 0.29);
         SuppliesLeft.setTranslateY(-screenHeight * 0.26);
         HeroImg.setTranslateY(-screenHeight * 0.35);
-        ZombieImg.setTranslateY(screenHeight * 0.35);
+        ZombieImg.setTranslateY(screenHeight * 0.32);
         healthBar.setTranslateY(-screenHeight * 0.23);
         zombieHealthBar.setTranslateY(screenHeight * 0.44);
 
@@ -585,7 +596,7 @@ public class Controller extends Application {
                 int row = 14 - row1;
                 int col = GridPane.getColumnIndex(stackpane);
                 if (e.getEventType().equals(MouseEvent.MOUSE_ENTERED)) {
-                    ((Button) stackpane.getChildren().get(stackpane.getChildren().size()-1)).setGraphic(
+                         ((Button) stackpane.getChildren().get(stackpane.getChildren().size()-1)).setGraphic(
                             new ImageView(
                                     new Image("file:src/views/imgs/overlay.png", screenHeight * 0.9 / 15,
                                             screenHeight * 0.9 / 15, false, false)));
