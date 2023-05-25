@@ -8,6 +8,7 @@ import exceptions.MovementException;
 import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
 import javafx.animation.Interpolator;
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -37,6 +38,7 @@ import model.characters.Character;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
+import model.world.TrapCell;
 import model.world.Cell;
 import javafx.scene.paint.Color;
 import java.io.File;
@@ -56,6 +58,7 @@ public class Controller extends Application {
     static Media explorerSound = new Media(new File("src/views/sounds/explorerSound.mp3").toURI().toString());
     static Media fighterSound = new Media(new File("src/views/sounds/fighterSound.mp3").toURI().toString());
     static Media deathSound = new Media(new File("src/views/sounds/deathSound.mp3").toURI().toString());
+    static Media trapSound = new Media(new File("src/views/sounds/trapSound.mp3").toURI().toString());
     static boolean playing = false;
     static ArrayList<Hero> current;
     static double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
@@ -458,6 +461,7 @@ public class Controller extends Application {
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
 
         Game.startGame(h);
+        Game.printBoard();
 
         // labels for Zombie + Hero
         Label Name = new Label();
@@ -835,6 +839,28 @@ public class Controller extends Application {
                     try {
                         int x = currentHero.getLocation().x;
                         int y = currentHero.getLocation().y;
+
+                        // handle moving into a trapcell
+                        boolean isTrap = false;
+                        int newX = x;
+                        int newY = y;
+                        switch (direction) {
+                            case UP:
+                                newX++;
+                                break;
+                            case DOWN:
+                                newX--;
+                                break;
+                            case LEFT:
+                                newY--;
+                                break;
+                            case RIGHT:
+                                newY++;
+                                break;
+                        }
+                        if (Game.map[newX][newY] instanceof TrapCell) {
+                            isTrap = true;
+                        }
                         currentHero.move(direction);
                         if (currentHero.getCurrentHp() == 0) {
                             Name.setText("");
@@ -869,6 +895,18 @@ public class Controller extends Application {
                                     + " / 5");
                         }
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
+                        if (isTrap) {
+                            StackPane stackpane = (StackPane) game.getChildren().get((newX) * 15 + newY);
+                            ImageView trap = new ImageView(
+                                    new Image("file:src/views/imgs/trap.png", 60, 60, false, false));
+
+                            stackpane.getChildren().add(trap);
+                            PauseTransition wait = new PauseTransition(Duration.seconds(1));
+                            wait.setOnFinished((e2) -> trap.setVisible(false));
+                            wait.play();
+                            play(trapSound);
+
+                        }
                     } catch (MovementException movementException) {
                         // TODO Auto-generated catch block
                         System.out.println("Illegal Move");

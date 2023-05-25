@@ -118,10 +118,10 @@ public class Game {
         for (int i = 14; i >= 0; i--) {
             for (int j = 0; j < 15; j++) {
                 Cell currentCell = map[i][j];
-                if (currentCell.isVisible() == false) {
-                    System.out.print("X ");
-                    continue;
-                }
+                // if (currentCell.isVisible() == false) {
+                // System.out.print("X ");
+                // continue;
+                // }
                 if (currentCell instanceof CharacterCell) {
                     if (((CharacterCell) currentCell).getCharacter() == null) {
                         System.out.print("_ ");
