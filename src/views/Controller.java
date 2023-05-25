@@ -476,16 +476,16 @@ public class Controller extends Application {
         Label CurrentHp = new Label();
         Label characterOverlay = new Label();
         characterOverlay.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/characterOverlay.png", 700,
-                        320, false, false)));
+                new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth)/1920)*700,
+                        ((screenWidth)/1920)*320, false, false)));
         Label remChars = new Label();
         remChars.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/characterOverlay.png", 700,
-                        320, false, false)));
+                new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth)/1920)*700,
+                        ((screenWidth)/1920)*320, false, false)));
         Label target = new Label();
         target.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/target.png", 300,
-                        300, false, false)));
+                new Image("file:src/views/imgs/target.png", ((screenWidth)/1920)*300,
+                        ((screenWidth)/1920)*300, false, false)));
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
 
@@ -566,7 +566,7 @@ public class Controller extends Application {
         HeroImg.setTranslateX(screenWidth / 6);
         ZombieImg.setTranslateX(screenWidth / 6);
         zombieHealthBar.setTranslateX(screenWidth / 6);
-        Heroes.setTranslateX(screenWidth * 0.61);
+        Heroes.setTranslateX(screenWidth * 0.62);
         remChars.setTranslateX(screenWidth / 3.6);
         target.setTranslateX(screenWidth / 5.75);
 
@@ -912,7 +912,7 @@ public class Controller extends Application {
                         if (isTrap) {
                             StackPane stackpane = (StackPane) game.getChildren().get((newX) * 15 + newY);
                             ImageView trap = new ImageView(
-                                    new Image("file:src/views/imgs/trap.png", 60, 60, false, false));
+                                    new Image("file:src/views/imgs/trap.png", (screenHeight * 0.9 / 15)*(0.6/0.64), (screenHeight * 0.9 / 15)*(0.6/0.64), false, false));
 
                             stackpane.getChildren().add(trap);
                             PauseTransition wait = new PauseTransition(Duration.seconds(1));
