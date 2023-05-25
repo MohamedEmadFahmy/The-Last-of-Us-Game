@@ -29,6 +29,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -74,6 +76,7 @@ public class Controller extends Application {
             null, null, null, null));
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
+    static StackPane messageBox = new StackPane();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -457,6 +460,13 @@ public class Controller extends Application {
     }
 
     public void switchToGame(Stage primaryStage, Hero h) {
+
+        Text messageText = new Text("");
+        messageText.setTextAlignment(TextAlignment.CENTER);
+        ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
+                300, 128, false, false));
+        messageBox.getChildren().addAll(messageImage, messageText);
+
         currentHero = null;
         currentTarget = null;
         StackPane root = new StackPane();
@@ -1459,15 +1469,32 @@ public class Controller extends Application {
         Bounds boundsInScreen = currentStackPane.localToScreen(currentStackPane.getBoundsInLocal());
         double paneMaxX = boundsInScreen.getMaxX();
         double paneMaxY = boundsInScreen.getMaxY();
-        paneMaxX += 50;
-        paneMaxY += 50;
-        Rectangle messageBox = new Rectangle(50, 50, Color.web("blue", 0.5));
-        messageBox.setLayoutX(paneMaxX);
-        messageBox.setLayoutY(paneMaxY);
-        root.getChildren().add(messageBox);
-        PauseTransition wait = new PauseTransition(Duration.seconds(1));
-        wait.setOnFinished((pauseEvent) -> root.getChildren().remove(messageBox));
-        wait.play();
+
+        int shift = 80;
+        paneMaxX += shift;
+        paneMaxY -= shift;
+
+        if (!root.getChildren().contains(messageBox)) {
+            root.getChildren().add(root.getChildren().size(), messageBox);
+            double centerX = screenWidth / 2;
+            double centerY = screenHeight / 2;
+            // messageBox.setTranslateX(-(centerX - paneMaxX));
+            // messageBox.setTranslateY((centerY - paneMaxY));
+            // messageBox.setTranslateX(-centerX);
+            // messageBox.setTranslateY(centerY);
+            messageBox.setAlignment(Pos.TOP_LEFT);
+
+            ((Text) messageBox.getChildren().get(1)).setText(message);
+
+            PauseTransition wait = new PauseTransition(Duration.seconds(1));
+            wait.setOnFinished((pauseEvent) -> root.getChildren().remove(messageBox));
+            wait.play();
+            // wait.playFromStart();
+        }
+
+        // System.out.println(paneMinX);
+        // System.out.println(paneMinY);
+
     }
 
     public static void main(String[] args) {
