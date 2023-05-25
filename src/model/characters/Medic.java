@@ -12,14 +12,20 @@ public class Medic extends Hero {
     @Override
     public void useSpecial() throws InvalidTargetException, NoAvailableResourcesException {
         Character myTarget = getTarget();
-        if (!(myTarget instanceof Hero) || !this.hasValidTarget()) {
-            throw new InvalidTargetException();
+        if (myTarget == null) {
+            throw new InvalidTargetException("Select a hero to heal!");
+        }
+        if (!(myTarget instanceof Hero)) {
+            throw new InvalidTargetException("Cant heal a zombie!");
+        }
+        if (!this.hasValidTarget()) {
+            throw new InvalidTargetException("Target out of range!");
         }
         try {
             Supply supply = getSupplyInventory().get(0);
             supply.use(this);
         } catch (Exception e) {
-            throw new NoAvailableResourcesException();
+            throw new NoAvailableResourcesException("Not enough supply points");
         }
         myTarget.setCurrentHp(myTarget.getMaxHp());
     }

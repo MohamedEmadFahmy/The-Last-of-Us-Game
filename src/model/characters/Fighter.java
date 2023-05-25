@@ -14,7 +14,7 @@ public class Fighter extends Hero {
             Supply supply = getSupplyInventory().get(0);
             supply.use(this);
         } catch (Exception e) {
-            throw new NoAvailableResourcesException();
+            throw new NoAvailableResourcesException("Not enough supply points!");
         }
         // if (isSpecialAction()) {
         // System.out.println("Already in Use");

@@ -68,16 +68,18 @@ public abstract class Hero extends Character {
             this.onCharacterDeath();
             return;
         }
+        if (getTarget() == null) {
+            throw new InvalidTargetException("You have to select a target!");
+        }
         if (!(getTarget() instanceof Zombie)) {
-            throw new InvalidTargetException();
+            throw new InvalidTargetException("Cant attack a Hero!");
         }
         if (!(hasValidTarget())) {
-            throw new InvalidTargetException(
-                    "Hero Location: " + this.getLocation() + " Zombie Location: " + this.getTarget().getLocation());
+            throw new InvalidTargetException("Target out of range!");
         }
         if (!(this instanceof Fighter && isSpecialAction())) {
             if (getActionsAvailable() <= 0) {
-                throw new NotEnoughActionsException();
+                throw new NotEnoughActionsException("Not enough action points!");
             }
             setActionsAvailable(getActionsAvailable() - 1);
         }
@@ -94,38 +96,38 @@ public abstract class Hero extends Character {
             return;
         }
         if (this.actionsAvailable <= 0) {
-            throw new NotEnoughActionsException();
+            throw new NotEnoughActionsException("Not enough action points!");
         }
         CharacterCell prevCell = (CharacterCell) Game.map[X][Y];
         Cell targetCell = null;
         if (D == Direction.UP) {
             if (X + 1 > 14) {
-                throw new MovementException();
+                throw new MovementException("Cant go there!");
             }
             X += 1;
             targetCell = Game.map[X][Y];
         } else if (D == Direction.LEFT) {
             if (Y - 1 < 0) {
-                throw new MovementException();
+                throw new MovementException("Cant go there!");
             }
             Y -= 1;
             targetCell = Game.map[X][Y];
         } else if (D == Direction.RIGHT) {
             if (Y + 1 > 14) {
-                throw new MovementException();
+                throw new MovementException("Cant go there!");
             }
             Y += 1;
             targetCell = Game.map[X][Y];
         } else if (D == Direction.DOWN) {
             if (X - 1 < 0) {
-                throw new MovementException();
+                throw new MovementException("Cant go there!");
             }
             X -= 1;
             targetCell = Game.map[X][Y];
         }
         if (targetCell instanceof CharacterCell) {
             if (((CharacterCell) targetCell).containsCharacter()) {
-                throw new MovementException();
+                throw new MovementException("Cell Occupied!");
             }
         }
 
@@ -152,14 +154,17 @@ public abstract class Hero extends Character {
             this.onCharacterDeath();
             return;
         }
-        if (this.getActionsAvailable() <= 0) {
-            throw new NotEnoughActionsException();
-        }
-        if (this.getVaccineInventory().isEmpty()) {
-            throw new NoAvailableResourcesException();
+        if (getTarget() == null) {
+            throw new InvalidTargetException("Select a zombie to cure!");
         }
         if (!(this.getTarget() instanceof Zombie)) {
-            throw new InvalidTargetException();
+            throw new InvalidTargetException("Cant cure a hero");
+        }
+        if (this.getActionsAvailable() <= 0) {
+            throw new NotEnoughActionsException("Not enough action points!");
+        }
+        if (this.getVaccineInventory().isEmpty()) {
+            throw new NoAvailableResourcesException("No vaccines to use!");
         }
         int targetX = this.getTarget().getLocation().x;
         int targetY = this.getTarget().getLocation().y;
@@ -172,7 +177,7 @@ public abstract class Hero extends Character {
         // }
         if (targetX > X + 1 || targetX < X - 1 || targetY > Y + 1 || targetY < Y - 1) {
             System.out.println("Out of range");
-            throw new InvalidTargetException();
+            throw new InvalidTargetException("Target out of range");
 
         }
         Vaccine v = this.getVaccineInventory().get(0);

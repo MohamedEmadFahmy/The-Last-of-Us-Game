@@ -76,7 +76,6 @@ public class Controller extends Application {
             null, null, null, null));
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
-    static StackPane messageBox = new StackPane();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -460,13 +459,6 @@ public class Controller extends Application {
     }
 
     public void switchToGame(Stage primaryStage, Hero h) {
-
-        Text messageText = new Text("");
-        messageText.setTextAlignment(TextAlignment.CENTER);
-        ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
-                300, 128, false, false));
-        messageBox.getChildren().addAll(messageImage, messageText);
-
         currentHero = null;
         currentTarget = null;
         StackPane root = new StackPane();
@@ -645,6 +637,13 @@ public class Controller extends Application {
                                 ZombieHp.setText(" +" + currentTarget.getCurrentHp());
                             }
                             updateRemainingHeroes(Heroes);
+                        } else {
+                            currentTarget = null;
+                            ZombieImg.setGraphic(null);
+
+                            zombieHpRed.setWidth(0);
+                            zombieHpGreen.setWidth(0);
+                            ZombieHp.setText("");
                         }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (Game.map[row][col] instanceof CharacterCell
@@ -721,14 +720,20 @@ public class Controller extends Application {
                             ZombieHp.setText("");
                         } catch (InvalidTargetException ex) {
                             System.out.println("You have to select a valid zombie");
-                            System.out.println(currentHero.getLocation());
-                            if (currentTarget != null) {
-                                System.out.println(currentTarget.getLocation());
-                            }
+                            // System.out.println(currentHero.getLocation());
+                            // if (currentTarget != null) {
+                            // System.out.println(currentTarget.getLocation());
+                            // }
+                            displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                    ex.getMessage());
                         } catch (NotEnoughActionsException ex) {
                             System.out.println("Not enough actions");
+                            displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                    ex.getMessage());
                         } catch (NoAvailableResourcesException ex) {
                             System.out.println("Not enough vaccines");
+                            displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                    ex.getMessage());
                         }
                         break;
                     case Q:
@@ -759,10 +764,16 @@ public class Controller extends Application {
                                 // Special.setText("Special: False");
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
+                                displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                        ex.getMessage());
                             } catch (NoAvailableResourcesException ex) {
                                 System.out.println("Not enough Supplies");
+                                displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                        ex.getMessage());
                             } catch (NullPointerException ex) {
                                 System.out.println("You must select a character to heal");
+                                displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                        ex.getMessage());
                             }
                         } else {
                             try {
@@ -778,8 +789,12 @@ public class Controller extends Application {
                                         + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
+                                displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                        ex.getMessage());
                             } catch (NoAvailableResourcesException ex) {
                                 System.out.println("Not enough Supplies");
+                                displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                        ex.getMessage());
                             }
                         }
                         break;
@@ -853,9 +868,12 @@ public class Controller extends Application {
                             }
                         } catch (InvalidTargetException ex) {
                             System.out.println("Target out of range ");
-                            System.out.println(ex.getMessage());
+                            displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                    ex.getMessage());
                         } catch (NotEnoughActionsException ex) {
                             System.out.println("Not enough Actions");
+                            displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                    ex.getMessage());
                         } catch (NullPointerException ex) {
                             System.out.println("No target is currently selected");
                         }
@@ -941,11 +959,14 @@ public class Controller extends Application {
                     } catch (MovementException movementException) {
                         // TODO Auto-generated catch block
                         System.out.println("Illegal Move");
-                        displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y, "hi");
+                        displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                movementException.getMessage());
                         // System.out.println("line 934");
                     } catch (NotEnoughActionsException actionsException) {
                         // TODO Auto-generated catch block
                         System.out.println("Not enough actions");
+                        displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                actionsException.getMessage());
                     } catch (NullPointerException notSelected) {
                         // TODO Auto-generated catch block
                         System.out.println("You have to select a character");
@@ -1465,36 +1486,40 @@ public class Controller extends Application {
     }
 
     public void displayAlert(StackPane root, GridPane game, int x, int y, String message) {
+
+        StackPane messageBox = new StackPane();
+        Text messageText = new Text("");
+        messageText.setId("messageText");
+        messageText.setTranslateX(20);
+        messageText.setTranslateY(20);
+        messageText.setWrappingWidth(260);
+        messageText.setFill(Color.RED);
+        // messageText.setTextAlignment(TextAlignment.CENTER);
+        ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
+                300, 128, false, false));
+        messageBox.getChildren().addAll(messageImage, messageText);
+
         StackPane currentStackPane = (StackPane) game.getChildren().get((x) * 15 + y);
         Bounds boundsInScreen = currentStackPane.localToScreen(currentStackPane.getBoundsInLocal());
-        double paneMaxX = boundsInScreen.getMaxX();
-        double paneMaxY = boundsInScreen.getMaxY();
 
-        int shift = 80;
-        paneMaxX += shift;
-        paneMaxY -= shift;
+        int shift = (int) (90 * (screenWidth / 1920));
 
-        if (!root.getChildren().contains(messageBox)) {
-            root.getChildren().add(root.getChildren().size(), messageBox);
-            double centerX = screenWidth / 2;
-            double centerY = screenHeight / 2;
-            // messageBox.setTranslateX(-(centerX - paneMaxX));
-            // messageBox.setTranslateY((centerY - paneMaxY));
-            // messageBox.setTranslateX(-centerX);
-            // messageBox.setTranslateY(centerY);
-            messageBox.setAlignment(Pos.TOP_LEFT);
+        double paneMinX = boundsInScreen.getMinX() + shift;
+        double paneMinY = boundsInScreen.getMinY() - shift;
 
-            ((Text) messageBox.getChildren().get(1)).setText(message);
+        root.getChildren().add(root.getChildren().size(), messageBox);
 
-            PauseTransition wait = new PauseTransition(Duration.seconds(1));
-            wait.setOnFinished((pauseEvent) -> root.getChildren().remove(messageBox));
-            wait.play();
-            // wait.playFromStart();
-        }
+        messageBox.setAlignment(Pos.TOP_LEFT);
+        messageBox.setTranslateX(paneMinX);
+        messageBox.setTranslateY(Math.max(paneMinY, 100));
 
-        // System.out.println(paneMinX);
-        // System.out.println(paneMinY);
+        ((Text) messageBox.getChildren().get(1)).setText(message);
 
+        PauseTransition wait = new PauseTransition(Duration.seconds(1));
+        wait.setOnFinished((pauseEvent) -> {
+            root.getChildren().remove(messageBox);
+        });
+        wait.play();
     }
 
     public static void main(String[] args) {

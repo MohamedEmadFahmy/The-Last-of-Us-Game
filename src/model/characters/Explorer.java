@@ -15,7 +15,7 @@ public class Explorer extends Hero {
             Supply supply = getSupplyInventory().get(0);
             supply.use(this);
         } catch (Exception e) {
-            throw new NoAvailableResourcesException();
+            throw new NoAvailableResourcesException("Not enough supply points!");
         }
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
