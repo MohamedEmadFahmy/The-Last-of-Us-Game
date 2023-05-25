@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -876,7 +877,8 @@ public class Controller extends Application {
                                 newY++;
                                 break;
                         }
-                        if (Game.map[newX][newY] instanceof TrapCell) {
+                        if ((newX <= 14 && newX >= 0) && (newY <= 14 && newY >= 0)
+                                && Game.map[newX][newY] instanceof TrapCell) {
                             isTrap = true;
                         }
                         currentHero.move(direction);
@@ -929,10 +931,12 @@ public class Controller extends Application {
                     } catch (MovementException movementException) {
                         // TODO Auto-generated catch block
                         System.out.println("Illegal Move");
+                        displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y, "hi");
+                        // System.out.println("line 934");
                     } catch (NotEnoughActionsException actionsException) {
                         // TODO Auto-generated catch block
                         System.out.println("Not enough actions");
-                    } catch (Exception notSelected) {
+                    } catch (NullPointerException notSelected) {
                         // TODO Auto-generated catch block
                         System.out.println("You have to select a character");
                     }
@@ -1448,6 +1452,22 @@ public class Controller extends Application {
         root.setBackground(null);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void displayAlert(StackPane root, GridPane game, int x, int y, String message) {
+        StackPane currentStackPane = (StackPane) game.getChildren().get((x) * 15 + y);
+        Bounds boundsInScreen = currentStackPane.localToScreen(currentStackPane.getBoundsInLocal());
+        double paneMaxX = boundsInScreen.getMaxX();
+        double paneMaxY = boundsInScreen.getMaxY();
+        paneMaxX += 50;
+        paneMaxY += 50;
+        Rectangle messageBox = new Rectangle(50, 50, Color.web("blue", 0.5));
+        messageBox.setLayoutX(paneMaxX);
+        messageBox.setLayoutY(paneMaxY);
+        root.getChildren().add(messageBox);
+        PauseTransition wait = new PauseTransition(Duration.seconds(1));
+        wait.setOnFinished((pauseEvent) -> root.getChildren().remove(messageBox));
+        wait.play();
     }
 
     public static void main(String[] args) {
