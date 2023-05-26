@@ -539,17 +539,23 @@ public class Controller extends Application {
         Label ZombieImg = new Label();
         Label CurrentHp = new Label();
         Label characterOverlay = new Label();
+        Label remChars = new Label();
+        Label target = new Label();
+        Label gridBackground = new Label();
+
         characterOverlay.setGraphic(new ImageView(
                 new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth) / 1920) * 750,
                         ((screenWidth) / 1920) * 320, false, false)));
-        Label remChars = new Label();
         remChars.setGraphic(new ImageView(
                 new Image("file:src/views/imgs/characterOverlay.png", ((screenWidth) / 1920) * 750,
                         ((screenWidth) / 1920) * 320, false, false)));
-        Label target = new Label();
         target.setGraphic(new ImageView(
                 new Image("file:src/views/imgs/target.png", ((screenWidth) / 1920) * 300,
                         ((screenWidth) / 1920) * 300, false, false)));
+        gridBackground.setGraphic(new ImageView(
+                new Image("file:src/views/imgs/gridBackground.png", (screenHeight * 0.9) + 60,
+                        (screenHeight * 0.9) + 60, false, false)));
+
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
 
@@ -619,10 +625,11 @@ public class Controller extends Application {
         // adding all groups to the root stackpane
         root.getChildren().addAll(characterOverlay, remChars, target, mainPlayerStats, HeroImg, ZombieImg,
                 zombieHealthBar, healthBar,
-                Heroes);
+                Heroes, gridBackground);
         root.getChildren().add(game);
         game.setAlignment(Pos.CENTER);
         game.setTranslateX(-screenWidth / 5);
+        gridBackground.setTranslateX(-screenWidth / 5);
 
         // alignment things
         mainPlayerStats.setTranslateX(screenWidth / 3);
