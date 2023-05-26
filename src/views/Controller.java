@@ -553,8 +553,8 @@ public class Controller extends Application {
                 new Image("file:src/views/imgs/target.png", ((screenWidth) / 1920) * 300,
                         ((screenWidth) / 1920) * 300, false, false)));
         gridBackground.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/gridBackground.png", (screenHeight * 0.9) + 60,
-                        (screenHeight * 0.9) + 60, false, false)));
+                new Image("file:src/views/imgs/gridBackground.png", (screenHeight * 0.9) + (60)*(screenWidth/1920),
+                        (screenHeight * 0.9) + (60)*(screenWidth/1920), false, false)));
 
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
@@ -1070,6 +1070,7 @@ public class Controller extends Application {
                     zombieHpGreen.setWidth(0);
                     ZombieImg.setGraphic(null);
                     HeroImg.setGraphic(null);
+                    updateRemainingHeroes(Heroes);
                 } catch (InvalidTargetException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
