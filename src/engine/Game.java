@@ -162,55 +162,35 @@ public class Game {
     }
 
     public static boolean checkWin() {
-        if (heroes.size() < 5) {
-            return false;
-        }
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                Cell currentCell = Game.map[i][j];
-                if (currentCell instanceof CollectibleCell) {
-                    if (((CollectibleCell) currentCell).getCollectible() instanceof Vaccine) {
-                        return false;
-                    }
-                }
+        int remainingVaccines = 0;
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] instanceof CollectibleCell
+                        && ((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine)
+                    remainingVaccines++;
             }
         }
-        for (int i = 0; i < Game.heroes.size(); i++) {
-            Hero hero = Game.heroes.get(i);
-            ArrayList<Vaccine> vaccineInventory = hero.getVaccineInventory();
-            if (vaccineInventory.size() != 0) {
-                return false;
-            }
+        for (Hero hero : heroes) {
+            remainingVaccines += hero.getVaccineInventory().size();
         }
-        return true;
+        return heroes.size() >= 5 && remainingVaccines == 0;
     }
 
     public static boolean checkGameOver() {
-        if (checkWin()) {
-            return true;
-        }
-        if (heroes.isEmpty()) {
-            return true;
-        }
-        int vaccines = 0;
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (map[i][j] instanceof CollectibleCell) {
-                    if (((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine) {
-                        vaccines++;
-                    }
+        if (heroes.size() > 0) {
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    if (map[i][j] instanceof CollectibleCell
+                            && ((CollectibleCell) map[i][j]).getCollectible() instanceof Vaccine)
+                        return false;
                 }
             }
+            for (Hero hero : heroes) {
+                if (hero.getVaccineInventory().size() > 0)
+                    return false;
+            }
         }
-        for (int i = 0; i < heroes.size(); i++) {
-            Hero h = heroes.get(i);
-            vaccines += h.getVaccineInventory().size();
-        }
-        if (heroes.size() < 5 && (availableHeroes.isEmpty() || vaccines == 0)) {
-            return true;
-        }
-        // return (vaccines + heroes.size()) < 5;
-        return false;
+        return true;
     }
 
     public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {

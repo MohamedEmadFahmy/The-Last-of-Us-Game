@@ -50,6 +50,6 @@
 } */
 #grid{
     -fx-border-color:rgb(114, 97, 0);
-    -fx-border-width: 8px;
-    -fx-border-radius: 4px;
+    -fx-border-width: 14px;
+    -fx-border-radius: 8px;
 }

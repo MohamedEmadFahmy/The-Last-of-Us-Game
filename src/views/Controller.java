@@ -1,6 +1,7 @@
 package views;
 
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.shape.Rectangle;
 import engine.Game;
 import exceptions.InvalidTargetException;
@@ -15,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -57,7 +59,7 @@ public class Controller extends Application {
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
     static Media attackSound = new Media(new File("src/views/sounds/attackSound.mp3").toURI().toString());
     static Media healSound = new Media(new File("src/views/sounds/healSound.mp3").toURI().toString());
-    static Media vaccineSound = new Media(new File("src/views/sounds/vaccineSound_1.mp3").toURI().toString());
+    static Media vaccineSound = new Media(new File("src/views/sounds/vaccineSound_0.mp3").toURI().toString());
     static Media explorerSound = new Media(new File("src/views/sounds/explorerSound.mp3").toURI().toString());
     static Media fighterSound = new Media(new File("src/views/sounds/fighterSound.mp3").toURI().toString());
     static Media deathSound = new Media(new File("src/views/sounds/deathSound.mp3").toURI().toString());
@@ -89,13 +91,17 @@ public class Controller extends Application {
         primaryStage.getIcons().add(new Image("file:src/views/imgs/icon.jpg"));
         primaryStage.setTitle("The Last Of Us Legacy");
         Scene scene = new Scene(temp, screenHeight, screenWidth);
+
+        Image image = new Image("file:src/views/imgs/cursor.png"); // pass in the image path
+        scene.setCursor(new ImageCursor(image));
+
         primaryStage.setScene(scene);
         switchToMainMenu(primaryStage);
     }
 
     private void play(Media media) {
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(0.3);
+        mediaPlayer.setVolume(0.15);
         mediaPlayer.play();
     }
 
@@ -195,6 +201,7 @@ public class Controller extends Application {
         exitGameBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
+                play(click);
                 primaryStage.close();
             }
         });
@@ -380,6 +387,7 @@ public class Controller extends Application {
         leftSel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
+                play(click);
                 if (index > 1) {
                     updateLabels(Name, Class, Hp, ActionPoints, Damage, current, --index);
                     updateImages(index, rightChar, middleChar, leftChar, imageArray);
@@ -401,6 +409,7 @@ public class Controller extends Application {
         rightSel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
+                play(click);
                 if (index < 6) {
                     updateImages(++index, rightChar, middleChar, leftChar, imageArray);
                     updateLabels(Name, Class, Hp, ActionPoints, Damage, current, index);
@@ -422,12 +431,14 @@ public class Controller extends Application {
         Continue.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                play(click);
                 switchToTutorial(primaryStage, current.get(index));
             }
         });
         backToMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                play(click);
                 index = 1;
                 switchToMainMenu(primaryStage);
             }
@@ -473,6 +484,7 @@ public class Controller extends Application {
         Continue.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                play(click);
                 switchToGame(primaryStage, h);
             }
         });
@@ -749,7 +761,6 @@ public class Controller extends Application {
                         direction = Direction.RIGHT;
                         break;
                     case V:
-
                         try {
                             currentHero.setTarget(currentTarget);
                             currentHero.cure();
@@ -767,6 +778,8 @@ public class Controller extends Application {
                             zombieHpGreen.setWidth(0);
                             ZombieHp.setText("");
                             play(vaccineSound);
+                            ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/"
+                                    + currentHero.getMaxActions());
                         } catch (InvalidTargetException ex) {
                             System.out.println("You have to select a valid zombie");
                             // System.out.println(currentHero.getLocation());
@@ -1031,6 +1044,7 @@ public class Controller extends Application {
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub
                 try {
+                    play(click);
                     Game.endTurn();
                     updateUI(game);
                     currentHero = null;
@@ -1475,12 +1489,12 @@ public class Controller extends Application {
         newGameBtn.setTranslateX(screenWidth / 25);
         root.setBottom(newGameBtn);
 
-        Button quitToMenue = new Button("QUIT GAME");
-        ScaleTransition st2 = new ScaleTransition(Duration.millis(30), quitToMenue);
-        quitToMenue.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        Button quitToMenu = new Button("QUIT GAME");
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(30), quitToMenu);
+        quitToMenu.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                quitToMenue.getStyleClass().add("redhover");
+                quitToMenu.getStyleClass().add("redhover");
                 st2.setToX(1.05);
                 st2.setToY(1.05);
                 st2.playFromStart();
@@ -1488,19 +1502,20 @@ public class Controller extends Application {
             }
         });
 
-        quitToMenue.setOnMouseExited(new EventHandler<MouseEvent>() {
+        quitToMenu.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                quitToMenue.getStyleClass().remove("redhover");
+                quitToMenu.getStyleClass().remove("redhover");
                 st2.setToX(1);
                 st2.setToY(1);
                 st2.playFromStart();
             }
         });
-        quitToMenue.setOnAction(new EventHandler<ActionEvent>() {
+        quitToMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 try {
+                    play(click);
                     primaryStage.close();
                 } catch (Exception e) {
                     System.out.print("something went wrong.");
@@ -1508,9 +1523,9 @@ public class Controller extends Application {
             }
         });
 
-        quitToMenue.setTranslateY(screenHeight - (screenHeight / 5));
-        quitToMenue.setTranslateX(screenWidth / 27);
-        root.setTop(quitToMenue);
+        quitToMenu.setTranslateY(screenHeight - (screenHeight / 5));
+        quitToMenu.setTranslateX(screenWidth / 27);
+        root.setTop(quitToMenu);
 
         root.setBackground(null);
         primaryStage.setScene(scene);
