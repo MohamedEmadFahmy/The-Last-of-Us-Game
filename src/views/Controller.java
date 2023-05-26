@@ -553,8 +553,8 @@ public class Controller extends Application {
                 new Image("file:src/views/imgs/target.png", ((screenWidth) / 1920) * 300,
                         ((screenWidth) / 1920) * 300, false, false)));
         gridBackground.setGraphic(new ImageView(
-                new Image("file:src/views/imgs/gridBackground.png", (screenHeight * 0.9) + (60)*(screenWidth/1920),
-                        (screenHeight * 0.9) + (60)*(screenWidth/1920), false, false)));
+                new Image("file:src/views/imgs/gridBackground.png", (screenHeight * 0.9) + (60) * (screenWidth / 1920),
+                        (screenHeight * 0.9) + (60) * (screenWidth / 1920), false, false)));
 
         // initialize remaining heroes stuff
         HBox Heroes = new HBox(20);
@@ -1005,6 +1005,8 @@ public class Controller extends Application {
                                     new Image("file:src/views/imgs/trap.png", (screenHeight * 0.9 / 15) * (0.6 / 0.64),
                                             (screenHeight * 0.9 / 15) * (0.6 / 0.64), false, false));
 
+                            displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
+                                    "You entered a trap cell!");
                             stackpane.getChildren().add(stackpane.getChildren().size() - 2, trap);
                             PauseTransition wait = new PauseTransition(Duration.seconds(1));
                             wait.setOnFinished((e2) -> trap.setVisible(false));
