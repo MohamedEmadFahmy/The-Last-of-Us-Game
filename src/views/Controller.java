@@ -1488,13 +1488,15 @@ public class Controller extends Application {
     public void displayAlert(StackPane root, GridPane game, int x, int y, String message) {
 
         StackPane messageBox = new StackPane();
+
         Text messageText = new Text("");
         messageText.setId("messageText");
+
         messageText.setTranslateX(20);
         messageText.setTranslateY(20);
         messageText.setWrappingWidth(260);
         messageText.setFill(Color.RED);
-        // messageText.setTextAlignment(TextAlignment.CENTER);
+        messageText.setTextAlignment(TextAlignment.CENTER);
         ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
                 300, 128, false, false));
         messageBox.getChildren().addAll(messageImage, messageText);
@@ -1504,8 +1506,15 @@ public class Controller extends Application {
 
         int shift = (int) (90 * (screenWidth / 1920));
 
-        double paneMinX = boundsInScreen.getMinX() + shift;
-        double paneMinY = boundsInScreen.getMinY() - shift;
+        double paneMinX;
+        double paneMinY;
+        if (boundsInScreen.getMinX() > (screenWidth / 1920) * 607) {
+            paneMinX = (boundsInScreen.getMinX() - (screenWidth / 1920) * (607 - 172)) + shift;
+            paneMinY = boundsInScreen.getMinY() - shift;
+        } else {
+            paneMinX = boundsInScreen.getMinX() + shift;
+            paneMinY = boundsInScreen.getMinY() - shift;
+        }
 
         root.getChildren().add(root.getChildren().size(), messageBox);
 

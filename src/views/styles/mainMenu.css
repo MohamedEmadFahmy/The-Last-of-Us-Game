@@ -40,5 +40,5 @@
 #messageText {
     -fx-font-size: 30px;
     -fx-font-weight: 900;
-    -fx-text-alignment: center;
+    /* -fx-text-alignment: center; */
 }
