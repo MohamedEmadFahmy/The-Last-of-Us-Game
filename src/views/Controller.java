@@ -637,6 +637,13 @@ public class Controller extends Application {
         healthBar.setTranslateY(-screenHeight * 0.23);
         zombieHealthBar.setTranslateY(screenHeight * 0.44);
 
+        // end turn button
+        Button endTurnButton = new Button("END TURN");
+        endTurnButton.setTranslateX(screenWidth / 2.5);
+        endTurnButton.setTranslateY(screenHeight * 0.4);
+        endTurnButton.setId("endTurn");
+        endTurnButton.addEventFilter(KeyEvent.ANY, Event::consume);
+
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
 
             @Override
@@ -1001,6 +1008,8 @@ public class Controller extends Application {
                 }
                 updateRemainingHeroes(Heroes);
                 if (Game.checkGameOver()) {
+                    root.setOnKeyPressed(null);
+                    endTurnButton.setOnAction(null);
                     PauseTransition wait = new PauseTransition(Duration.seconds(3));
                     wait.setOnFinished((pauseEvent) -> {
                         switchToGameEnd(primaryStage);
@@ -1014,12 +1023,7 @@ public class Controller extends Application {
             }
         };
 
-        Button endGameButton = new Button("END TURN");
-        endGameButton.setTranslateX(screenWidth / 2.5);
-        endGameButton.setTranslateY(screenHeight * 0.4);
-        endGameButton.setId("endTurn");
-        endGameButton.addEventFilter(KeyEvent.ANY, Event::consume);
-        endGameButton.setOnAction(new EventHandler<ActionEvent>() {
+        endTurnButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent arg0) {
@@ -1051,6 +1055,8 @@ public class Controller extends Application {
                     e.printStackTrace();
                 }
                 if (Game.checkGameOver()) {
+                    root.setOnKeyPressed(null);
+                    endTurnButton.setOnAction(null);
                     PauseTransition wait = new PauseTransition(Duration.seconds(3));
                     wait.setOnFinished((pauseEvent) -> {
                         switchToGameEnd(primaryStage);
@@ -1064,28 +1070,28 @@ public class Controller extends Application {
             }
         });
 
-        ScaleTransition stEndGame = new ScaleTransition(Duration.millis(30), endGameButton);
-        endGameButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        ScaleTransition stEndTurn = new ScaleTransition(Duration.millis(30), endTurnButton);
+        endTurnButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                endGameButton.getStyleClass().add("hover");
-                stEndGame.setToX(1.05);
-                stEndGame.setToY(1.05);
-                stEndGame.playFromStart();
+                endTurnButton.getStyleClass().add("hover");
+                stEndTurn.setToX(1.05);
+                stEndTurn.setToY(1.05);
+                stEndTurn.playFromStart();
                 play(hover);
             }
         });
 
-        endGameButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+        endTurnButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                endGameButton.getStyleClass().remove("hover");
-                stEndGame.setToX(1);
-                stEndGame.setToY(1);
-                stEndGame.playFromStart();
+                endTurnButton.getStyleClass().remove("hover");
+                stEndTurn.setToX(1);
+                stEndTurn.setToY(1);
+                stEndTurn.playFromStart();
             }
         });
-        root.getChildren().add(endGameButton);
+        root.getChildren().add(endTurnButton);
 
         root.setOnKeyPressed(keyboardHandler);
         scene.setRoot(root);
@@ -1417,7 +1423,7 @@ public class Controller extends Application {
         if (Game.checkWin()) {
             ImagePattern pattern = new ImagePattern(new Image("/views/imgs/victoryScreen.png"));
             scene.setFill(pattern);
-        } else {
+        } else if (!Game.checkWin()) {
             ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/defeatScreen.png"));
             scene.setFill(pattern2);
         }
