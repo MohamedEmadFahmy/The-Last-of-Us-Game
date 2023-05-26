@@ -40,7 +40,10 @@
 #messageText {
     -fx-font-size: 30px;
     -fx-font-weight: 900;
-    /* -fx-text-alignment: center; */
+    -fx-text-alignment: center;
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 0.7px;
 }
 #messageBox {
     -fx-background-color: green;
