@@ -42,3 +42,6 @@
     -fx-font-weight: 900;
     /* -fx-text-alignment: center; */
 }
+#messageBox {
+    -fx-background-color: green;
+}

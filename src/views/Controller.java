@@ -462,7 +462,7 @@ public class Controller extends Application {
         StackPane root = new StackPane();
         Scene scene = primaryStage.getScene();
         scene.setRoot(root);
-        ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/howtoplay.png"));
+        ImagePattern pattern2 = new ImagePattern(new Image("file:src/views/imgs/howtoplay.png"));
         scene.setFill(pattern2);
         Button Continue = new Button("CONTINUE");
         root.getChildren().add(Continue);
@@ -1511,12 +1511,11 @@ public class Controller extends Application {
     public void displayAlert(StackPane root, GridPane game, int x, int y, String message) {
 
         StackPane messageBox = new StackPane();
+        messageBox.setId("messageBox");
+        messageBox.setMaxSize(300, 128);
 
         Text messageText = new Text("");
         messageText.setId("messageText");
-
-        messageText.setTranslateX(20);
-        messageText.setTranslateY(20);
         messageText.setWrappingWidth(260);
         messageText.setFill(Color.RED);
         ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
@@ -1534,7 +1533,8 @@ public class Controller extends Application {
         double paneMinX;
         double paneMinY;
         if (boundsInScreen.getMinX() > (screenWidth / 1920) * 607) {
-            paneMinX = (boundsInScreen.getMinX() - (screenWidth / 1920) * (607 - 172)) + shift;
+            paneMinX = (boundsInScreen.getMinX() - (screenWidth / 1920) * (607 - 172)) +
+                    shift;
             paneMinY = boundsInScreen.getMinY() - shift;
         } else {
             paneMinX = boundsInScreen.getMinX() + shift;
@@ -1543,7 +1543,7 @@ public class Controller extends Application {
 
         root.getChildren().add(root.getChildren().size(), messageBox);
 
-        messageBox.setAlignment(Pos.TOP_LEFT);
+        StackPane.setAlignment(messageBox, Pos.TOP_LEFT);
         messageBox.setTranslateX(paneMinX);
         messageBox.setTranslateY(Math.max(paneMinY, 100));
 
