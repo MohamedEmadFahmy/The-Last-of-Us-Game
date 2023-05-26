@@ -76,7 +76,7 @@ public class Controller extends Application {
             null, null, null, null));
     Font font = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/The Bomb Sound.ttf"), 40);
     Font font2 = Font.loadFont(this.getClass().getResourceAsStream("/views/fonts/Aka-AcidGR-Compacta.ttf"), 40);
-    static StackPane messageBox = new StackPane();
+    static ArrayList<StackPane> messages = new ArrayList<StackPane>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -505,6 +505,7 @@ public class Controller extends Application {
         currentTarget = null;
         StackPane root = new StackPane();
         GridPane game = new GridPane();
+        game.setId("grid");
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
 
@@ -1510,7 +1511,11 @@ public class Controller extends Application {
     }
 
     public void displayAlert(StackPane root, GridPane game, int x, int y, String message) {
+        if (messages.size() > 0) {
+            root.getChildren().remove(messages.remove(0));
+        }
 
+        StackPane messageBox = new StackPane();
         messageBox.setId("messageBox");
         messageBox.setMaxSize(300, 128);
 
@@ -1520,6 +1525,7 @@ public class Controller extends Application {
         ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
                 300, 128, false, false));
         messageBox.getChildren().addAll(messageImage, messageText);
+        messages.add(messageBox);
 
         StackPane currentStackPane = (StackPane) game.getChildren().get((x) * 15 + y);
         Bounds boundsInScreen = currentStackPane.localToScreen(currentStackPane.getBoundsInLocal());
@@ -1529,14 +1535,6 @@ public class Controller extends Application {
 
         int shift = (int) (90 * (screenWidth / 1920));
 
-        if (root.getChildren().contains(messageBox)) {
-            root.getChildren().remove(messageBox);
-            // PauseTransition wait = new PauseTransition(Duration.seconds(1));
-            // wait.setOnFinished((pauseEvent) -> {
-            // displayAlert(root, game, x, y, message);
-            // });
-            // wait.play();
-        }
         double paneMinX;
         double paneMinY;
         if (boundsInScreen.getMinX() > (screenWidth / 1920) * 607) {
@@ -1556,11 +1554,13 @@ public class Controller extends Application {
 
         ((Text) messageBox.getChildren().get(1)).setText(message);
 
-        PauseTransition wait = new PauseTransition(Duration.seconds(3));
-        // System.out.println(root.getChildren());
+        PauseTransition wait = new PauseTransition(Duration.seconds(1));
         wait.setOnFinished((pauseEvent) -> {
-            root.getChildren().remove(messageBox);
-            // System.out.println(root.getChildren());
+            if (root.getChildren().contains(messageBox)) {
+                messages.remove(messageBox);
+                root.getChildren().remove(messageBox);
+            }
+
         });
         wait.play();
     }
