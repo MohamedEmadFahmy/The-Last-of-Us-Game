@@ -206,7 +206,6 @@ public class Controller extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
     public void switchToCharacterSelect(Stage primaryStage) {
         index = 1;
         try {
@@ -421,7 +420,7 @@ public class Controller extends Application {
         Continue.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                switchToGame(primaryStage, current.get(index));
+                switchToTutorial(primaryStage, current.get(index));
             }
         });
         backToMenu.setOnAction(new EventHandler<ActionEvent>() {
@@ -458,6 +457,47 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
+    public void switchToTutorial(Stage primaryStage,Hero h) {
+        StackPane root = new StackPane();
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(root);
+        ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/howtoplay.png"));
+        scene.setFill(pattern2);
+        Button Continue = new Button("CONTINUE");
+        root.getChildren().add(Continue);
+        Continue.setTranslateY(screenHeight * 0.40);
+        Continue.setTranslateX(screenWidth * 0.40);
+        ScaleTransition stC = new ScaleTransition(Duration.millis(30), Continue);
+        Continue.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                switchToGame(primaryStage,h);
+            }
+        });
+        Continue.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Continue.getStyleClass().add("hover");
+                stC.setToX(1.05);
+                stC.setToY(1.05);
+                stC.playFromStart();
+                play(hover);
+            }
+        });
+
+        Continue.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Continue.getStyleClass().remove("hover");
+                stC.setToX(1);
+                stC.setToY(1);
+                stC.playFromStart();
+            }
+        });
+        root.setBackground(null);
+        primaryStage.show();
+    }
+
     public void switchToGame(Stage primaryStage, Hero h) {
         currentHero = null;
         currentTarget = null;
@@ -465,6 +505,10 @@ public class Controller extends Application {
         GridPane game = new GridPane();
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
+
+        Scene scene = primaryStage.getScene();
+        ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/characterSelect.jpg"));
+        scene.setFill(pattern2);
 
         Game.startGame(h);
         Game.printBoard();
@@ -1061,8 +1105,6 @@ public class Controller extends Application {
         });
         root.getChildren().add(endGameButton);
 
-        Scene scene = primaryStage
-                .getScene();
         root.setOnKeyPressed(keyboardHandler);
         scene.setRoot(root);
         root.setBackground(null);
@@ -1494,7 +1536,6 @@ public class Controller extends Application {
         messageText.setTranslateY(20);
         messageText.setWrappingWidth(260);
         messageText.setFill(Color.RED);
-        // messageText.setTextAlignment(TextAlignment.CENTER);
         ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
                 300, 128, false, false));
         messageBox.getChildren().addAll(messageImage, messageText);
@@ -1502,10 +1543,21 @@ public class Controller extends Application {
         StackPane currentStackPane = (StackPane) game.getChildren().get((x) * 15 + y);
         Bounds boundsInScreen = currentStackPane.localToScreen(currentStackPane.getBoundsInLocal());
 
+        System.out.println(boundsInScreen.getMinX());
+        System.out.println(boundsInScreen.getMinY());
+
         int shift = (int) (90 * (screenWidth / 1920));
 
-        double paneMinX = boundsInScreen.getMinX() + shift;
-        double paneMinY = boundsInScreen.getMinY() - shift;
+        double paneMinX;
+        double paneMinY;
+        if (boundsInScreen.getMinX() > (screenWidth/1920) * 607) {
+            paneMinX = (boundsInScreen.getMinX() - (screenWidth/1920) * (607-172)) + shift;
+            paneMinY = boundsInScreen.getMinY() - shift;
+        }
+        else {
+            paneMinX = boundsInScreen.getMinX() + shift;
+            paneMinY = boundsInScreen.getMinY() - shift;
+        }
 
         root.getChildren().add(root.getChildren().size(), messageBox);
 
@@ -1521,7 +1573,6 @@ public class Controller extends Application {
         });
         wait.play();
     }
-
     public static void main(String[] args) {
         launch(args);
     }
