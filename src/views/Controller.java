@@ -421,7 +421,7 @@ public class Controller extends Application {
         Continue.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                switchToGame(primaryStage, current.get(index));
+                switchToTutorial(primaryStage, current.get(index));
             }
         });
         backToMenu.setOnAction(new EventHandler<ActionEvent>() {
@@ -458,6 +458,47 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
+    public void switchToTutorial(Stage primaryStage, Hero h) {
+        StackPane root = new StackPane();
+        Scene scene = primaryStage.getScene();
+        scene.setRoot(root);
+        ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/howtoplay.png"));
+        scene.setFill(pattern2);
+        Button Continue = new Button("CONTINUE");
+        root.getChildren().add(Continue);
+        Continue.setTranslateY(screenHeight * 0.40);
+        Continue.setTranslateX(screenWidth * 0.40);
+        ScaleTransition stC = new ScaleTransition(Duration.millis(30), Continue);
+        Continue.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                switchToGame(primaryStage, h);
+            }
+        });
+        Continue.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Continue.getStyleClass().add("hover");
+                stC.setToX(1.05);
+                stC.setToY(1.05);
+                stC.playFromStart();
+                play(hover);
+            }
+        });
+
+        Continue.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Continue.getStyleClass().remove("hover");
+                stC.setToX(1);
+                stC.setToY(1);
+                stC.playFromStart();
+            }
+        });
+        root.setBackground(null);
+        primaryStage.show();
+    }
+
     public void switchToGame(Stage primaryStage, Hero h) {
         currentHero = null;
         currentTarget = null;
@@ -465,6 +506,10 @@ public class Controller extends Application {
         GridPane game = new GridPane();
         game.setMaxSize(screenHeight * 0.9, screenHeight * 0.9);
         game.setPrefSize(screenHeight * 0.9, screenHeight * 0.9);
+
+        Scene scene = primaryStage.getScene();
+        ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/characterSelect.jpg"));
+        scene.setFill(pattern2);
 
         Game.startGame(h);
         Game.printBoard();
@@ -474,9 +519,8 @@ public class Controller extends Application {
         Label Class = new Label();
         Label ActionPoints = new Label();
         Label Damage = new Label();
-        Label VaccinesLeft = new Label();
-        Label Special = new Label();
-        Label SuppliesLeft = new Label();
+        HBox VaccinesLeft = new HBox();
+        HBox SuppliesLeft = new HBox();
         Label HeroImg = new Label();
         Label ZombieImg = new Label();
         Label CurrentHp = new Label();
@@ -548,7 +592,7 @@ public class Controller extends Application {
 
         // group for main player stats
         Group mainPlayerStats = new Group();
-        mainPlayerStats.getChildren().addAll(Name, Class, ActionPoints, Damage, VaccinesLeft, Special, SuppliesLeft);
+        mainPlayerStats.getChildren().addAll(Name, Class, ActionPoints, Damage, VaccinesLeft, SuppliesLeft);
 
         // group for health bar for main player
         Group healthBar = new Group();
@@ -580,14 +624,13 @@ public class Controller extends Application {
         target.setTranslateY(screenHeight * 0.34);
         Heroes.setTranslateY(screenHeight * 0.43);
         characterOverlay.setTranslateY(-screenHeight * 0.32);
-        mainPlayerStats.setTranslateY(-screenHeight * 0.35);
+        mainPlayerStats.setTranslateY(-screenHeight * 0.33);
         Name.setTranslateY(-screenHeight * 0.44);
         Class.setTranslateY(-screenHeight * 0.41);
         ActionPoints.setTranslateY(-screenHeight * 0.38);
         Damage.setTranslateY(-screenHeight * 0.35);
         VaccinesLeft.setTranslateY(-screenHeight * 0.32);
-        Special.setTranslateY(-screenHeight * 0.29);
-        SuppliesLeft.setTranslateY(-screenHeight * 0.26);
+        SuppliesLeft.setTranslateY(-screenHeight * 0.27);
         HeroImg.setTranslateY(-screenHeight * 0.35);
         ZombieImg.setTranslateY(screenHeight * 0.32);
         healthBar.setTranslateY(-screenHeight * 0.23);
@@ -659,16 +702,13 @@ public class Controller extends Application {
                             ActionPoints.setText("Actions Available: " + currentHero.getActionsAvailable() + "/"
                                     + currentHero.getMaxActions());
                             Damage.setText("Attack Damage: " + currentHero.getAttackDmg());
-                            VaccinesLeft.setText("Vaccines Left: " + currentHero.getVaccineInventory().size() + " / 5");
-                            SuppliesLeft.setText("Supplies Left: " + currentHero.getSupplyInventory().size() + " / 5");
-                            Special.setText(("Special: ")
-                                    + ((Hero) ((CharacterCell) Game.map[row][col]).getCharacter()).isSpecialAction());
                             HeroImg.setGraphic(new ImageView(
                                     new Image("file:src/views/imgs/" + currentHero.getName() + ".png",
                                             screenHeight * 0.2,
                                             screenHeight * 0.2, false, false)));
 
                             updateRemainingHeroes(Heroes);
+                            updateSupplyVaccine(SuppliesLeft, VaccinesLeft);
                         }
                     }
 
@@ -711,8 +751,7 @@ public class Controller extends Application {
                                     currentHero.getLocation().x, currentHero.getLocation().y, game);
                             System.out.println(
                                     "Cure @ " + currentHero.getLocation() + " & " + currentTarget.getLocation());
-                            VaccinesLeft.setText("Vaccines Left: "
-                                    + ((Hero) currentHero).getVaccineInventory().size() + " / 5");
+                            updateSupplyVaccine(SuppliesLeft, VaccinesLeft);
                             currentTarget = null;
                             ZombieImg.setGraphic(null);
                             zombieHpRed.setWidth(0);
@@ -747,9 +786,7 @@ public class Controller extends Application {
                                         (((double) currentHero.getCurrentHp() / (double) currentHero.getMaxHp())
                                                 * screenHeight) * 0.2);
                                 CurrentHp.setText(" +" + currentHero.getCurrentHp());
-                                SuppliesLeft.setText("Supplies Left: "
-                                        + currentHero.getSupplyInventory().size() + " / 5");
-                                Special.setText("Special: True");
+                                updateSupplyVaccine(SuppliesLeft, VaccinesLeft);
                                 ZombieImg.setGraphic(new ImageView(
                                         new Image("file:src/views/imgs/" + currentTarget.getName() + ".png",
                                                 screenHeight * 0.2,
@@ -760,8 +797,6 @@ public class Controller extends Application {
                                         (((double) currentTarget.getCurrentHp() / (double) currentTarget.getMaxHp())
                                                 * screenHeight) * 0.2);
                                 ZombieHp.setText(" +" + currentTarget.getCurrentHp());
-                                // animation
-                                // Special.setText("Special: False");
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                                 displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
@@ -778,15 +813,13 @@ public class Controller extends Application {
                         } else {
                             try {
                                 currentHero.useSpecial();
-                                Special.setText("Special: True");
                                 if (currentHero instanceof Explorer) {
                                     updateUI(game);
                                     play(explorerSound);
                                 } else {
                                     play(fighterSound);
                                 }
-                                SuppliesLeft.setText("Supplies Left: "
-                                        + ((Hero) currentHero).getSupplyInventory().size() + " / 5");
+                                updateSupplyVaccine(SuppliesLeft, VaccinesLeft);
                             } catch (InvalidTargetException ex) {
                                 System.out.println("Target Out of range");
                                 displayAlert(root, game, currentHero.getLocation().x, currentHero.getLocation().y,
@@ -844,9 +877,8 @@ public class Controller extends Application {
                                 CurrentHp.setText("");
                                 ActionPoints.setText("");
                                 Damage.setText("");
-                                VaccinesLeft.setText("");
-                                Special.setText("");
-                                SuppliesLeft.setText("");
+                                VaccinesLeft.getChildren().clear();
+                                SuppliesLeft.getChildren().clear();
                                 HeroImg.setGraphic(null);
                                 ZombieImg.setGraphic(null);
                                 ZombieHp.setText("");
@@ -918,9 +950,8 @@ public class Controller extends Application {
                             CurrentHp.setText("");
                             ActionPoints.setText("");
                             Damage.setText("");
-                            VaccinesLeft.setText("");
-                            Special.setText("");
-                            SuppliesLeft.setText("");
+                            VaccinesLeft.getChildren().clear();
+                            SuppliesLeft.getChildren().clear();
                             currentHero = null;
                             currentTarget = null;
                             StackPane stackpane = (StackPane) game.getChildren().get((x) * 15 + y);
@@ -935,12 +966,7 @@ public class Controller extends Application {
                                     + currentHero.getActionsAvailable()
                                     + "/"
                                     + currentHero.getMaxActions());
-                            VaccinesLeft.setText("Vaccines Left: "
-                                    + currentHero.getVaccineInventory().size()
-                                    + " / 5");
-                            SuppliesLeft.setText("Supplies Left: "
-                                    + currentHero.getSupplyInventory().size()
-                                    + " / 5");
+                            updateSupplyVaccine(SuppliesLeft, VaccinesLeft);
                         }
                         updateMoveUI(currentHero.getLocation().x, currentHero.getLocation().y, x, y, game);
                         if (isTrap) {
@@ -949,7 +975,7 @@ public class Controller extends Application {
                                     new Image("file:src/views/imgs/trap.png", (screenHeight * 0.9 / 15) * (0.6 / 0.64),
                                             (screenHeight * 0.9 / 15) * (0.6 / 0.64), false, false));
 
-                            stackpane.getChildren().add(trap);
+                            stackpane.getChildren().add(stackpane.getChildren().size() - 2, trap);
                             PauseTransition wait = new PauseTransition(Duration.seconds(1));
                             wait.setOnFinished((e2) -> trap.setVisible(false));
                             wait.play();
@@ -1009,9 +1035,8 @@ public class Controller extends Application {
                     CurrentHp.setText("");
                     ActionPoints.setText("");
                     Damage.setText("");
-                    VaccinesLeft.setText("");
-                    Special.setText("");
-                    SuppliesLeft.setText("");
+                    VaccinesLeft.getChildren().clear();
+                    SuppliesLeft.getChildren().clear();
                     ZombieHp.setText("");
                     zombieHpRed.setWidth(0);
                     zombieHpGreen.setWidth(0);
@@ -1061,8 +1086,6 @@ public class Controller extends Application {
         });
         root.getChildren().add(endGameButton);
 
-        Scene scene = primaryStage
-                .getScene();
         root.setOnKeyPressed(keyboardHandler);
         scene.setRoot(root);
         root.setBackground(null);
@@ -1496,13 +1519,15 @@ public class Controller extends Application {
         messageText.setTranslateY(20);
         messageText.setWrappingWidth(260);
         messageText.setFill(Color.RED);
-        messageText.setTextAlignment(TextAlignment.CENTER);
         ImageView messageImage = new ImageView(new Image("file:src/views/imgs/characterOverlay2.png",
                 300, 128, false, false));
         messageBox.getChildren().addAll(messageImage, messageText);
 
         StackPane currentStackPane = (StackPane) game.getChildren().get((x) * 15 + y);
         Bounds boundsInScreen = currentStackPane.localToScreen(currentStackPane.getBoundsInLocal());
+
+        System.out.println(boundsInScreen.getMinX());
+        System.out.println(boundsInScreen.getMinY());
 
         int shift = (int) (90 * (screenWidth / 1920));
 
@@ -1533,5 +1558,23 @@ public class Controller extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void updateSupplyVaccine(HBox supply, HBox vaccine) {
+        supply.getChildren().clear();
+        vaccine.getChildren().clear();
+
+        for (int i = 0; i < currentHero.getSupplyInventory().size(); i++) {
+            Label Supply = new Label();
+            Supply.setGraphic(
+                    new ImageView(new Image("file:src/views/imgs/supply.png", 48, 48, false, false)));
+            supply.getChildren().add(Supply);
+        }
+        for (int j = 0; j < currentHero.getVaccineInventory().size(); j++) {
+            Label Supply = new Label();
+            Supply.setGraphic(
+                    new ImageView(new Image("file:src/views/imgs/vaccine.png", 48, 48, false, false)));
+            vaccine.getChildren().add(Supply);
+        }
     }
 }
