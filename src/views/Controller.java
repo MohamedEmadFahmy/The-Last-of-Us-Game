@@ -57,6 +57,7 @@ public class Controller extends Application {
     static Media main = new Media(new File("src/views/sounds/maintheme.mp3").toURI().toString());
     static Media attackSound = new Media(new File("src/views/sounds/attackSound.mp3").toURI().toString());
     static Media healSound = new Media(new File("src/views/sounds/healSound.mp3").toURI().toString());
+    static Media vaccineSound = new Media(new File("src/views/sounds/vaccineSound_1.mp3").toURI().toString());
     static Media explorerSound = new Media(new File("src/views/sounds/explorerSound.mp3").toURI().toString());
     static Media fighterSound = new Media(new File("src/views/sounds/fighterSound.mp3").toURI().toString());
     static Media deathSound = new Media(new File("src/views/sounds/deathSound.mp3").toURI().toString());
@@ -765,6 +766,7 @@ public class Controller extends Application {
                             zombieHpRed.setWidth(0);
                             zombieHpGreen.setWidth(0);
                             ZombieHp.setText("");
+                            play(vaccineSound);
                         } catch (InvalidTargetException ex) {
                             System.out.println("You have to select a valid zombie");
                             // System.out.println(currentHero.getLocation());
