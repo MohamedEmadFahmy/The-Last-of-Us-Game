@@ -1419,7 +1419,7 @@ public class Controller extends Application {
             ImagePattern pattern = new ImagePattern(new Image("/views/imgs/victoryScreen.png"));
             scene.setFill(pattern);
         } else {
-            ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/defeatScreen.jpg"));
+            ImagePattern pattern2 = new ImagePattern(new Image("/views/imgs/defeatScreen.png"));
             scene.setFill(pattern2);
         }
         Button newGameBtn = new Button("NEW GAME");
